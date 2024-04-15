@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+
+
+      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
+      work correctly both with client-side routing and a non-root public URL.
+      Learn how to configure a non-root public URL by running `npm run build`.
+  
+    <script
+      type="text/javascript"
+      src="//dapi.kakao.com/v2/maps/sdk.js?appkey=9b85e54cf4f07335d0bf269a08662b60"
+    ></script>
+
+    <title>React App</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        min-height: 100vh;
+        position: relative;
+        font-family: Arial, sans-serif;
+        white-space: nowrap;
+      }
+
+      .header {
+        display: flex;
+        background-color: #282222;
+        color: #fff;
+        height: 100px;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        padding: 0 30px;
+        position: sticky;
+        top: 0;
+      }
+
+      .logo {
+        height: 100px;
+        width: 300px;
+      }
+
+      .logo > a {
+        height: 100%;
+        width: 100%;
+      }
+
+      a > img {
+        width: 100%;
+        height: 90%;
+        margin-top: 3px;
+      }
+
+      .header > .menus {
+        height: 100%;
+        width: 65%;
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+      }
+
+      .center {
+        width: 60%;
+        height: auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-left: 50px;
+      }
+
+      .center > input {
+        width: 60%;
+        padding: 10px;
+        background-color: #777777;
+        color: rgb(0, 0, 0);
+      }
+
+      .header input::placeholder {
+        color: rgb(199, 199, 199);
+      }
+
+      .left {
+        display: flex;
+        margin-left: 100px;
+        width: 20%;
+        align-items: center;
+        justify-content: flex-end;
+      }
+
+      .left div {
+        margin: 0 15px;
+      }
+
+      .header > .menus a:hover {
+        background-color: #555;
+        cursor: pointer;
+      }
+
+      footer {
+        position: absolute;
+        bottom: 0;
+        height: 180px;
+        width: 100%;
+        background-color: #eeeded;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .footer_text {
+        color: #747474;
+        letter-spacing: 2px;
+      }
+
+      .menu-button {
+        display: none; /* 기본적으로 숨김 */
+        background-color: #282222; /* 버튼 배경색 */
+        border: none; /* 테두리 없음 */
+        cursor: pointer; /* 커서 스타일 */
+        width: 100px;
+        height: 100%;
+      }
+
+      .menu-button img {
+        width: 100%;
+        height: 100%;
+      }
+
+      @media (max-width: 950px) {
+        .menus > div {
+          display: none; /* 화면이 950px 이하일 때 메뉴 숨김 */
+        }
+        .menu-button {
+          display: block; /* 메뉴 버튼만 보임 */
+          margin: 10px; /* 위치 조정 */
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="header">
+      <div class="logo">
+        <a href="http://localhost:3000/"><img src="logo.jpg" /></a>
+      </div>
+
+      <div class="menus">
+        <div class="center">
+          <a href="http://localhost:3000/auction"><div>경매</div></a>
+          <a href="http://localhost:3000/product/register"
+            ><div>판매하기</div></a
+          >
+          <input placeholder="원하는 상품을 입력하세요" />
+        </div>
+        <div class="left">
+          <a href="http://localhost:3000/user/login"><div>로그인</div></a>
+          <a href="http://localhost:3000/user/join"><div>회원가입</div></a>
+        </div>
+      </div>
+      <div>
+        <button class="menu-button">
+          <img src="https://cdn-icons-png.flaticon.com/512/5602/5602186.png" />
+        </button>
+      </div>
+    </div>
+
+    <div id="root"></div>
+
+    <footer>
+      <div class="footer_text">
+        <strong>대표 </strong> 000 |
+        <strong>사업자 번호</strong> 000-00-00000<br />
+        <strong>주소</strong> 서울 특별시 종로구 미려빌딩 6층<br />
+        <strong>전화</strong> 0000-0000 | <strong>고객문의</strong> cs@000.com
+      </div>
+    </footer>
+  </body>
+</html>
