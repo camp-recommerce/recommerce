@@ -31,21 +31,8 @@ const A_ReadComponent = () => {
   const remainingTime = useCustomTimes(auctionProduct.apStartTime);
   const [socket, setSocket] = useState(null);
 
-  const connectWebSocket = () => {
-    const soc = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
-    soc.onopen = () => {
-      console.log("WebSocket connection established");
-      console.log("web:" + soc); // 소켓 값 확인
-      setSocket(soc);
-      setRoom(auctionProduct.apno);
-      console.log("set socket" + soc);
-      setIsChatModalOpen(true); // 소켓 연결이 완료된 후에 모달을 엽니다.
-    };
-  };
-
   useEffect(() => {
     setLoading(true);
-
     getOne(apno).then((data) => {
       console.log(data);
       setAuctionProduct(data);
@@ -53,6 +40,16 @@ const A_ReadComponent = () => {
       setLoading(false);
     });
   }, [apno]);
+
+  const connectWebSocket = () => {
+    const soc = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
+    soc.onopen = () => {
+      console.log("WebSocket connection established");
+      setSocket(soc);
+      setRoom(auctionProduct.apno);
+      setIsChatModalOpen(true); // 소켓 연결이 완료된 후에 모달을 엽니다.
+    };
+  };
 
   const closeChatModal = () => {
     setIsChatModalOpen(false);
