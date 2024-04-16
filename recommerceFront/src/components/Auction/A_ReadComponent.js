@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
+import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import useCustomTimes from "../../hooks/useCustomTimes";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
+import { formatDateTime } from "../../util/formatTimeUtil";
 
 import A_Chat from "../auction/chat/A_Chat";
 
@@ -30,6 +32,7 @@ const A_ReadComponent = () => {
   const { apno } = useParams();
   const remainingTime = useCustomTimes(auctionProduct.apStartTime);
   const [socket, setSocket] = useState(null);
+  const [formattedDate, setFormattedDate] = useState("");
 
   const connectWebSocket = () => {
     const soc = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
@@ -49,6 +52,7 @@ const A_ReadComponent = () => {
     getOne(apno).then((data) => {
       console.log(data);
       setAuctionProduct(data);
+      setFormattedDate(formatDateTime(data.apStartTime));
       window.scrollTo(0, 0);
       setLoading(false);
     });
@@ -62,11 +66,18 @@ const A_ReadComponent = () => {
     setOpenImg(false);
   };
 
-  const auctionStatusDescriptions = {
+  const auctionStatusDesc = {
     PENDING: "경매 대기 중",
     ACTIVE: "경매 진행 중",
     CLOSED: "경매 종료",
     CANCELLED: "경매 취소",
+  };
+
+  const auctionCategoriesDesc = {
+    SHOES: "신발",
+    CLOTHES: "옷",
+    WATCH: "시계",
+    ETC: "기타",
   };
 
   return (
@@ -91,7 +102,9 @@ const A_ReadComponent = () => {
           </div>
           <div>
             <div className="max-w-md">
-              <div className="text-lg mb-4">{auctionProduct.apCategory}</div>
+              <div className="text-lg mb-4">
+                {auctionCategoriesDesc[auctionProduct.apCategory]}
+              </div>
               <div className="font-bold text-2xl mb-4">
                 {auctionProduct.apName}
               </div>
@@ -114,12 +127,12 @@ const A_ReadComponent = () => {
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">물품상태</div>
                 <div className="text-lg">
-                  {auctionStatusDescriptions[auctionProduct.apStatus]}
+                  {auctionStatusDesc[auctionProduct.apStatus]}
                 </div>
               </div>
               <div className="flex items-center justify-between">
                 <div className="font-bold text-lg">시작시간</div>
-                <div className="text-lg">{auctionProduct.apStartTime}</div>
+                <div className="text-lg">{formattedDate}</div>
               </div>
               <div className="flex items-center justify-center mb-4">
                 <div className="text-sm">

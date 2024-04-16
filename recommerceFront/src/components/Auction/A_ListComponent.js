@@ -39,6 +39,8 @@ const A_ListComponent = () => {
       setServerData(data);
       setLoading(false);
     });
+    console.log(serverData.uploadFileNames);
+  }, [page, size, refresh, apName]); // 의존성 배열에 추가
   }, [page, size, refresh, apName, apCategory]);
 
   const navigate = useNavigate();
@@ -57,16 +59,28 @@ const A_ListComponent = () => {
   };
 
   const handleSearchButtonClick = () => {
-    getList({ page: 1, size, apName, apCategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
+    setLoading(true);
+    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
+    getList({ page: 1, size, apName, apCategory: categoryQuery }).then(
+      (data) => {
+        setServerData(data);
+        setLoading(false);
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearchButtonClick();
     }
+  };
+
+  const auctionCategories = {
+    ALL: "전체",
+    SHOES: "신발",
+    CLOTHES: "옷",
+    WATCH: "시계",
+    ETC: "기타",
   };
 
   return (
@@ -88,6 +102,13 @@ const A_ListComponent = () => {
             borderRadius: "0.375rem",
           }}
         />
+        <select value={apCategory} onChange={handleCategoryChange}>
+        {Object.entries(auctionCategories).map(([key, value]) => (
+          <option key={key} value={key}>
+            {value}
+          </option>
+        ))}
+      </select>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
           onClick={handleSearchButtonClick}
@@ -167,6 +188,5 @@ const A_ListComponent = () => {
       </div>
     </div>
   );
-};
 
 export default A_ListComponent;
