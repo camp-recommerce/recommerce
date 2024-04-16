@@ -81,6 +81,7 @@ const A_ReadComponent = () => {
                   src={`${host}/auction/view/${imgFile}`}
                   className="w-full rounded-lg shadow-md cursor-pointer"
                   alt="product"
+                  style={{ height: "500px" }}
                   onClick={() => {
                     setOpenImg(true);
                     setSelectedImgPath(`${host}/auction/view/${imgFile}`);

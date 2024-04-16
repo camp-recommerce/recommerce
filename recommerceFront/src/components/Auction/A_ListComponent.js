@@ -33,6 +33,8 @@ const A_ListComponent = () => {
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
 
+  const navigate = useNavigate();
+
   useEffect(() => {
     setLoading(true);
     getList({ page, size, apName, apCategory }).then((data) => {
@@ -41,22 +43,22 @@ const A_ListComponent = () => {
     });
   }, [page, size, refresh, apName, apCategory]);
 
-  const navigate = useNavigate();
-
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
     window.scrollTo(0, 0);
   });
 
   const handleCategoryClick = (category) => {
-    setApCategory(category === "전체" ? "" : category); // "전체"를 빈 문자열로 처리
-  };
-
-  const handleSearchInputChange = (e) => {
-    setApName(e.target.value);
+    // "전체"를 선택한 경우
+    if (category === "전체") {
+      setApCategory(null); // apCategory를 null로 설정
+    } else {
+      setApCategory(category);
+    }
   };
 
   const handleSearchButtonClick = () => {
+    // 검색 버튼 클릭 시 검색 실행
     getList({ page: 1, size, apName, apCategory }).then((data) => {
       setServerData(data);
       setLoading(false);
@@ -78,7 +80,6 @@ const A_ListComponent = () => {
         <input
           type="text"
           value={apName}
-          onChange={handleSearchInputChange}
           onKeyPress={handleKeyPress}
           placeholder="상품 이름 검색"
           style={{
@@ -90,7 +91,7 @@ const A_ListComponent = () => {
         />
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
-          onClick={handleSearchButtonClick}
+          onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
         >
           검색
         </button>
@@ -99,7 +100,10 @@ const A_ListComponent = () => {
             <div
               key={category}
               className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
-                apCategory === category ? "bg-gray-200" : ""
+                apCategory === category ||
+                (category === "전체" && apCategory === null)
+                  ? "bg-gray-200"
+                  : ""
               }`}
               onClick={() => handleCategoryClick(category)}
             >
