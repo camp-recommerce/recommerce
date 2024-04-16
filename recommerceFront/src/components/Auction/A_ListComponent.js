@@ -111,31 +111,29 @@ const A_ListComponent = () => {
         style={{ width: "1160px" }}
       >
         {serverData.dtoList.length === 0 ? (
-          <div style={{ width: "25%", height: "200px" }}></div>
+          <div style={{ width: "100%", height: "200px" }}></div>
         ) : (
-          serverData.dtoList.map((auctionProduct) => (
+          serverData.dtoList.map((auctionProduct, index) => (
             <div
               key={auctionProduct.apno}
-              className="shopList_wrap mt-4"
+              className="shopList_wrap"
               onClick={() => moveReadPage(auctionProduct.apno)}
-              style={{ width: "100%", height: "200px" }}
+              style={{ width: "400px", height: "400px", margin: "10px" }}
             >
               <div className="shopList_box">
-                <div className="shopList_info flex">
-                  <div className="shopList_thum mr-2">
-                    <img
-                      alt={auctionProduct.apno}
-                      src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
-                      className="w-40 h-40 object-cover"
-                    />
+                <div className="shopList_thum mb-2">
+                  <img
+                    alt={auctionProduct.apno}
+                    src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
+                    className="w-400 h-300 object-cover"
+                  />
+                </div>
+                <div className="shopList_sum text-center">
+                  <div className="shopList_pname text-sm mb-1">
+                    {auctionProduct.apName}
                   </div>
-                  <div className="shopList_sum">
-                    <div className="shopList_pname text-sm">
-                      {auctionProduct.apName}
-                    </div>
-                    <div className="shopList_price text-sm">
-                      {formatNumber(auctionProduct.apStartPrice)}원
-                    </div>
+                  <div className="shopList_price text-sm">
+                    {formatNumber(auctionProduct.apStartPrice)}원
                   </div>
                 </div>
               </div>

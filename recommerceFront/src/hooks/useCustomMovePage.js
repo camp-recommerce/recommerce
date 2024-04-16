@@ -94,7 +94,7 @@ const useCustomMovePage = (pno) => {
 
     if (pageParam) {
       const pageNum = getNum(pageParam.page, 1);
-      const sizeNum = getNum(pageParam.size, 8);
+      const sizeNum = getNum(pageParam.size, 4);
 
       queryString = createSearchParams({
         page: pageNum,
