@@ -5,6 +5,7 @@ import PagingComponent from "../common/PagingComponent";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
+import useCustomTimesList from "../../hooks/useCustomTimesList";
 
 const host = API_SERVER_HOST;
 
@@ -26,19 +27,17 @@ const A_ListComponent = () => {
     useCustomMovePage();
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
-  const [apName, setApName] = useState(""); // 검색어 상태 추가
-  const [apCategory, setApCategory] = useState(""); // 카테고리 상태 추가
+  const [apName, setApName] = useState("");
+  const [apCategory, setApCategory] = useState("");
+  const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
 
   useEffect(() => {
     setLoading(true);
-
-    // 검색어와 카테고리 정보를 getList 함수로 전달
     getList({ page, size }).then((data) => {
       setServerData(data);
       setLoading(false);
     });
-    console.log(serverData.uploadFileNames);
-  }, [page, size, refresh]); // 의존성 배열에 추가
+  }, [page, size, refresh]);
 
   const navigate = useNavigate();
 
@@ -47,17 +46,14 @@ const A_ListComponent = () => {
     window.scrollTo(0, 0);
   });
 
-  // 검색어 입력 핸들러
   const handleSearchInputChange = (e) => {
     setApName(e.target.value);
   };
 
-  // 카테고리 선택 핸들러
   const handleCategoryChange = (e) => {
     setApCategory(e.target.value);
   };
 
-  // 검색 버튼 클릭 핸들러
   const handleSearchButtonClick = () => {
     getList({ page: 1, size, apName, apCategory }).then((data) => {
       setServerData(data);
@@ -65,7 +61,6 @@ const A_ListComponent = () => {
     });
   };
 
-  // 엔터 키 입력 핸들러
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
       handleSearchButtonClick();
@@ -75,9 +70,8 @@ const A_ListComponent = () => {
   return (
     <div
       className="flex justify-center items-center flex-col"
-      style={{ minHeight: "80vh" }}
+      style={{ minHeight: "70vh" }}
     >
-      {/* minHeight 추가 */}
       <div className="mb-4">
         <input
           type="text"
@@ -90,6 +84,7 @@ const A_ListComponent = () => {
             padding: "0.375rem 0.75rem",
             border: "1px solid #ccc",
             borderRadius: "0.375rem",
+            marginBottom: "20px",
           }}
         />
         <select
@@ -108,24 +103,26 @@ const A_ListComponent = () => {
       </div>
       <div
         className="shopList_area grid grid-cols-4 gap-2"
-        style={{ width: "1160px" }}
+        style={{ width: "80%" }}
       >
         {serverData.dtoList.length === 0 ? (
-          <div style={{ width: "100%", height: "200px" }}></div>
+          <div></div>
         ) : (
           serverData.dtoList.map((auctionProduct, index) => (
             <div
               key={auctionProduct.apno}
               className="shopList_wrap"
               onClick={() => moveReadPage(auctionProduct.apno)}
-              style={{ width: "400px", height: "400px", margin: "10px" }}
             >
-              <div className="shopList_box">
+              <div
+                className="shopList_box"
+                style={{ width: "300px", height: "400px" }}
+              >
                 <div className="shopList_thum mb-2">
                   <img
                     alt={auctionProduct.apno}
                     src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
-                    className="w-400 h-300 object-cover"
+                    style={{ width: "300px", height: "400px" }}
                   />
                 </div>
                 <div className="shopList_sum text-center">
@@ -133,7 +130,10 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {formatNumber(auctionProduct.apStartPrice)}원
+                    시작가: {formatNumber(auctionProduct.apStartPrice)}원
+                  </div>
+                  <div className="shopList_end text-sm">
+                    경매 종료까지: {remainingTimes[index]}
                   </div>
                 </div>
               </div>
@@ -149,7 +149,10 @@ const A_ListComponent = () => {
           상품 등록
         </div>
       </div>
-      <div className="flex justify-center">
+      <div
+        className="flex justify-center items-center"
+        style={{ marginTop: "90px" }}
+      >
         <PagingComponent
           serverData={serverData}
           movePage={moveProductListPage}
