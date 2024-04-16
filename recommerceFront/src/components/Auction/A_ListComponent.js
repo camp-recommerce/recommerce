@@ -27,18 +27,19 @@ const A_ListComponent = () => {
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
   const [apName, setApName] = useState(""); // 검색어 상태 추가
-  const [apCategory, setApCategory] = useState(""); // 카테고리 상태 추가
+  const [apCategory, setApCategory] = useState("ALL"); // 카테고리 상태 추가
 
   useEffect(() => {
     setLoading(true);
 
     // 검색어와 카테고리 정보를 getList 함수로 전달
+    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
     getList({ page, size }).then((data) => {
       setServerData(data);
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName]); // 의존성 배열에 추가
 
   const navigate = useNavigate();
 
@@ -59,10 +60,14 @@ const A_ListComponent = () => {
 
   // 검색 버튼 클릭 핸들러
   const handleSearchButtonClick = () => {
-    getList({ page: 1, size, apName, apCategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
+    setLoading(true);
+    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
+    getList({ page: 1, size, apName, apCategory: categoryQuery }).then(
+      (data) => {
+        setServerData(data);
+        setLoading(false);
+      }
+    );
   };
 
   // 엔터 키 입력 핸들러
@@ -72,26 +77,51 @@ const A_ListComponent = () => {
     }
   };
 
+  const auctionCategories = {
+    ALL: "전체",
+    SHOES: "신발",
+    CLOTHES: "옷",
+    WATCH: "시계",
+    ETC: "기타",
+  };
+
   return (
     <div
-      className="flex justify-center items-center flex-col"
+      className="flex justify-center items-center flex-col border border-black"
       style={{ minHeight: "80vh" }}
     >
       {/* minHeight 추가 */}
+      <div>
+        <input
+          type="text"
+          placeholder="검색어 입력"
+          value={apName}
+          onChange={handleSearchInputChange}
+          onKeyPress={handleKeyPress}
+        />
+        <select value={apCategory} onChange={handleCategoryChange}>
+          {Object.entries(auctionCategories).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </select>
+        <button onClick={handleSearchButtonClick}>검색</button>
+      </div>
       <div
-        className="shopList_area grid grid-cols-4 gap-4"
+        className="shopList_area grid grid-cols-4 gap-4 border border-black"
         style={{ width: "1160px" }}
       >
         {/* height 삭제 */}
         {serverData.dtoList.map((auctionProduct) => (
           <div
             key={auctionProduct.apno}
-            className="shopList_wrap mt-64"
+            className="shopList_wrap mt-64 border border-black"
             onClick={() => moveReadPage(auctionProduct.apno)}
             style={{ width: "300px", height: "100px" }}
           >
             <div className="shopList_box">
-              <div className="shopList_info flex">
+              <div className="shopList_info flex flex-col">
                 <div className="shopList_thum mr-2">
                   <img
                     alt={auctionProduct.apno}

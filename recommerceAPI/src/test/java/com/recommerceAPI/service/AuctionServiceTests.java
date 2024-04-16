@@ -57,7 +57,7 @@ public class AuctionServiceTests {
                 .page(1)
                 .size(10)
                 .build();
-        PageResponseDTO<AuctionDTO> response = auctionService.list(pageRequestDTO);
+        PageResponseDTO<AuctionDTO> response = auctionService.list(pageRequestDTO, null, null);
         log.info(response);
     }
 }

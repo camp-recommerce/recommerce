@@ -1,14 +1,16 @@
 import React, { useRef, useState } from "react";
 import { postOne } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
+import { getInitialDateTime } from "../../util/formatTimeUtil";
 
 const initState = {
+  apCategory: "ETC",
   apName: "",
   apDesc: "",
   apStartPrice: "",
   apBidIncrement: "",
   apStatus: "PENDING",
-  apStartTime: "",
+  apStartTime: getInitialDateTime(),
   files: [],
 };
 
@@ -19,27 +21,24 @@ const A_AddComponent = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const { moveProductListPage } = useCustomMovePage();
+  const [formattedPrice, setFormattedPrice] = useState("");
+  const [formattedIncrement, setFormattedIncrement] = useState("");
 
   const handleChangeAuction = (e) => {
     const { name, value } = e.target;
-    console.log("Field Changed:", name, "Value:", value); // 변경된 필드와 값 로깅
+    const numericValue = value.replace(/[^\d]/g, "");
 
-    if (name === "apStartPrice" || name === "apBidIncrement") {
-      const numericValue = value.replace(/[^\d]/g, "");
-      const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      setAuction({
-        ...auction,
-        [name]: formattedValue,
-      });
+    if (name === "apStartPrice") {
+      setAuction({ ...auction, [name]: numericValue });
+      setFormattedPrice(numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    } else if (name === "apBidIncrement") {
+      setAuction({ ...auction, [name]: numericValue });
+      setFormattedIncrement(numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     } else {
-      setAuction({
-        ...auction,
-        [name]: value,
-      });
+      setAuction({ ...auction, [name]: value });
     }
   };
 
-  // // 이미지 등록 시 미리보기 생성
   const handleImagePreview = (e) => {
     e.preventDefault();
 
@@ -64,13 +63,11 @@ const A_AddComponent = () => {
       formData.append("files", files[i]);
     }
 
+    formData.append("apCategory", auction.apCategory);
     formData.append("apName", auction.apName);
     formData.append("apDesc", auction.apDesc);
-    formData.append("apStartPrice", auction.apStartPrice.replace(/[^\d]/g, ""));
-    formData.append(
-      "apBidIncrement",
-      auction.apBidIncrement.replace(/[^\d]/g, "")
-    );
+    formData.append("apStartPrice", auction.apStartPrice);
+    formData.append("apBidIncrement", auction.apBidIncrement);
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
 
@@ -78,16 +75,18 @@ const A_AddComponent = () => {
 
     setLoading(true);
 
-    postOne(formData).then((data) => {
-      setLoading(false);
-      setResult(data.result);
-      setAuction({ ...initState });
-    });
-  };
-
-  const closeAlertModal = () => {
-    setResult(null);
-    moveProductListPage({ page: 1 });
+    postOne(formData)
+      .then((data) => {
+        setLoading(false);
+        setResult(data.result);
+        alert("등록되었습니다.");
+        moveProductListPage({ page: 1 });
+        setAuction({ ...initState });
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("등록에 실패했습니다.");
+      });
   };
 
   const AuctionStatus = {
@@ -97,19 +96,16 @@ const A_AddComponent = () => {
     CANCELLED: "경매 취소",
   };
 
+  const AuctionCategories = {
+    SHOES: "신발",
+    CLOTHES: "옷",
+    WATCH: "시계",
+    ETC: "기타",
+  };
+
   return (
     <div className="flex justify-center mt-20">
       <div>물품 등록</div>
-      {/* {loading ? <LoadingModal /> : <></>}
-      {result ? (
-        <AlertModal
-          title={"물품이 등록되었습니다."}
-          content={`${result}번 물품 등록 완료`}
-          callbackFn={closeAlertModal}
-        />
-      ) : (
-        <></>
-      )} */}
       <div className="grid grid-cols-2 gap-10">
         <div className="flex justify-center items-center">
           <div className="max-w-md">
@@ -132,8 +128,24 @@ const A_AddComponent = () => {
           </div>
         </div>
         <div>
+          <div className="text-lg mb-4">물품 번호: {auction.apno}</div>
           <div className="max-w-md">
-            <div className="text-lg mb-4">{auction.apCategory}</div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="font-bold text-lg">카테고리</div>
+              <div className="text-lg">
+                <select
+                  name="apCategory"
+                  value={auction.apCategory}
+                  onChange={handleChangeAuction}
+                >
+                  {Object.entries(AuctionCategories).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             <div className="flex items-center justify-between mb-4">
               <div className="font-bold text-lg">물품명</div>
               <div className="text-lg">
@@ -156,7 +168,6 @@ const A_AddComponent = () => {
                 value={auction.apDesc}
               ></textarea>
             </div>
-            <div className="text-gray-700 mb-4">물품 번호: {auction.apno}</div>
             <div className="flex items-center justify-between mb-4">
               <div className="font-bold text-lg">시작가</div>
               <div className="text-lg">
@@ -164,7 +175,7 @@ const A_AddComponent = () => {
                   className="text-right"
                   name="apStartPrice"
                   type={"text"}
-                  value={auction.apStartPrice}
+                  value={formattedPrice}
                   onChange={handleChangeAuction}
                 ></input>
                 원
@@ -177,7 +188,7 @@ const A_AddComponent = () => {
                   className="text-right"
                   name="apBidIncrement"
                   type={"text"}
-                  value={auction.apBidIncrement}
+                  value={formattedIncrement}
                   onChange={handleChangeAuction}
                 ></input>
                 원

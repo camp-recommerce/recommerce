@@ -3,8 +3,10 @@ import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { deleteOne, getOne, putOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useParams } from "react-router-dom";
+import { formatNumber } from "../../util/formatNumberUtil";
 
 const initState = {
+  apCategory: "",
   apName: "",
   apDesc: "",
   apStartPrice: "",
@@ -25,32 +27,32 @@ const A_ModifyComponent = () => {
   const uploadRef = useRef();
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [formattedPrice, setFormattedPrice] = useState("");
+  const [formattedIncrement, setFormattedIncrement] = useState("");
 
   useEffect(() => {
     getOne(apno).then((data) => {
       setAuction(data);
       setFormattedPrice(
-        data.apPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+        data.apStartPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+      );
+      setFormattedIncrement(
+        data.apBidIncrement.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       );
     });
   }, [apno]);
 
   const handleChangeAuction = (e) => {
     const { name, value } = e.target;
-    console.log("Field Changed:", name, "Value:", value);
+    const numericValue = value.replace(/[^\d]/g, "");
 
-    if (name === "apStartPrice" || name === "apBidIncrement") {
-      const numericValue = value.replace(/[^\d]/g, "");
-      const formattedValue = numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-      setAuction({
-        ...auction,
-        [name]: formattedValue,
-      });
+    if (name === "apStartPrice") {
+      setAuction({ ...auction, [name]: numericValue });
+      setFormattedPrice(numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
+    } else if (name === "apBidIncrement") {
+      setAuction({ ...auction, [name]: numericValue });
+      setFormattedIncrement(numericValue.replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     } else {
-      setAuction({
-        ...auction,
-        [name]: value,
-      });
+      setAuction({ ...auction, [name]: value });
     }
   };
 
@@ -87,13 +89,11 @@ const A_ModifyComponent = () => {
       formData.append("files", files[i]);
     }
 
+    formData.append("apCategory", auction.apCategory);
     formData.append("apName", auction.apName);
     formData.append("apDesc", auction.apDesc);
-    formData.append("apStartPrice", auction.apStartPrice.replace(/[^\d]/g, ""));
-    formData.append(
-      "apBidIncrement",
-      auction.apBidIncrement.replace(/[^\d]/g, "")
-    );
+    formData.append("apStartPrice", auction.apStartPrice);
+    formData.append("apBidIncrement", auction.apBidIncrement);
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
 
@@ -103,28 +103,33 @@ const A_ModifyComponent = () => {
 
     setLoading(true);
 
-    putOne(apno, formData).then((data) => {
-      setResult("Modified");
-      setLoading(false);
-    });
+    putOne(apno, formData)
+      .then((data) => {
+        setLoading(false);
+        setResult(data.result);
+        alert("수정되었습니다.");
+        moveReadPage(apno);
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("수정에 실패했습니다.");
+      });
   };
 
   const handleClickDelete = () => {
     setLoading(true);
-    deleteOne(auction).then((data) => {
-      setResult("Deleted");
-      setLoading(false);
-    });
-  };
-
-  const closeAlertModal = () => {
-    if (result === "Modified") {
-      moveReadPage(apno);
-    } else if (result === "Deleted") {
-      moveProductListPage({ page: 1 });
-    }
-
-    setResult(null);
+    deleteOne(auction)
+      .then((data) => {
+        setLoading(false);
+        setResult(data.result);
+        alert("삭제되었습니다.");
+        moveProductListPage({ page: 1 });
+        setAuction({ ...initState });
+      })
+      .catch((error) => {
+        setLoading(false);
+        alert("삭제에 실패했습니다.");
+      });
   };
 
   const AuctionStatus = {
@@ -134,19 +139,16 @@ const A_ModifyComponent = () => {
     CANCELLED: "경매 취소",
   };
 
+  const AuctionCategories = {
+    SHOES: "신발",
+    CLOTHES: "옷",
+    WATCH: "시계",
+    ETC: "기타",
+  };
+
   return (
     <div className="flex justify-center mt-20">
       <div>물품 수정</div>
-      {/* {loading ? <LoadingModal /> : <></>}
-  {result ? (
-    <AlertModal
-      title={"물품이 등록되었습니다."}
-      content={`${result}번 물품 등록 완료`}
-      callbackFn={closeAlertModal}
-    />
-  ) : (
-    <></>
-  )} */}
       <div className="grid grid-cols-2 gap-10">
         <div className="flex justify-center items-center">
           <div className="modify_wrap">
@@ -188,8 +190,24 @@ const A_ModifyComponent = () => {
           </div>
         </div>
         <div>
+          <div className="text-lg mb-4">물품 번호: {auction.apno}</div>
           <div className="max-w-md">
-            <div className="text-lg mb-4">{auction.apCategory}</div>
+            <div className="flex items-center justify-between mb-4">
+              <div className="font-bold text-lg">카테고리</div>
+              <div className="text-lg">
+                <select
+                  name="apCategory"
+                  value={auction.apCategory}
+                  onChange={handleChangeAuction}
+                >
+                  {Object.entries(AuctionCategories).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            </div>
             <div className="flex items-center justify-between mb-4">
               <div className="font-bold text-lg">물품명</div>
               <div className="text-lg">
@@ -212,7 +230,6 @@ const A_ModifyComponent = () => {
                 value={auction.apDesc}
               ></textarea>
             </div>
-            <div className="text-gray-700 mb-4">물품 번호: {auction.apno}</div>
             <div className="flex items-center justify-between mb-4">
               <div className="font-bold text-lg">시작가</div>
               <div className="text-lg">
@@ -220,7 +237,7 @@ const A_ModifyComponent = () => {
                   className="text-right"
                   name="apStartPrice"
                   type={"text"}
-                  value={auction.apStartPrice}
+                  value={formattedPrice}
                   onChange={handleChangeAuction}
                 ></input>
                 원
@@ -233,7 +250,7 @@ const A_ModifyComponent = () => {
                   className="text-right"
                   name="apBidIncrement"
                   type={"text"}
-                  value={auction.apBidIncrement}
+                  value={formattedIncrement}
                   onChange={handleChangeAuction}
                 ></input>
                 원
