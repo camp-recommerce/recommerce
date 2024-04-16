@@ -1,13 +1,21 @@
 import React, { useEffect, useRef, useState } from "react";
 import { A_Message } from "./A_Message";
 import { v4 as uuidv4 } from "uuid";
+import { API_SERVER_HOST } from "../../../api/userApi";
 
-function A_Chat({ socket, username, room, closeModal }) {
+function A_Chat({
+  socket,
+  username,
+  room,
+  closeModal,
+  startPrice,
+  bidIncrement,
+  imageSrc,
+}) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
-
   const messageBottomRef = useRef(null);
-
+  const host = API_SERVER_HOST;
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     if (currentMsg !== "") {
@@ -42,22 +50,20 @@ function A_Chat({ socket, username, room, closeModal }) {
     e.stopPropagation(); // 모달 내부 클릭 시 닫히지 않도록 이벤트 전파 중단
   };
 
-  const handleOutsideClick = () => {
+  const handleOutsideClick = (e) => {
     closeModal(); // 모달 외부 클릭 시 모달 닫기
   };
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center"
-      onClick={handleOutsideClick}
+      className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
+      style={{ zIndex: 999 }}
+      onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
     >
-      <div
-        className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"
-        onClick={handleOutsideClick}
-      ></div>
+      <div className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"></div>
       <div
         className="bg-white rounded-lg p-8 relative"
-        style={{ width: "700px", height: "700px" }}
+        style={{ width: "700px", height: "900px" }}
         onClick={handleModalClick}
       >
         <div className="flex justify-between items-center mb-4">
@@ -76,9 +82,20 @@ function A_Chat({ socket, username, room, closeModal }) {
             </svg>
           </button>
         </div>
+        {/* 상품 정보 표시 */}
+        <div className="flex items-center mb-5">
+          <img
+            src={`${host}/auction/view/${imageSrc}`}
+            className="w-24 h-24 mr-8"
+          />
+          <div>
+            <div>시작 가격: {startPrice}원</div>
+            <div>입찰 단위: {bidIncrement}원</div>
+          </div>
+        </div>
         <div
           className="border border-gray-300 rounded-lg overflow-y-auto mb-4"
-          style={{ height: "550px" }}
+          style={{ height: "630px" }}
         >
           {messageList.map((messageContent) => {
             return (
