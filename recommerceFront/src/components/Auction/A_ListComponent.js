@@ -29,6 +29,7 @@ const A_ListComponent = () => {
     useCustomMovePage();
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
+  const [apNameInput, setApNameInput] = useState("");
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
@@ -57,9 +58,13 @@ const A_ListComponent = () => {
     }
   };
 
+  const handleSearchInputChange = (e) => {
+    setApNameInput(e.target.value);
+  };
+
   const handleSearchButtonClick = () => {
-    // 검색 버튼 클릭 시 검색 실행
-    getList({ page: 1, size, apName, apCategory }).then((data) => {
+    setApName(apNameInput); // 입력 창의 값을 변수에 저장
+    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
       setServerData(data);
       setLoading(false);
     });
@@ -79,7 +84,8 @@ const A_ListComponent = () => {
       <div className="mb-4 flex items-center" style={{ marginBottom: "20px" }}>
         <input
           type="text"
-          value={apName}
+          value={apNameInput}
+          onChange={handleSearchInputChange}
           onKeyPress={handleKeyPress}
           placeholder="상품 이름 검색"
           style={{
