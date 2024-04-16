@@ -49,7 +49,7 @@ const A_ListComponent = () => {
   });
 
   const handleCategoryClick = (category) => {
-    setApCategory(category);
+    setApCategory(category); // "전체"를 선택해도 해당 카테고리를 설정하도록 수정
   };
 
   const handleSearchInputChange = (e) => {
