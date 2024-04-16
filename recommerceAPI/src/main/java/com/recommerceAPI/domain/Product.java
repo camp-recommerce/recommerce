@@ -8,11 +8,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "tbl_product")
-@Getter
+@Data
 @ToString(exclude = "imageList")
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product {
 
     @Id
@@ -24,8 +22,6 @@ public class Product {
     private int price;
 
     private String pdesc;
-
-    private String paddress;
 
     private boolean delFlag;
 
@@ -50,10 +46,6 @@ public class Product {
     public void changeName(String name){
         this.pname = name;
     }
-
-    public void changeAdd(String address){
-            this.paddress = address;
-        }
 
     public void addImage(ProductImage image) {
 

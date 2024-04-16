@@ -31,13 +31,16 @@ public class ProductController {
     private final CustomFileUtil fileUtil;
 
 
-    @GetMapping("/")
-    public PageResponseDTO<ProductDTO> list (PageRequestDTO pageRequestDTO, String pname){
+    @GetMapping("/products")
+        public PageResponseDTO<ProductDTO> getProductsByPage(@RequestParam(defaultValue = "0") int page,
+                                                             @RequestParam(defaultValue = "10") int size) {
+            PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                    .page(page)
+                    .size(size)
+                    .build();
+            return productService.getProductsByPage(pageRequestDTO);
+        }
 
-        log.info("list----------------------"+ pageRequestDTO);
-
-        return productService.getList(pageRequestDTO, pname);
-    }
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API
     @GetMapping(value ="/products/read/{pno}")

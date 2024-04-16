@@ -1,6 +1,6 @@
 package com.recommerceAPI.service;
 
-import java.util.Collections;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
+
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.repository.ProductRepository;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,48 +31,19 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+
     @Override
-    public PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname) {
-
-        log.info("getList..............");
-
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("pno").descending());
-
-        Page<Object[]> result = productRepository.selectList(pname,pageable);
-
-        List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
-
-            Product product = (Product) arr[0];
-            ProductImage productImage = (ProductImage) arr[1];
-
-            ProductDTO productDTO = ProductDTO.builder()
-                    .pno(product.getPno())
-                    .pname(product.getPname())
-                    .pdesc(product.getPdesc())
-                    .price(product.getPrice())
-                    .paddress(product.getPaddress())
-                    .delFlag(product.isDelFlag())
-                    .build();
-
-            if (productImage != null) {
-                productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
-            }
-
-            return productDTO;
-        }).collect(Collectors.toList());
-
-        long totalCount = result.getTotalElements();
-
-        return PageResponseDTO.<ProductDTO>withAll()
-                .dtoList(dtoList)
-                .totalCount(totalCount)
+    public PageResponseDTO<ProductDTO> getProductsByPage(PageRequestDTO pageRequestDTO) {
+        Page<Product> productPage = productRepository.findAll(PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize()));
+        List<ProductDTO> productDTOList = productPage.getContent().stream()
+                .map(ProductMapper::toDTO)
+                .collect(Collectors.toList());
+        return PageResponseDTO.withAll()
+                .dtoList(productDTOList)
                 .pageRequestDTO(pageRequestDTO)
+                .totalCount(productPage.getTotalElements())
                 .build();
     }
-
 
     @Override
     public Long register(ProductDTO productDTO) {

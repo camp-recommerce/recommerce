@@ -1,13 +1,13 @@
 import React from "react";
-import HeaderLayout from "./HeaderLayout";
-import FooterLayout from "./FooterLayout";
+import Header from "./Header";
+import Footer from "./Footer";
 
 const BasicLayout = ({ children }) => {
   return (
     <>
-      <HeaderLayout />
+      <Header />
       {children}
-      <FooterLayout />
+      <Footer />
     </>
   );
 };

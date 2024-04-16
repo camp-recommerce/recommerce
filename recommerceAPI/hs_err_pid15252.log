@@ -1,0 +1,227 @@
+#
+# There is insufficient memory for the Java Runtime Environment to continue.
+# Native memory allocation (mmap) failed to map 268435456 bytes for G1 virtual space
+# Possible reasons:
+#   The system is out of physical RAM or swap space
+#   The process is running with CompressedOops enabled, and the Java Heap may be blocking the growth of the native heap
+# Possible solutions:
+#   Reduce memory load on the system
+#   Increase physical memory or swap space
+#   Check if swap backing store is full
+#   Decrease Java heap size (-Xmx/-Xms)
+#   Decrease number of Java threads
+#   Decrease Java thread stack sizes (-Xss)
+#   Set larger code cache with -XX:ReservedCodeCacheSize=
+#   JVM is running with Unscaled Compressed Oops mode in which the Java heap is
+#     placed in the first 4GB address space. The Java Heap base address is the
+#     maximum limit for the native heap growth. Please use -XX:HeapBaseMinAddress
+#     to set the Java Heap base and to place the Java Heap above 4GB virtual address.
+# This output file may be truncated or incomplete.
+#
+#  Out of Memory Error (os_windows.cpp:3613), pid=15252, tid=10380
+#
+# JRE version:  (17.0.10+7) (build )
+# Java VM: OpenJDK 64-Bit Server VM (17.0.10+7-LTS, mixed mode, sharing, tiered, compressed oops, compressed class ptrs, g1 gc, windows-amd64)
+# No core dump will be written. Minidumps are not enabled by default on client versions of Windows
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dorg.gradle.internal.worker.tmpdir=C:\Users\EZEN604-20\Desktop\recommerce\recommerceAPI\build\tmp\test\work -Dorg.gradle.native=false -Xmx512m -Dfile.encoding=x-windows-949 -Duser.country=KR -Duser.language=ko -Duser.variant -ea worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 1'
+
+Host: Intel(R) Core(TM) i5-4590 CPU @ 3.30GHz, 4 cores, 15G,  Windows 10 , 64 bit Build 19041 (10.0.19041.3636)
+Time: Tue Apr 16 13:56:44 2024  Windows 10 , 64 bit Build 19041 (10.0.19041.3636) elapsed time: 0.020966 seconds (0d 0h 0m 0s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000268a48af0a0):  JavaThread "Unknown thread" [_thread_in_vm, id=10380, stack(0x000000c2b7d00000,0x000000c2b7e00000)]
+
+Stack: [0x000000c2b7d00000,0x000000c2b7e00000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x67d2c9]
+V  [jvm.dll+0x834b1a]
+V  [jvm.dll+0x8365de]
+V  [jvm.dll+0x836c43]
+V  [jvm.dll+0x2477ff]
+V  [jvm.dll+0x67a109]
+V  [jvm.dll+0x66eb7a]
+V  [jvm.dll+0x30764b]
+V  [jvm.dll+0x30eaf6]
+V  [jvm.dll+0x35e83e]
+V  [jvm.dll+0x35ea6f]
+V  [jvm.dll+0x2de248]
+V  [jvm.dll+0x2df1b4]
+V  [jvm.dll+0x806381]
+V  [jvm.dll+0x36c6f1]
+V  [jvm.dll+0x7e4e26]
+V  [jvm.dll+0x3eff3f]
+V  [jvm.dll+0x3f1b71]
+C  [jli.dll+0x528f]
+C  [ucrtbase.dll+0x21bb2]
+C  [KERNEL32.DLL+0x17344]
+C  [ntdll.dll+0x526b1]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00007ffd368bee98, length=0, elements={
+}
+
+Java Threads: ( => current thread )
+
+Other Threads:
+  0x00000268a48dbf50 GCTaskThread "GC Thread#0" [stack: 0x000000c2b7e00000,0x000000c2b7f00000] [id=13768]
+  0x00000268a48e1dc0 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000c2b7f00000,0x000000c2b8000000] [id=12764]
+  0x00000268a48e26f0 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000c2b8000000,0x000000c2b8100000] [id=10324]
+
+[error occurred during error reporting (printing all threads), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffd3607ec87]
+
+VM state: not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread:  ([mutex/lock_event])
+[0x00000268a48a9c10] Heap_lock - owner thread: 0x00000268a48af0a0
+
+Heap address: 0x00000000e0000000, size: 512 MB, Compressed Oops mode: 32-bit
+
+CDS archive(s) mapped at: [0x0000000000000000-0x0000000000000000-0x0000000000000000), size 0, SharedBaseAddress: 0x0000000800000000, ArchiveRelocationMode: 1.
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 0, Narrow klass range: 0x0
+
+GC Precious Log:
+<Empty>
+
+Heap:
+ garbage-first heap   total 0K, used 0K [0x00000000e0000000, 0x0000000100000000)
+  region size 1024K, 0 young (0K), 0 survivors (0K)
+
+[error occurred during error reporting (printing heap information), id 0xc0000005, EXCEPTION_ACCESS_VIOLATION (0xc0000005) at pc=0x00007ffd36466fb9]
+
+GC Heap History (0 events):
+No events
+
+Dll operation events (1 events):
+Event: 0.011 Loaded shared library C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\java.dll
+
+Deoptimization events (0 events):
+No events
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+VM Operations (0 events):
+No events
+
+Events (0 events):
+No events
+
+
+Dynamic libraries:
+0x00007ff62a4e0000 - 0x00007ff62a4ee000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\java.exe
+0x00007ffdb8070000 - 0x00007ffdb8268000 	C:\Windows\SYSTEM32\ntdll.dll
+0x00007ffdb7b50000 - 0x00007ffdb7c0d000 	C:\Windows\System32\KERNEL32.DLL
+0x00007ffdb5af0000 - 0x00007ffdb5de6000 	C:\Windows\System32\KERNELBASE.dll
+0x00007ffdb59f0000 - 0x00007ffdb5af0000 	C:\Windows\System32\ucrtbase.dll
+0x00007ffd72e70000 - 0x00007ffd72e8b000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\VCRUNTIME140.dll
+0x00007ffd73360000 - 0x00007ffd73377000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\jli.dll
+0x00007ffdb7e90000 - 0x00007ffdb802e000 	C:\Windows\System32\USER32.dll
+0x00007ffdb5df0000 - 0x00007ffdb5e12000 	C:\Windows\System32\win32u.dll
+0x00007ffdb6dd0000 - 0x00007ffdb6dfb000 	C:\Windows\System32\GDI32.dll
+0x00007ffdb57a0000 - 0x00007ffdb58b7000 	C:\Windows\System32\gdi32full.dll
+0x00007ffd981f0000 - 0x00007ffd9848a000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.3636_none_60b6a03d71f818d5\COMCTL32.dll
+0x00007ffdb58c0000 - 0x00007ffdb595d000 	C:\Windows\System32\msvcp_win.dll
+0x00007ffdb6d30000 - 0x00007ffdb6dce000 	C:\Windows\System32\msvcrt.dll
+0x00007ffdb6e00000 - 0x00007ffdb6e32000 	C:\Windows\System32\IMM32.DLL
+0x00007ffd915d0000 - 0x00007ffd915dc000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\vcruntime140_1.dll
+0x00007ffd62f40000 - 0x00007ffd62fcd000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\msvcp140.dll
+0x00007ffd35d90000 - 0x00007ffd369f2000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\server\jvm.dll
+0x00007ffdb6750000 - 0x00007ffdb6800000 	C:\Windows\System32\ADVAPI32.dll
+0x00007ffdb66b0000 - 0x00007ffdb6750000 	C:\Windows\System32\sechost.dll
+0x00007ffdb6a50000 - 0x00007ffdb6b75000 	C:\Windows\System32\RPCRT4.dll
+0x00007ffdb5770000 - 0x00007ffdb5797000 	C:\Windows\System32\bcrypt.dll
+0x00007ffdb54d0000 - 0x00007ffdb551b000 	C:\Windows\SYSTEM32\POWRPROF.dll
+0x00007ffdb0830000 - 0x00007ffdb0839000 	C:\Windows\SYSTEM32\WSOCK32.dll
+0x00007ffda3960000 - 0x00007ffda3987000 	C:\Windows\SYSTEM32\WINMM.dll
+0x00007ffdb65b0000 - 0x00007ffdb661b000 	C:\Windows\System32\WS2_32.dll
+0x00007ffd98560000 - 0x00007ffd9856a000 	C:\Windows\SYSTEM32\VERSION.dll
+0x00007ffdb54b0000 - 0x00007ffdb54c2000 	C:\Windows\SYSTEM32\UMPDC.dll
+0x00007ffdb35f0000 - 0x00007ffdb3602000 	C:\Windows\SYSTEM32\kernel.appcore.dll
+0x00007ffd8e5e0000 - 0x00007ffd8e5ea000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\jimage.dll
+0x00007ffda5000000 - 0x00007ffda51e4000 	C:\Windows\SYSTEM32\DBGHELP.DLL
+0x00007ffda4f30000 - 0x00007ffda4f64000 	C:\Windows\SYSTEM32\dbgcore.DLL
+0x00007ffdb5960000 - 0x00007ffdb59e2000 	C:\Windows\System32\bcryptPrimitives.dll
+0x00007ffd6a990000 - 0x00007ffd6a9b5000 	C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\java.dll
+
+dbghelp: loaded successfully - version: 4.0.5 - missing functions: none
+symbol engine: initialized successfully - sym options: 0x614 - pdb path: .;C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin;C:\Windows\SYSTEM32;C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.19041.3636_none_60b6a03d71f818d5;C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin\server
+
+VM Arguments:
+jvm_args: -Dorg.gradle.internal.worker.tmpdir=C:\Users\EZEN604-20\Desktop\recommerce\recommerceAPI\build\tmp\test\work -Dorg.gradle.native=false -Xmx512m -Dfile.encoding=x-windows-949 -Duser.country=KR -Duser.language=ko -Duser.variant -ea 
+java_command: worker.org.gradle.process.internal.worker.GradleWorkerMain 'Gradle Test Executor 1'
+java_class_path (initial): C:\\Users\\EZEN604-20\\.gradle\\caches\\8.7\\workerMain\\gradle-worker.jar;C:\\Users\\EZEN604-20\\Desktop\\recommerce\\recommerceAPI\\build\\classes\\java\\test;C:\\Users\\EZEN604-20\\Desktop\\recommerce\\recommerceAPI\\build\\classes\\java\\main;C:\\Users\\EZEN604-20\\Desktop\\recommerce\\recommerceAPI\\build\\resources\\main;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-data-jpa\\3.2.4\\d8c5f393d9b18d96021b3e02d80e4356c5cbe0f7\\spring-boot-starter-data-jpa-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-thymeleaf\\3.2.4\\db900acbd0bbeb7a8682fe6aeb477d17fe501ac1\\spring-boot-starter-thymeleaf-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-websocket\\3.2.4\\fd02f6a9ccbc66cf84c498d0eb4e8367a400769c\\spring-boot-starter-websocket-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-web\\3.2.4\\a74df12b71060da7c8e87f9a8c2ef4ea43fc8017\\spring-boot-starter-web-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.modelmapper\\modelmapper\\3.1.0\\a3727e6b449dfc9d9052d48185d1eeb029faaf12\\modelmapper-3.1.0.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-security\\3.2.4\\a1b9f09832c42c6c079be67bf3e7989c54a338ff\\spring-boot-starter-security-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\org.springframework.boot\\spring-boot-starter-oauth2-client\\3.2.4\\df97ea80dcbe38200d9222dbc14a50b79e44fc65\\spring-boot-starter-oauth2-client-3.2.4.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\com.google.code.gson\\gson\\2.10.1\\b3add478d4382b78ea20b1671390a858002feb6c\\gson-2.10.1.jar;C:\\Users\\EZEN604-20\\.gradle\\caches\\modules-2\\files-2.1\\io.jsonwebtoken\\jjwt
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 3                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 1                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 4                                         {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 1048576                                   {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 268435456                                 {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 536870912                                 {product} {command line}
+   size_t MinHeapDeltaBytes                        = 1048576                                   {product} {ergonomic}
+   size_t MinHeapSize                              = 8388608                                   {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5832780                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122912730                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122912730                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 536870912                              {manageable} {ergonomic}
+     bool UseCompressedClassPointers               = true                           {product lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseLargePagesIndividualAllocation        = false                                  {pd product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Amazon Corretto\jdk17.0.10_7
+PATH=C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin;C:\Program Files\Amazon Corretto\jdk17.0.10_7\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\Git\cmd;C:\Users\EZEN604-20\AppData\Local\Microsoft\WindowsApps;C:\Users\EZEN604-20\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\EZEN604-20\AppData\Roaming\npm;C:\Program Files\JetBrains\IntelliJ IDEA 2023.3.3\bin;;C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2023.3.4\bin;;C:\Users\EZEN604-20\AppData\Local\GitHubDesktop\bin
+USERNAME=EZEN604-20
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 60 Stepping 3, GenuineIntel
+TMP=C:\Users\EZEN60~1\AppData\Local\Temp
+TEMP=C:\Users\EZEN60~1\AppData\Local\Temp
+
+
+
+Periodic native trim disabled
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+ Windows 10 , 64 bit Build 19041 (10.0.19041.3636)
+OS uptime: 14 days 4:55 hours
+
+CPU: total 4 (initial active 4) (4 cores per cpu, 1 threads per core) family 6 model 60 stepping 3 microcode 0x27, cx8, cmov, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, lzcnt, tsc, tscinvbit, avx, avx2, aes, erms, clmul, bmi1, bmi2, fma, vzeroupper, clflush
+Processor Information for all 4 processors :
+  Max Mhz: 3301, Current Mhz: 3301, Mhz Limit: 3301
+
+Memory: 4k page, system-wide physical 16305M (5994M free)
+TotalPageFile size 31491M (AvailPageFile size 146M)
+current process WorkingSet (physical memory assigned to process): 10M, peak: 10M
+current process commit charge ("private bytes"): 51M, peak: 307M
+
+vm_info: OpenJDK 64-Bit Server VM (17.0.10+7-LTS) for windows-amd64 JRE (17.0.10+7-LTS), built on Jan 10 2024 22:11:07 by "Administrator" with MS VC++ 16.10 / 16.11 (VS2019)
+
+END.
