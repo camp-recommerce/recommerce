@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import useCustomMovePage from "../../hooks/useCustomMovePage"
+import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import useCustomTimes from "../../hooks/useCustomTimes";
@@ -158,7 +158,7 @@ const A_ReadComponent = () => {
           </div>
         </div>
       </div>
-     
+
       <div className="flex justify-center mt-20">
         <div className="grid grid-cols-2 gap-10">
           <div className="flex justify-center items-center">
@@ -199,10 +199,7 @@ const A_ReadComponent = () => {
                 >
                   경매 채팅
                 </button>
-                <button
-                  className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800"
-                  
-                >
+                <button className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800">
                   {isChatModalOpen && (
                     <A_Chat
                       username={username}

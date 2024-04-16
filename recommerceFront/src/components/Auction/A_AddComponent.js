@@ -156,69 +156,76 @@ const A_AddComponent = () => {
                 value={auction.apDesc}
               ></textarea>
             </div>
-            <div className="text-gray-700 mb-4">물품 번호: {auction.apno}</div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">시작가</div>
-              <div className="text-lg">
-                <input
-                  className="text-right"
-                  name="apStartPrice"
-                  type={"text"}
-                  value={auction.apStartPrice}
-                  onChange={handleChangeAuction}
-                ></input>
-                원
-              </div>
+            <div className="font-bold text-lg">카테고리</div>
+            <textarea
+              className=""
+              name="apDesc"
+              type={"text"}
+              onChange={handleChangeAuction}
+              value={auction.apCategory}
+            ></textarea>
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-bold text-lg">시작가</div>
+            <div className="text-lg">
+              <input
+                className="text-right"
+                name="apStartPrice"
+                type={"text"}
+                value={auction.apStartPrice}
+                onChange={handleChangeAuction}
+              ></input>
+              원
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">입찰단위</div>
-              <div className="text-lg">
-                <input
-                  className="text-right"
-                  name="apBidIncrement"
-                  type={"text"}
-                  value={auction.apBidIncrement}
-                  onChange={handleChangeAuction}
-                ></input>
-                원
-              </div>
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-bold text-lg">입찰단위</div>
+            <div className="text-lg">
+              <input
+                className="text-right"
+                name="apBidIncrement"
+                type={"text"}
+                value={auction.apBidIncrement}
+                onChange={handleChangeAuction}
+              ></input>
+              원
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">물품상태</div>
-              <div className="text-lg">
-                <select
-                  name="apStatus"
-                  value={auction.apStatus}
-                  onChange={handleChangeAuction}
-                >
-                  {Object.entries(AuctionStatus).map(([key, value]) => (
-                    <option key={key} value={key}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="font-bold text-lg">시작시간</div>
-              <div className="text-lg">
-                <input
-                  className=""
-                  name="apStartTime"
-                  type={"datetime-local"}
-                  value={auction.apStartTime}
-                  onChange={handleChangeAuction}
-                ></input>
-              </div>
-            </div>
-            <div className="flex space-x-4">
-              <button
-                className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                onClick={handleClickAdd}
+          </div>
+          <div className="flex items-center justify-between mb-4">
+            <div className="font-bold text-lg">물품상태</div>
+            <div className="text-lg">
+              <select
+                name="apStatus"
+                value={auction.apStatus}
+                onChange={handleChangeAuction}
               >
-                물품 등록
-              </button>
+                {Object.entries(AuctionStatus).map(([key, value]) => (
+                  <option key={key} value={key}>
+                    {value}
+                  </option>
+                ))}
+              </select>
             </div>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="font-bold text-lg">시작시간</div>
+            <div className="text-lg">
+              <input
+                className=""
+                name="apStartTime"
+                type={"datetime-local"}
+                value={auction.apStartTime}
+                onChange={handleChangeAuction}
+              ></input>
+            </div>
+          </div>
+          <div className="flex space-x-4">
+            <button
+              className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+              onClick={handleClickAdd}
+            >
+              물품 등록
+            </button>
           </div>
         </div>
       </div>
