@@ -35,11 +35,11 @@ const A_ListComponent = () => {
 
   useEffect(() => {
     setLoading(true);
-    getList({ page, size }).then((data) => {
+    getList({ page, size, apName, apCategory }).then((data) => {
       setServerData(data);
       setLoading(false);
     });
-  }, [page, size, refresh]);
+  }, [page, size, refresh, apName, apCategory]);
 
   const navigate = useNavigate();
 
@@ -49,7 +49,7 @@ const A_ListComponent = () => {
   });
 
   const handleCategoryClick = (category) => {
-    setApCategory(category);
+    setApCategory(category === "전체" ? "" : category); // "전체"를 빈 문자열로 처리
   };
 
   const handleSearchInputChange = (e) => {
