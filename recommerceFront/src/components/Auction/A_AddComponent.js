@@ -8,6 +8,7 @@ const initState = {
   apStartPrice: "",
   apBidIncrement: "",
   apStatus: "PENDING",
+  apCategory: "",
   apStartTime: "",
   files: [],
 };
@@ -73,6 +74,7 @@ const A_AddComponent = () => {
     );
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
+    formData.append("apCategory", auction.apCategory);
 
     console.log(formData);
 
@@ -159,7 +161,7 @@ const A_AddComponent = () => {
             <div className="font-bold text-lg">카테고리</div>
             <textarea
               className=""
-              name="apDesc"
+              name="apCategory"
               type={"text"}
               onChange={handleChangeAuction}
               value={auction.apCategory}

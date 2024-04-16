@@ -22,6 +22,8 @@ const initState = {
   current: 0,
 };
 
+const categories = ["전체", "신발", "옷", "시계", "기타"];
+
 const A_ListComponent = () => {
   const { page, size, refresh, moveProductListPage, moveReadPage } =
     useCustomMovePage();
@@ -46,12 +48,12 @@ const A_ListComponent = () => {
     window.scrollTo(0, 0);
   });
 
-  const handleSearchInputChange = (e) => {
-    setApName(e.target.value);
+  const handleCategoryClick = (category) => {
+    setApCategory(category);
   };
 
-  const handleCategoryChange = (e) => {
-    setApCategory(e.target.value);
+  const handleSearchInputChange = (e) => {
+    setApName(e.target.value);
   };
 
   const handleSearchButtonClick = () => {
@@ -72,7 +74,7 @@ const A_ListComponent = () => {
       className="flex justify-center items-center flex-col"
       style={{ minHeight: "70vh" }}
     >
-      <div className="mb-4">
+      <div className="mb-4 flex items-center" style={{ marginBottom: "20px" }}>
         <input
           type="text"
           value={apName}
@@ -84,22 +86,27 @@ const A_ListComponent = () => {
             padding: "0.375rem 0.75rem",
             border: "1px solid #ccc",
             borderRadius: "0.375rem",
-            marginBottom: "20px",
           }}
         />
-        <select
-          value={apCategory}
-          onChange={handleCategoryChange}
-          className="px-3 py-1 border border-gray-300 rounded-md w-100 h-10 ml-2"
-        >
-          <option value="">전체 카테고리</option>
-        </select>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
           onClick={handleSearchButtonClick}
         >
           검색
         </button>
+        <div className="flex items-center ml-4">
+          {categories.map((category) => (
+            <div
+              key={category}
+              className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
+                apCategory === category ? "bg-gray-200" : ""
+              }`}
+              onClick={() => handleCategoryClick(category)}
+            >
+              {category}
+            </div>
+          ))}
+        </div>
       </div>
       <div
         className="shopList_area grid grid-cols-4 gap-2"
@@ -133,7 +140,7 @@ const A_ListComponent = () => {
                     시작가: {formatNumber(auctionProduct.apStartPrice)}원
                   </div>
                   <div className="shopList_end text-sm">
-                    경매 종료까지: {remainingTimes[index]}
+                    경매 종료: {remainingTimes[index]}
                   </div>
                 </div>
               </div>
