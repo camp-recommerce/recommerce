@@ -69,13 +69,6 @@ const A_ReadComponent = () => {
     CANCELLED: "경매 취소",
   };
 
-  const auctionCategoriesDesc = {
-    SHOES: "신발",
-    CLOTHES: "옷",
-    WATCH: "시계",
-    ETC: "기타",
-  };
-
   return (
     <>
       <div className="flex justify-center mt-20">
@@ -99,9 +92,7 @@ const A_ReadComponent = () => {
           </div>
           <div>
             <div className="max-w-md">
-              <div className="text-lg mb-4">
-                {auctionCategoriesDesc[auctionProduct.apCategory]}
-              </div>
+              <div className="text-lg mb-4">{auctionProduct.apCategory}</div>
               <div className="font-bold text-2xl mb-4">
                 {auctionProduct.apName}
               </div>

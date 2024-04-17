@@ -139,12 +139,7 @@ const A_ModifyComponent = () => {
     CANCELLED: "경매 취소",
   };
 
-  const AuctionCategories = {
-    SHOES: "신발",
-    CLOTHES: "옷",
-    WATCH: "시계",
-    ETC: "기타",
-  };
+  const categories = ["신발", "옷", "시계", "기타"];
 
   return (
     <div className="flex justify-center mt-20">
@@ -200,9 +195,9 @@ const A_ModifyComponent = () => {
                   value={auction.apCategory}
                   onChange={handleChangeAuction}
                 >
-                  {Object.entries(AuctionCategories).map(([key, value]) => (
-                    <option key={key} value={key}>
-                      {value}
+                  {categories.map((category) => (
+                    <option key={category} value={category}>
+                      {category}
                     </option>
                   ))}
                 </select>
