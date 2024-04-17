@@ -5,6 +5,7 @@ const MapComponent = () => {
   const mapContainer = useRef(null);
   const [map, setMap] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [regionInfo, setRegionInfo] = useState("");
 
   useEffect(() => {
     const mapOption = {
@@ -13,6 +14,25 @@ const MapComponent = () => {
     };
     const initializedMap = new kakao.maps.Map(mapContainer.current, mapOption);
     setMap(initializedMap);
+
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    const displayRegionInfo = (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const regionData = result[0];
+        const region = `${regionData.region_1depth_name} ${regionData.region_2depth_name} ${regionData.region_3depth_name}`;
+        setRegionInfo(region);
+      }
+    };
+
+    kakao.maps.event.addListener(initializedMap, "idle", () => {
+      const center = initializedMap.getCenter();
+      geocoder.coord2RegionCode(
+        center.getLng(),
+        center.getLat(),
+        displayRegionInfo
+      );
+    });
   }, []);
 
   const handleSearch = (e) => {
@@ -29,7 +49,11 @@ const MapComponent = () => {
 
   return (
     <div className="map-wrap" style={{ width: "100%", height: "500px" }}>
-      <div ref={mapContainer} className="w-full h-full"></div>
+      <div ref={mapContainer} className="w-full h-full relative">
+        <div className="absolute top-0 left-0 bg-white bg-opacity-75 p-4 m-2 rounded z-10">
+          <p>{regionInfo ? `${regionInfo}` : "현재 위치"}</p>
+        </div>
+      </div>
       <form onSubmit={handleSearch} className="p-4">
         <input
           type="text"
@@ -40,7 +64,7 @@ const MapComponent = () => {
         />
         <button
           type="submit"
-          className="ml-2 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          className="ml-2 bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
         >
           검색
         </button>
