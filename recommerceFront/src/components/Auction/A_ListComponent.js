@@ -43,7 +43,9 @@ const A_ListComponent = () => {
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName]); // 의존성 배열에 추가
+
+  const navigate = useNavigate();
 
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
