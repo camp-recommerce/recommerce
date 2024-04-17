@@ -41,18 +41,23 @@ const A_ReadComponent = () => {
     });
   }, [apno]);
 
-  const connectWebSocket = () => {
-    const soc = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
-    soc.onopen = () => {
+  const openChatModal = () => {
+    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
+    newSocket.onopen = () => {
       console.log("WebSocket connection established");
-      setSocket(soc);
+      setSocket(newSocket);
       setRoom(auctionProduct.apno);
-      setIsChatModalOpen(true); // 소켓 연결이 완료된 후에 모달을 엽니다.
+      setIsChatModalOpen(true);
+      console.log(isChatModalOpen);
     };
   };
 
   const closeChatModal = () => {
     setIsChatModalOpen(false);
+    if (socket) {
+      socket.close();
+      setSocket(null);
+    }
   };
 
   const closeImageModal = () => {
@@ -131,7 +136,7 @@ const A_ReadComponent = () => {
               <div className="flex space-x-4">
                 <button
                   className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                  onClick={connectWebSocket}
+                  onClick={() => openChatModal()}
                 >
                   경매 채팅
                 </button>
@@ -141,7 +146,7 @@ const A_ReadComponent = () => {
                       username={username}
                       room={room}
                       socket={socket}
-                      closeModal={() => closeChatModal()}
+                      closeModal={closeChatModal}
                       startPrice={auctionProduct.apStartPrice}
                       bidIncrement={auctionProduct.apBidIncrement}
                       imageSrc={auctionProduct.uploadFileNames}

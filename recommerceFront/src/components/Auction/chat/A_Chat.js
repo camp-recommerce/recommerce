@@ -36,10 +36,12 @@ function A_Chat({
   };
 
   useEffect(() => {
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMessageList((list) => [...list, data]);
-    };
+    if (socket) {
+      socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        setMessageList((list) => [...list, data]);
+      };
+    }
   }, [socket]);
 
   useEffect(() => {
