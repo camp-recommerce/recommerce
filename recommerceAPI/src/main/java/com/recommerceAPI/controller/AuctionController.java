@@ -31,15 +31,13 @@ public class AuctionController {
     }
 
     @GetMapping("/list")
+    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
 
-   public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
+        log.info(pageRequestDTO);
 
-       log.info(pageRequestDTO);
-
-      PageResponseDTO responseDTO = service.list(pageRequestDTO,apName,apCategory);
-       return responseDTO;
-   }
-
+        PageResponseDTO responseDTO = service.list(pageRequestDTO,apName,apCategory);
+        return responseDTO;
+    }
 
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){

@@ -18,6 +18,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query("select p from Product p where p.pno = :pno")
     Optional<Product> selectOne(@Param("pno") Long pno);
 
+
     @Modifying
     @Query("update Product p set p.delFlag = :flag where p.pno = :pno")
     void updateToDelete(@Param("pno") Long pno, @Param("flag") boolean flag);

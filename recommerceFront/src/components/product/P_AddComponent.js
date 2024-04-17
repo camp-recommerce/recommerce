@@ -1,6 +1,5 @@
 import { useRef, useState } from "react";
 import { postOne } from "../../api/productApi";
-import useCustomMovePage from "../../hooks/useCustomMovePage";
 import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";

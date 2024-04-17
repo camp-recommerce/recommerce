@@ -1,6 +1,6 @@
 package com.recommerceAPI.service;
 
-
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -8,14 +8,14 @@ import java.util.stream.Collectors;
 
 import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
-
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.repository.ProductRepository;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,19 +31,47 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-
     @Override
-    public PageResponseDTO<ProductDTO> getProductsByPage(PageRequestDTO pageRequestDTO) {
-        Page<Product> productPage = productRepository.findAll(PageRequest.of(pageRequestDTO.getPage(), pageRequestDTO.getSize()));
-        List<ProductDTO> productDTOList = productPage.getContent().stream()
-                .map(ProductMapper::toDTO)
-                .collect(Collectors.toList());
-        return PageResponseDTO.withAll()
-                .dtoList(productDTOList)
+    public PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname) {
+
+        log.info("getList..............");
+
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
+
+        Page<Object[]> result = productRepository.selectList(pname,pageable);
+
+        List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
+
+            Product product = (Product) arr[0];
+            ProductImage productImage = (ProductImage) arr[1];
+
+            ProductDTO productDTO = ProductDTO.builder()
+                    .pno(product.getPno())
+                    .pname(product.getPname())
+                    .pdesc(product.getPdesc())
+                    .price(product.getPrice())
+                    .delFlag(product.isDelFlag())
+                    .build();
+
+            if (productImage != null) {
+                productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
+            }
+
+            return productDTO;
+        }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+
+        return PageResponseDTO.<ProductDTO>withAll()
+                .dtoList(dtoList)
+                .totalCount(totalCount)
                 .pageRequestDTO(pageRequestDTO)
-                .totalCount(productPage.getTotalElements())
                 .build();
     }
+
 
     @Override
     public Long register(ProductDTO productDTO) {
@@ -60,10 +88,8 @@ public class ProductServiceImpl implements ProductService {
         Product product = Product.builder()
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
-                .price(productDTO.getPrice())
                 .pdesc(productDTO.getPdesc())
-                .pstate(productDTO.getPstate())
-                .plocat(productDTO.getPlocat())
+                .price(productDTO.getPrice())
                 .build();
 
         //업로드 처리가 끝난 파일들의 이름 리스트
@@ -99,11 +125,8 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .pname(product.getPname())
-                .price(product.getPrice())
                 .pdesc(product.getPdesc())
-                .pstate(product.getPstate())
-                .plocat(product.getPlocat())
-
+                .price(product.getPrice())
                 .build();
 
         List<ProductImage> imageList = product.getImageList();
@@ -127,12 +150,10 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = result.orElseThrow();
 
-        //2. change pname, pdesc, price, pstate, plocat
+        //2. change pname, pdesc, price
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPrice());
-        product.changeState(productDTO.getPstate());
-        product.changeLocat(productDTO.getPlocat());
 
         //3. upload File -- clear first
         product.clearList();
@@ -153,5 +174,6 @@ public class ProductServiceImpl implements ProductService {
         productRepository.updateToDelete(pno, true);
 
     }
+
 
 }

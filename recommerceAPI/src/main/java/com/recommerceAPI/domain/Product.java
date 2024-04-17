@@ -7,34 +7,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "tbl_product")
 @Getter
 @ToString(exclude = "imageList")
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long pno; // 제품번호
+    private Long pno;
 
-    private String pname; // 제품제목
+    private String pname;
 
-    private int price; // 제품가격
+    private int price;
 
-    private String pstate; // 제품상태
-
-    private String plocat; // 제품판매장소
-
-    private String pdesc; // 제품설명
+    private String pdesc;
 
     private boolean delFlag;
 
-    @ManyToOne
-    @JoinColumn(name = "user_email")  // 외래 키 이름 설정
-    private User user; // Product와 User의 관계
 
     public void changeDel(boolean delFlag) {
         this.delFlag = delFlag;
     }
+
 
     @ElementCollection
     @Builder.Default
@@ -51,14 +48,6 @@ public class Product {
     public void changeName(String name){
         this.pname = name;
     }
-
-
-    public void changeLocat(String locat){
-        this.plocat = locat;
-    }
-
-    public void changeState(String state){this.pstate = state;}
-
 
     public void addImage(ProductImage image) {
 

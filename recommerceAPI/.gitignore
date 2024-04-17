@@ -35,6 +35,3 @@ out/
 
 ### VS Code ###
 .vscode/
-
-# Custom folders
-/recommerce_2/recommerceAPI/upload/
