@@ -15,8 +15,11 @@ public class ProductImage { // 이미지마다 번호를 지정하고 상품 목
 
     private int ord;
 
+
+
     public void setOrd(int ord){
         this.ord = ord;
     }
+
 
 }
