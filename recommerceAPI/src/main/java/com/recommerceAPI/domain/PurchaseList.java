@@ -26,6 +26,4 @@ public class PurchaseList {
     private List<PurchaseListItem> items; // 구매한 상품 목록
 
 
-
-
 }

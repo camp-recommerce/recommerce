@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 public interface ProductService {
     PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname);
 
+    //create
     Long register(ProductDTO productDTO);
     ProductDTO get(Long pnum);
     void modify(ProductDTO productDTO);

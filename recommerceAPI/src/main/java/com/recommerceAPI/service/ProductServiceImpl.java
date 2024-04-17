@@ -89,9 +89,10 @@ public class ProductServiceImpl implements ProductService {
         Product product = Product.builder()
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
-                .pdesc(productDTO.getPdesc())
                 .price(productDTO.getPrice())
-                .paddress(productDTO.getPaddress())
+                .pdesc(productDTO.getPdesc())
+                .pstate(productDTO.getPstate())
+                .plocat(productDTO.getPlocat())
                 .build();
 
         //업로드 처리가 끝난 파일들의 이름 리스트
@@ -127,9 +128,11 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .pname(product.getPname())
-                .pdesc(product.getPdesc())
                 .price(product.getPrice())
-                .paddress(product.getPaddress())
+                .pdesc(product.getPdesc())
+                .pstate(product.getPstate())
+                .plocat(product.getPlocat())
+
                 .build();
 
         List<ProductImage> imageList = product.getImageList();
@@ -153,10 +156,12 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = result.orElseThrow();
 
-        //2. change pname, pdesc, price
+        //2. change pname, pdesc, price, pstate, plocat
         product.changeName(productDTO.getPname());
         product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPrice());
+        product.changeState(productDTO.getPstate());
+        product.changeLocat(productDTO.getPlocat());
 
         //3. upload File -- clear first
         product.clearList();
@@ -177,6 +182,5 @@ public class ProductServiceImpl implements ProductService {
         productRepository.updateToDelete(pno, true);
 
     }
-
 
 }

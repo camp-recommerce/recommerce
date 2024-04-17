@@ -31,13 +31,7 @@ public class ProductController {
     private final CustomFileUtil fileUtil;
 
 
-    @GetMapping("/")
-    public PageResponseDTO<ProductDTO> list (PageRequestDTO pageRequestDTO, String pname){
 
-        log.info("list----------------------"+ pageRequestDTO);
-
-        return productService.getList(pageRequestDTO, pname);
-    }
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API
     @GetMapping(value ="/products/read/{pno}")
@@ -63,7 +57,7 @@ public class ProductController {
     @PostMapping("/product/register")
     public Map<String, Long> register(ProductDTO productDTO){
 
-        log.info("register: " + productDTO);
+        log.info("!!!!!!!!!!!!!!!!!!!!Received productDTO: " + productDTO); // productDTO 확인 로그 추가
 
         List<MultipartFile> files = productDTO.getFiles();
 
@@ -71,7 +65,7 @@ public class ProductController {
 
         productDTO.setUploadFileNames(uploadFileNames);
 
-        log.info(uploadFileNames);
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!Uploaded file names: " + uploadFileNames); // 업로드된 파일 이름 확인 로그 추가
 
         //서비스 호출
         Long pno = productService.register(productDTO);
