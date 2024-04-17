@@ -16,6 +16,7 @@ function A_Chat({
   const [messageList, setMessageList] = useState([]);
   const messageBottomRef = useRef(null);
   const host = API_SERVER_HOST;
+
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     if (currentMsg !== "") {
@@ -115,7 +116,7 @@ function A_Chat({
             ref={inputRef}
             className="border border-gray-300 rounded-md px-4 py-2 mr-2 w-full text-black"
             type="text"
-            placeholder="메세지를 입력해주세요"
+            placeholder="입찰 가격을 입력해주세요"
             onKeyPress={(event) => {
               event.key === "Enter" && sendMessage();
             }}
@@ -124,7 +125,7 @@ function A_Chat({
             className="bg-blue-500 text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 flex-shrink-0"
             onClick={sendMessage}
           >
-            전송
+            입찰
           </button>
         </div>
       </div>
