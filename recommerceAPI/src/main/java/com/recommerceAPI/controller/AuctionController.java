@@ -31,6 +31,7 @@ public class AuctionController {
     }
 
     @GetMapping("/list")
+
    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
 
        log.info(pageRequestDTO);
@@ -38,6 +39,7 @@ public class AuctionController {
       PageResponseDTO responseDTO = service.list(pageRequestDTO,apName,apCategory);
        return responseDTO;
    }
+
 
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
