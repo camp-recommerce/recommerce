@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
-import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import useCustomTimes from "../../hooks/useCustomTimes";
