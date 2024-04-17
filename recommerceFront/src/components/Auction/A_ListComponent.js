@@ -29,9 +29,12 @@ const A_ListComponent = () => {
     useCustomMovePage();
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
+  const [apNameInput, setApNameInput] = useState("");
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -40,10 +43,7 @@ const A_ListComponent = () => {
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName]); // 의존성 배열에 추가
-  }, [page, size, refresh, apName, apCategory]);
-
-  const navigate = useNavigate();
+  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
 
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
@@ -51,11 +51,16 @@ const A_ListComponent = () => {
   });
 
   const handleCategoryClick = (category) => {
-    setApCategory(category === "전체" ? "" : category); // "전체"를 빈 문자열로 처리
+    // "전체"를 선택한 경우
+    if (category === "전체") {
+      setApCategory(null); // apCategory를 null로 설정
+    } else {
+      setApCategory(category);
+    }
   };
 
   const handleSearchInputChange = (e) => {
-    setApName(e.target.value);
+    setApNameInput(e.target.value);
   };
 
   const handleSearchButtonClick = () => {
@@ -67,6 +72,12 @@ const A_ListComponent = () => {
         setLoading(false);
       }
     );
+
+    setApName(apNameInput); // 입력 창의 값을 변수에 저장
+    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
+      setServerData(data);
+      setLoading(false);
+    });
   };
 
   const handleKeyPress = (e) => {
@@ -91,7 +102,7 @@ const A_ListComponent = () => {
       <div className="mb-4 flex items-center" style={{ marginBottom: "20px" }}>
         <input
           type="text"
-          value={apName}
+          value={apNameInput}
           onChange={handleSearchInputChange}
           onKeyPress={handleKeyPress}
           placeholder="상품 이름 검색"
@@ -102,16 +113,16 @@ const A_ListComponent = () => {
             borderRadius: "0.375rem",
           }}
         />
-        <select value={apCategory} onChange={handleCategoryChange}>
-        {Object.entries(auctionCategories).map(([key, value]) => (
-          <option key={key} value={key}>
-            {value}
-          </option>
-        ))}
-      </select>
+        <select value={apCategory} onChange={handleCategoryClick}>
+          {Object.entries(auctionCategories).map(([key, value]) => (
+            <option key={key} value={key}>
+              {value}
+            </option>
+          ))}
+        </select>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
-          onClick={handleSearchButtonClick}
+          onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
         >
           검색
         </button>
@@ -120,7 +131,10 @@ const A_ListComponent = () => {
             <div
               key={category}
               className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
-                apCategory === category ? "bg-gray-200" : ""
+                apCategory === category ||
+                (category === "전체" && apCategory === null)
+                  ? "bg-gray-200"
+                  : ""
               }`}
               onClick={() => handleCategoryClick(category)}
             >
@@ -188,5 +202,5 @@ const A_ListComponent = () => {
       </div>
     </div>
   );
-
+};
 export default A_ListComponent;
