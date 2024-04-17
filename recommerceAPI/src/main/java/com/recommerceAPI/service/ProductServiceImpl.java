@@ -31,46 +31,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
-    @Override
-    public PageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname) {
-
-        log.info("getList..............");
-
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("pno").descending());
-
-        Page<Object[]> result = productRepository.selectList(pname,pageable);
-
-        List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
-
-            Product product = (Product) arr[0];
-            ProductImage productImage = (ProductImage) arr[1];
-
-            ProductDTO productDTO = ProductDTO.builder()
-                    .pno(product.getPno())
-                    .pname(product.getPname())
-                    .pdesc(product.getPdesc())
-                    .price(product.getPrice())
-                    .delFlag(product.isDelFlag())
-                    .build();
-
-            if (productImage != null) {
-                productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
-            }
-
-            return productDTO;
-        }).collect(Collectors.toList());
-
-        long totalCount = result.getTotalElements();
-
-        return PageResponseDTO.<ProductDTO>withAll()
-                .dtoList(dtoList)
-                .totalCount(totalCount)
-                .pageRequestDTO(pageRequestDTO)
-                .build();
-    }
 
 
     @Override
@@ -125,8 +85,10 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .pname(product.getPname())
-                .pdesc(product.getPdesc())
                 .price(product.getPrice())
+                .pstate(product.getPstate())
+                .plocat(product.getPlocat())
+                .pdesc(product.getPdesc())
                 .build();
 
         List<ProductImage> imageList = product.getImageList();
@@ -150,10 +112,12 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = result.orElseThrow();
 
-        //2. change pname, pdesc, price
+        //2. change pname, price, pstate, plocat, pdesc
         product.changeName(productDTO.getPname());
-        product.changeDesc(productDTO.getPdesc());
         product.changePrice(productDTO.getPrice());
+        product.changeState(productDTO.getPstate());
+        product.changeLocat(productDTO.getPlocat());
+        product.changeDesc(productDTO.getPdesc());
 
         //3. upload File -- clear first
         product.clearList();
