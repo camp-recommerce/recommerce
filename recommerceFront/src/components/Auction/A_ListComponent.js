@@ -45,8 +45,6 @@ const A_ListComponent = () => {
     console.log(serverData.uploadFileNames);
   }, [page, size, refresh, apName]); // 의존성 배열에 추가
 
-  const navigate = useNavigate();
-
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
     window.scrollTo(0, 0);
