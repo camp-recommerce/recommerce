@@ -60,22 +60,16 @@ public class ChatHandler extends TextWebSocketHandler {
         ChatMessageDTO chatMessageDTO = objectMapper.readValue(payload, ChatMessageDTO.class);
         log.info("Received chat message: {}", chatMessageDTO);
 
-        String author = chatMessageDTO.getAuthor();
-        String room = chatMessageDTO.getRoom();
-        String content = chatMessageDTO.getMessage();
-        String time = chatMessageDTO.getTime(); // time 필드 추가
 
-        log.info("Author: {}", chatMessageDTO.getAuthor());
-        log.info("Room: {}", chatMessageDTO.getRoom());
-        log.info("Message: {}", chatMessageDTO.getMessage());
-        log.info("Time: {}", chatMessageDTO.getTime());
+        String room = chatMessageDTO.getRoom();
+
 
         if (chatMessageDTO.getMessageType() == null) {
             log.error("Message type is null: {}", payload);
             return;
         }
 
-        sendMessageToRoom(room, chatMessageDTO, session); // 수정된 부분
+        sendMessageToRoom(room, chatMessageDTO, session);
     }
 
     @Override
