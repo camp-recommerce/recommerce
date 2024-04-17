@@ -9,13 +9,11 @@ const useCustomTimesList = (serverData) => {
     const timer = setInterval(() => {
       const now = new Date().getTime();
       const remaining = serverData.dtoList.map((auctionProduct) => {
-        const endTime = new Date(auctionProduct.apStartTime).getTime();
-        const distance = endTime - now;
+        const startTime = new Date(auctionProduct.apStartTime).getTime();
+        const endTime = new Date(auctionProduct.apClosingTime).getTime();
 
-        if (distance <= 0) {
-          return "경매 종료";
-        } else {
-          const endDateTime = new Date(
+        if (now < startTime) {
+          const startDateTime = new Date(
             auctionProduct.apStartTime
           ).toLocaleString("ko-KR", {
             hour12: false,
@@ -25,7 +23,11 @@ const useCustomTimesList = (serverData) => {
             hour: "numeric",
             minute: "numeric",
           });
-          return endDateTime;
+          return `경매 시작: ${startDateTime}`;
+        } else if (now > endTime) {
+          return "경매 종료";
+        } else {
+          return "경매 진행 중";
         }
       });
       setRemainingTimes(remaining);
