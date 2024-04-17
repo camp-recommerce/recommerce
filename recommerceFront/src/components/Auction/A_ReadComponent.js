@@ -20,7 +20,7 @@ const host = API_SERVER_HOST;
 
 const A_ReadComponent = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const [username, setUsername] = useState("1");
+  const [username, setUsername] = useState("user0@aaa.com");
   const [room, setRoom] = useState(1); // 예시로 '기본 방'으로 설정
   const [auctionProduct, setAuctionProduct] = useState(initState);
   const { moveProductListPage, moveModifyPage } = useCustomMovePage();

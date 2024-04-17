@@ -85,4 +85,11 @@ public class Auction {
     public void clearList() {
         this.imageList.clear();
     }
+
+    // 입찰가 갱신 메서드
+    public void updateCurrentPrice(int bidAmount) {
+        if (bidAmount > this.apCurrentPrice) {
+            this.apCurrentPrice = bidAmount;
+        }
+    }
 }

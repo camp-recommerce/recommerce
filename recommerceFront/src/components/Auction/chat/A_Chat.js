@@ -28,7 +28,7 @@ function A_Chat({
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
-        messageType: "MESSAGE",
+        messageType: "BID",
       };
       socket.send(JSON.stringify(messageData));
       setMessageList((list) => [...list, messageData]);

@@ -43,6 +43,11 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
 
         // AuctionRepository를 사용하여 상품번호에 해당하는 경매 정보 가져오기
         Auction auction = auctionRepository.findById(apno).orElse(null);
+        // Auction의 현재 가격 업데이트
+        log.info("가격"+bidAmount);
+        log.info("상품"+auction);
+        auction.updateCurrentPrice(bidAmount);
+        auctionRepository.save(auction);
 
         // 필요한 정보가 없으면 null 반환
         if ( auction == null) {
