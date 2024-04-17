@@ -92,8 +92,24 @@ public class ChatHandler extends TextWebSocketHandler {
         sendMessageToRoom(room,notificationDTO,session);
 
         sessions.remove(session);
-        sessionToUsername.remove(session.getId());
-        log.info("{} disconnect", session.getId());
+
+        // 세션투유저네임 맵에 반복돌림
+        Iterator<Map.Entry<String, List<WebSocketSession>>> iterator = sessionToUsername.entrySet().iterator();
+        // 한줄씩 모든 내용 찾기.
+        while (iterator.hasNext()) {
+            // 내용을 저장
+            Map.Entry<String, List<WebSocketSession>> entry = iterator.next();
+            // 현재 방에 연결된 세션 리스트를 가져옵니다
+            List<WebSocketSession> sessionsInRoom = entry.getValue();
+            // 현재 세션을 세션 리스트에서 제거합니다.
+            sessionsInRoom.remove(session);
+            // 세션 리스트가 비어 있다면 해당 방의 엔트리를 맵에서 제거합니다.
+            if (sessionsInRoom.isEmpty()) {
+                iterator.remove();
+            }
+            // 세션이 연결이 끊겼음을 로그로 기록합니다.
+            log.info("{} disconnect", session.getId());
+        }
     }
 
     // handleTextMessage 메서드 내부에서 사용자가 입력한 채팅을 해당 방의 모든 세션에게 전달하는 부분입니다.
