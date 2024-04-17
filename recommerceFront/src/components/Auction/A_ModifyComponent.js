@@ -11,8 +11,9 @@ const initState = {
   apDesc: "",
   apStartPrice: "",
   apBidIncrement: "",
-  apStatus: "",
+  apStatus: "PENDING",
   apStartTime: "",
+  apClosingTime: "",
   uploadFileNames: [],
 };
 
@@ -96,6 +97,7 @@ const A_ModifyComponent = () => {
     formData.append("apBidIncrement", auction.apBidIncrement);
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
+    formData.append("apClosingTime", auction.apClosingTime);
 
     for (let i = 0; i < auction.uploadFileNames.length; i++) {
       formData.append("uploadFileNames", auction.uploadFileNames[i]);
@@ -130,13 +132,6 @@ const A_ModifyComponent = () => {
         setLoading(false);
         alert("삭제에 실패했습니다.");
       });
-  };
-
-  const AuctionStatus = {
-    PENDING: "경매 대기 중",
-    ACTIVE: "경매 진행 중",
-    CLOSED: "경매 종료",
-    CANCELLED: "경매 취소",
   };
 
   const categories = ["신발", "옷", "시계", "기타"];
@@ -251,22 +246,6 @@ const A_ModifyComponent = () => {
                 원
               </div>
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">물품상태</div>
-              <div className="text-lg">
-                <select
-                  name="apStatus"
-                  value={auction.apStatus}
-                  onChange={handleChangeAuction}
-                >
-                  {Object.entries(AuctionStatus).map(([key, value]) => (
-                    <option key={key} value={key}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
             <div className="flex items-center justify-between">
               <div className="font-bold text-lg">시작시간</div>
               <div className="text-lg">
@@ -275,6 +254,18 @@ const A_ModifyComponent = () => {
                   name="apStartTime"
                   type={"datetime-local"}
                   value={auction.apStartTime}
+                  onChange={handleChangeAuction}
+                ></input>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="font-bold text-lg">종료시간</div>
+              <div className="text-lg">
+                <input
+                  className=""
+                  name="apClosingTime"
+                  type={"datetime-local"}
+                  value={auction.apClosingTime}
                   onChange={handleChangeAuction}
                 ></input>
               </div>

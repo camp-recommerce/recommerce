@@ -157,10 +157,16 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    시작가: {formatNumber(auctionProduct.apStartPrice)}원
+                    {auctionProduct.apStatus === "ACTIVE"
+                      ? `현재 입찰가: ${formatNumber(
+                          auctionProduct.apCurrentPrice
+                        )}원`
+                      : `경매 시작가: ${formatNumber(
+                          auctionProduct.apStartPrice
+                        )}원`}
                   </div>
                   <div className="shopList_end text-sm">
-                    경매 종료: {remainingTimes[index]}
+                    {remainingTimes[index]}
                   </div>
                 </div>
               </div>

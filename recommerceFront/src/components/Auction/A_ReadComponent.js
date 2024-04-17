@@ -32,6 +32,8 @@ const A_ReadComponent = () => {
   const remainingTime = useCustomTimes(auctionProduct.apStartTime);
   const [socket, setSocket] = useState(null);
   const [formattedDate, setFormattedDate] = useState("");
+  const [formattedClosingDate, setFormattedClosingDate] = useState("");
+  const [currentPrice, setCurrentPrice] = useState("");
 
   useEffect(() => {
     setLoading(true);
@@ -39,11 +41,13 @@ const A_ReadComponent = () => {
       console.log(data);
       setAuctionProduct(data);
       setFormattedDate(formatDateTime(data.apStartTime));
+      setFormattedClosingDate(formatDateTime(data.apClosingTime));
       window.scrollTo(0, 0);
       setLoading(false);
     });
   }, [apno]);
 
+  // openChatModal 함수 내에서 WebSocket을 열고 새로운 입찰가를 받았을 때 해당 값을 상태로 업데이트합니다.
   const openChatModal = () => {
     const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
     newSocket.onopen = () => {
@@ -112,6 +116,13 @@ const A_ReadComponent = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">현재 입찰가</div>
+                <div className="text-lg">
+                  {formatNumber(currentPrice || auctionProduct.apCurrentPrice)}
+                  원
+                </div>
+              </div>
+              <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">입찰단위</div>
                 <div className="text-lg">
                   {formatNumber(auctionProduct.apBidIncrement)}원
@@ -127,22 +138,24 @@ const A_ReadComponent = () => {
                 <div className="font-bold text-lg">시작시간</div>
                 <div className="text-lg">{formattedDate}</div>
               </div>
-              <div className="flex items-center justify-center mb-4">
-                <div className="text-sm">
-                  (경매는 시작 후 2시간 동안 진행됩니다)
-                </div>
+              <div className="flex items-center justify-between">
+                <div className="font-bold text-lg">종료시간</div>
+                <div className="text-lg">{formattedClosingDate}</div>
               </div>
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">경매 시작까지</div>
                 <div className="text-lg">{remainingTime}</div>
               </div>
+
               <div className="flex space-x-4">
-                <button
-                  className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                  onClick={() => openChatModal()}
-                >
-                  경매 채팅
-                </button>
+                {auctionProduct.apStatus === "ACTIVE" && (
+                  <button
+                    className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                    onClick={() => openChatModal()}
+                  >
+                    경매 채팅
+                  </button>
+                )}
                 <div>
                   {isChatModalOpen && (
                     <A_Chat
