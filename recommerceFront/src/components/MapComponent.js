@@ -2,51 +2,73 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const MapComponent = () => {
-  const mapContainer = useRef(null); // 지도를 담을 컨테이너의 ref
-  const [map, setMap] = useState(null); // 지도 객체를 상태로 관리
-  const [locationInfo, setLocationInfo] = useState({
-    addressName: "",
-    code: "",
-  });
+  const mapContainer = useRef(null);
+  const [map, setMap] = useState(null);
+  const [keyword, setKeyword] = useState("");
+  const [regionInfo, setRegionInfo] = useState("");
 
   useEffect(() => {
-    const options = {
-      center: new kakao.maps.LatLng(37.57011257004789, 126.9772250564715), // 초기 주소 광화문역
-      isPanto: true,
-      level: 4,
+    const mapOption = {
+      center: new kakao.maps.LatLng(37.566826, 126.9786567), // 초기 지도 중심좌표
+      level: 3, // 초기 지도 확대 레벨
     };
-    const mapInstance = new kakao.maps.Map(mapContainer.current, options);
-    setMap(mapInstance); // 지도 객체를 상태로 저장
+    const initializedMap = new kakao.maps.Map(mapContainer.current, mapOption);
+    setMap(initializedMap);
+
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    const displayRegionInfo = (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const regionData = result[0];
+        const region = `${regionData.region_1depth_name} ${regionData.region_2depth_name} ${regionData.region_3depth_name}`;
+        setRegionInfo(region);
+      }
+    };
+
+    kakao.maps.event.addListener(initializedMap, "idle", () => {
+      const center = initializedMap.getCenter();
+      geocoder.coord2RegionCode(
+        center.getLng(),
+        center.getLat(),
+        displayRegionInfo
+      );
+    });
   }, []);
 
-  useEffect(() => {
-    if (map) {
-      // 지도 객체가 초기화된 후 이벤트 리스너 설정
-      kakao.maps.event.addListener(map, "click", function (mouseEvent) {
-        const latlng = mouseEvent.latLng;
-        const geocoder = new kakao.maps.services.Geocoder();
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const geocoder = new kakao.maps.services.Geocoder();
 
-        const callback = function (result, status) {
-          if (status === kakao.maps.services.Status.OK) {
-            setLocationInfo({
-              addressName: result[0].address_name,
-              code: result[0].code,
-            });
-          }
-        };
-
-        geocoder.coord2RegionCode(latlng.getLng(), latlng.getLat(), callback);
-      });
-    }
-  }, [map]); // map 객체가 변할 때마다 이벤트 리스너를 다시 설정
+    geocoder.addressSearch(keyword, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        map.setCenter(coords);
+      }
+    });
+  };
 
   return (
-    <div className="map-wrap w-4/5 h-96 border-2 border-black">
-      <div ref={mapContainer} className="map-box w-full h-full"></div>
-      <div>
-        <p>지역 명칭: {locationInfo.addressName}</p>
-        <p>행정구역 코드: {locationInfo.code}</p>
+    <div className="map-wrap" style={{ width: "100%", height: "500px" }}>
+      <div ref={mapContainer} className="w-full h-full relative">
+        <div className="absolute top-0 left-0 bg-white bg-opacity-75 p-4 m-2 rounded z-10">
+          <p>{regionInfo ? `${regionInfo}` : "현재 위치"}</p>
+        </div>
       </div>
+      <form onSubmit={handleSearch} className="p-4">
+        <input
+          type="text"
+          value={keyword}
+          onChange={(e) => setKeyword(e.target.value)}
+          placeholder="행정동 이름 검색..."
+          className="p-2 text-sm border rounded shadow"
+        />
+        <button
+          type="submit"
+          className="ml-2 bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded"
+        >
+          검색
+        </button>
+      </form>
     </div>
   );
 };
