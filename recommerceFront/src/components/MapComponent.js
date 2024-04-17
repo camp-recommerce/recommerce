@@ -15,9 +15,23 @@ const MapComponent = () => {
     const initializedMap = new kakao.maps.Map(mapContainer.current, mapOption);
     setMap(initializedMap);
 
-    // 마커 생성 및 지도 중앙 고정
+    // 마커 이미지의 URL, 크기 및 옵션 설정
+    const imageSrc = process.env.PUBLIC_URL + "/images/location.svg", // 마커 이미지의 주소
+      imageSize = new kakao.maps.Size(64, 69), // 마커 이미지의 크기
+      imageOption = { offset: new kakao.maps.Point(32, 69) }; // 이미지에서 마커의 위치를 조정 (이미지의 중앙 아래가 마커 위치)
+
+    // 마커 이미지 생성
+    const markerImage = new kakao.maps.MarkerImage(
+        imageSrc,
+        imageSize,
+        imageOption
+      ),
+      markerPosition = mapOption.center; // 마커 초기 위치 (지도 중앙)
+
+    // 마커 생성 및 지도에 표시
     const marker = new kakao.maps.Marker({
-      position: mapOption.center,
+      position: markerPosition,
+      image: markerImage, // 마커 이미지 설정
     });
     marker.setMap(initializedMap);
 
