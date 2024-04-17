@@ -43,7 +43,7 @@ const A_ListComponent = () => {
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
 
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
@@ -86,14 +86,6 @@ const A_ListComponent = () => {
     }
   };
 
-  const auctionCategories = {
-    ALL: "전체",
-    SHOES: "신발",
-    CLOTHES: "옷",
-    WATCH: "시계",
-    ETC: "기타",
-  };
-
   return (
     <div
       className="flex justify-center items-center flex-col"
@@ -113,13 +105,6 @@ const A_ListComponent = () => {
             borderRadius: "0.375rem",
           }}
         />
-        <select value={apCategory} onChange={handleCategoryClick}>
-          {Object.entries(auctionCategories).map(([key, value]) => (
-            <option key={key} value={key}>
-              {value}
-            </option>
-          ))}
-        </select>
         <button
           className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
           onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
