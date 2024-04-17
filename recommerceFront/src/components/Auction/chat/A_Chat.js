@@ -19,21 +19,38 @@ function A_Chat({
 
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
-    if (currentMsg !== "") {
-      const messageData = {
-        room: room,
-        author: username,
-        message: currentMsg,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-        messageType: "BID",
-      };
-      socket.send(JSON.stringify(messageData));
-      setMessageList((list) => [...list, messageData]);
-      inputRef.current.value = "";
+    const parsedMsg = parseInt(currentMsg);
+
+    // 입력된 메시지가 숫자가 아니거나, startPrice보다 작은 경우 알림창으로 알림
+    if (isNaN(parsedMsg) || parsedMsg <= startPrice) {
+      window.alert("입찰가가 시작가 보다 낮습니다.");
+      return;
     }
+
+    // bidIncrement로 나누어 떨어지지 않는 경우 알림창으로 알림
+    if (parsedMsg % bidIncrement !== 0) {
+      window.alert("입찰 단위가 맞지 않습니다.");
+      return;
+    }
+    const currentMonth = new Date().getMonth() + 1;
+    // 조건에 맞는 경우에만 메시지 전송
+    const messageData = {
+      room: room,
+      author: username,
+      message: currentMsg,
+      time:
+        currentMonth +
+        "." +
+        new Date(Date.now()).getDate() +
+        "," +
+        new Date(Date.now()).getHours() +
+        ":" +
+        new Date(Date.now()).getMinutes(),
+      messageType: "BID",
+    };
+    socket.send(JSON.stringify(messageData));
+    setMessageList((list) => [...list, messageData]);
+    inputRef.current.value = "";
   };
 
   useEffect(() => {
