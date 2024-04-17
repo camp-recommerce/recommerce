@@ -97,7 +97,7 @@ const MapComponent = () => {
         </button>
       </div>
       <div className="m-4 w-full flex flex-col justify-center items-center">
-        <div className="mb-2 font-extrabold text-lg">
+        <div className="mb-2 font-extrabold text-lg min-h-[30px]">
           <p>{address}</p>
         </div>
         <button
