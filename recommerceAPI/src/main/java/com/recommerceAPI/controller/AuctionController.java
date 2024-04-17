@@ -1,6 +1,8 @@
 package com.recommerceAPI.controller;
 
 import com.recommerceAPI.dto.AuctionDTO;
+import com.recommerceAPI.dto.PageRequestDTO;
+import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.service.AuctionService;
 import com.recommerceAPI.util.CustomFileUtil;
 import lombok.RequiredArgsConstructor;
@@ -28,14 +30,14 @@ public class AuctionController {
         return service.get(apno);
     }
 
-//    @GetMapping("/list")
-//    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
-//
-//        log.info(pageRequestDTO);
-//
-//        PageResponseDTO responseDTO = service.list(pageRequestDTO,apName,apCategory);
-//        return responseDTO;
-//    }
+    @GetMapping("/list")
+   public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
+
+       log.info(pageRequestDTO);
+
+      PageResponseDTO responseDTO = service.list(pageRequestDTO,apName,apCategory);
+       return responseDTO;
+   }
 
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
