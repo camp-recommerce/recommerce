@@ -8,11 +8,9 @@ const A_IndexPage = () => {
   const size = queryParams.get("size") ? parseInt(queryParams.get("size")) : 10;
 
   return (
-    <>
-      <BasicLayout>
-        <Outlet />
-      </BasicLayout>
-    </>
+    <BasicLayout>
+      <Outlet />
+    </BasicLayout>
   );
 };
 

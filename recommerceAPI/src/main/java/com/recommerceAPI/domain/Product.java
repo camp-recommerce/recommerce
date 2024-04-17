@@ -10,8 +10,6 @@ import java.util.List;
 @Getter
 @ToString(exclude = "imageList")
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product {
 
     @Id
@@ -27,8 +25,6 @@ public class Product {
     private String plocat; // 제품판매장소
 
     private String pdesc; // 제품설명
-
-    private String paddress;
 
     private boolean delFlag;
 

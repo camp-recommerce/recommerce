@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { API_SERVER_HOST } from "../../services/productApi";
+import { API_SERVER_HOST } from "../../api/productApi";
 import { formatNumber } from "../../util/formatNumberUtil";
 
 const initState = {

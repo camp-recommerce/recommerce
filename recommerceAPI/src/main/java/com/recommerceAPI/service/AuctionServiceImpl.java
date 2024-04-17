@@ -3,8 +3,7 @@ package com.recommerceAPI.service;
 import com.recommerceAPI.domain.Auction;
 import com.recommerceAPI.domain.AuctionImage;
 import com.recommerceAPI.dto.AuctionDTO;
-import com.recommerceAPI.dto.PageRequestDTO;
-import com.recommerceAPI.dto.PageResponseDTO;
+
 import com.recommerceAPI.repository.AuctionRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -16,7 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -99,34 +98,5 @@ public class AuctionServiceImpl implements AuctionService{
         auctionRepository.deleteById(apno);
     }
 
-    @Override
-    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
-        Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
-                pageRequestDTO.getSize(),
-                Sort.by("apno").descending());
 
-        Page<Object[]> result = auctionRepository.selectList(apName,apCategory,pageable);
-
-        List<AuctionDTO> dtoList = result.getContent().stream()
-                .map(arr -> {
-                    Auction auction = (Auction) arr[0];
-                    AuctionImage auctionImage = (AuctionImage) arr[1];
-                    AuctionDTO auctionDTO = modelMapper.map(auction, AuctionDTO.class);
-                    if (auctionImage != null) {
-                        auctionDTO.setUploadFileNames(Collections.singletonList(auctionImage.getFileName()));
-                    }
-                    return auctionDTO;
-                }).collect(Collectors.toList());
-
-        long totalCount = result.getTotalElements();
-
-        PageResponseDTO<AuctionDTO> responseDTO = PageResponseDTO.<AuctionDTO>withAll()
-                .dtoList(dtoList)
-                .pageRequestDTO(pageRequestDTO)
-                .totalCount(totalCount)
-                .build();
-
-        return responseDTO;
-    }
 }
