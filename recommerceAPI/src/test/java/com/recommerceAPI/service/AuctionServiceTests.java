@@ -2,8 +2,6 @@ package com.recommerceAPI.service;
 
 import com.recommerceAPI.domain.AuctionStatus;
 import com.recommerceAPI.dto.AuctionDTO;
-import com.recommerceAPI.dto.PageRequestDTO;
-import com.recommerceAPI.dto.PageResponseDTO;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,7 +48,6 @@ public class AuctionServiceTests {
 
         log.info(auctionDTO);
     }
-
     @Test
     public void testList() {
         PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
@@ -60,4 +57,5 @@ public class AuctionServiceTests {
         PageResponseDTO<AuctionDTO> response = auctionService.list(pageRequestDTO, null, null);
         log.info(response);
     }
+
 }

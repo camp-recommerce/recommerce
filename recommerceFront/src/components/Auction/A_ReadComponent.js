@@ -7,16 +7,16 @@ import { useNavigate, useParams } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 import { formatDateTime } from "../../util/formatTimeUtil";
 
-import A_Chat from "../auction/chat/A_Chat";
+// import A_Chat from "../auction/chat/A_Chat";
 
-const initState = {
-  apName: "",
-  apDesc: "",
-  apStartPrice: 0,
-  uploadFileNames: [],
-};
+// const initState = {
+//   apName: "",
+//   apDesc: "",
+//   apStartPrice: 0,
+//   uploadFileNames: [],
+// };
 
-const host = API_SERVER_HOST;
+// const host = API_SERVER_HOST;
 
 const A_ReadComponent = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
@@ -63,9 +63,9 @@ const A_ReadComponent = () => {
     }
   };
 
-  const closeImageModal = () => {
-    setOpenImg(false);
-  };
+  //   const closeImageModal = () => {
+  //     setOpenImg(false);
+  //   };
 
   const auctionStatusDesc = {
     PENDING: "경매 대기 중",
@@ -177,4 +177,4 @@ const A_ReadComponent = () => {
   );
 };
 
-export default A_ReadComponent;
+// export default A_ReadComponent;
