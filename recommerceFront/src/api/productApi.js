@@ -4,9 +4,18 @@ export const API_SERVER_HOST = "http://localhost:8080";
 const host = `${API_SERVER_HOST}`;
 
 //상품 리스트 불러오기(메인페이지)
-export const getList = async () => {
-  const res = await axios.get(`${host}`);
-  return res.data;
+export const getList = async (pageParam) => {
+  const { pname, pcategory } = pageParam;
+
+  try {
+    const res = await axios.get(`${host}`, {
+      params: { pname, pcategory },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching auction list:", error);
+    throw error; // 오류를 호출자에게 전파
+  }
 };
 
 //상품 상세페이지

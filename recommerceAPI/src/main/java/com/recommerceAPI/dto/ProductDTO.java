@@ -12,6 +12,8 @@ public class ProductDTO {
     private Long pno; // 상품 번호
 
     private String pname; // 상품 이름
+    
+    private String pcategory; // 상품 카테고리
 
     private int price; // 상품 가격
 

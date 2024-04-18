@@ -20,6 +20,8 @@ public class Product {
 
     private String pname;
 
+    private String pcategory;
+
     private int price;
 
     private String pstate; // 제품상태
@@ -46,6 +48,10 @@ public class Product {
     public void changePrice(int price) {
         this.price = price;
     }
+
+    public void changePcategory(String category) {
+            this.pcategory = category;
+        }
 
     public void changeDesc(String desc){
         this.pdesc = desc;
