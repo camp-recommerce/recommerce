@@ -10,8 +10,10 @@ import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
+import com.recommerceAPI.dto.PageResponsePpDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.repository.ProductRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,43 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
 
+    private final ModelMapper modelMapper;
+
+
+    @Override
+       public PageResponsePpDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory) {
+
+           log.info("getList..............");
+
+           Pageable pageable = PageRequest.of(
+                   pageRequestDTO.getPage() - 1,
+                   pageRequestDTO.getSize(),
+                   Sort.by("pno").descending());
+
+           Page<Object[]> result = productRepository.selectList(pname,pageable);
+
+           List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
+
+               Product product = (Product) arr[0];
+               ProductImage productImage = (ProductImage) arr[1];
+
+               ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+
+               if (productImage != null) {
+                   productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
+               }
+
+               return productDTO;
+           }).collect(Collectors.toList());
+
+           long totalCount = result.getTotalElements();
+
+           return PageResponsePpDTO.<ProductDTO>withAll()
+                   .dtoList(dtoList)
+                   .totalCount(totalCount)
+                   .pageRequestDTO(pageRequestDTO)
+                   .build();
+       }
 
 
     @Override
@@ -49,6 +88,8 @@ public class ProductServiceImpl implements ProductService {
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
                 .pcategory(productDTO.getPcategory())
+                .plocat(productDTO.getPlocat())
+                .pstate(productDTO.getPstate())
                 .pdesc(productDTO.getPdesc())
                 .price(productDTO.getPrice())
                 .build();

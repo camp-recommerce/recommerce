@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
+import com.recommerceAPI.dto.PageResponsePpDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.service.ProductService;
 import com.recommerceAPI.util.CustomFileUtil;
@@ -26,10 +27,16 @@ import lombok.extern.log4j.Log4j2;
 
 public class ProductController {
 
-    // 여기 하나만 조회하는 기능 추가 해주셔야 합니다.
     private final ProductService productService;
     private final CustomFileUtil fileUtil;
 
+    @GetMapping("/")
+       public PageResponsePpDTO<ProductDTO> list(PageRequestDTO pageRequestDTO, String pname, String pcategory){
+
+           log.info("list----------------------"+ pageRequestDTO);
+
+           return productService.getList(pageRequestDTO, pname, pcategory);
+       }
 
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API

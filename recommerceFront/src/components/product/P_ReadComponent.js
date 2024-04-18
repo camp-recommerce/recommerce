@@ -27,7 +27,7 @@ const P_ReadComponent = ({ pno }) => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const data = await getOne(pno);
+        const data = await getOne(1);
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
