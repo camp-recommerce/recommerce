@@ -115,11 +115,18 @@ const A_ReadComponent = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between mb-4">
-                <div className="font-bold text-lg">현재 입찰가</div>
-                <div className="text-lg">
-                  {formatNumber(currentPrice || auctionProduct.apCurrentPrice)}
-                  원
-                </div>
+                {auctionProduct.apStatus === "ACTIVE" && (
+                  <>
+                    <div className="font-bold text-lg">현재 입찰가</div>
+
+                    <div className="text-lg">
+                      {formatNumber(
+                        currentPrice || auctionProduct.apCurrentPrice
+                      )}
+                      원
+                    </div>
+                  </>
+                )}
               </div>
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">입찰단위</div>
