@@ -46,6 +46,19 @@ const A_ListComponent = () => {
     console.log(serverData.uploadFileNames);
   }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
 
+  useEffect(() => {
+    const handleResize = () => {
+      // 화면의 너비에 따라 그리드의 열 수를 결정하여 설정합니다.
+      const numCols = window.innerWidth > 768 ? 4 : 2;
+      document.documentElement.style.setProperty("--grid-cols", numCols);
+    };
+
+    // 컴포넌트가 마운트될 때 한 번 실행하고, 창의 크기가 변할 때마다 다시 실행합니다.
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const handleClickAdd = useCallback(() => {
     navigate({ pathname: "/auction/add" });
     window.scrollTo(0, 0);
@@ -135,55 +148,64 @@ const A_ListComponent = () => {
           </div>
         </div>
         <div
-          className="shopList_area grid grid-cols-4 gap-2"
-          style={{ width: "80%" }}
+          className="shopList_area grid gap-2"
+          style={{
+            width: "80%",
+            gridTemplateColumns: "repeat(var(--grid-cols), 1fr)",
+          }}
         >
-          {serverData.dtoList.length === 0 ? (
-            <div></div>
-          ) : (
-            serverData.dtoList.map((auctionProduct, index) => (
-              <div
-                key={auctionProduct.apno}
-                className="shopList_wrap"
-                onClick={() => moveReadPage(auctionProduct.apno)}
-              >
-                <div
-                  className="shopList_box"
-                  style={{ width: "300px", height: "400px" }}
-                >
-                  <div className="shopList_thum mb-2">
-                    <img
-                      alt={auctionProduct.apno}
-                      src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
-                      style={{ width: "300px", height: "400px" }}
-                    />
+          {serverData.dtoList.map((auctionProduct, index) => (
+            // A_ListComponent 컴포넌트의 코드에 적용된 부분입니다.
+            <div
+              key={auctionProduct.apno}
+              className="shopList_wrap"
+              onClick={() => moveReadPage(auctionProduct.apno)}
+              // 마우스를 올렸을 때 크기를 조정
+              onMouseEnter={(e) => {
+                // 마우스를 올린 요소의 스타일을 직접 수정합니다.
+                e.currentTarget.querySelector(".shopList_box").style.transform =
+                  "scale(1.05)";
+              }}
+              // 마우스가 벗어났을 때 원래 크기로
+              onMouseLeave={(e) => {
+                // 마우스를 벗어난 요소의 스타일을 직접 수정합니다.
+                e.currentTarget.querySelector(".shopList_box").style.transform =
+                  "scale(1)";
+              }}
+            >
+              <div className="shopList_box">
+                <div className="shopList_thum mb-2">
+                  <img
+                    alt={auctionProduct.apno}
+                    src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
+                    style={{ width: "100%", height: "400px" }}
+                  />
+                </div>
+                <div className="shopList_sum text-center">
+                  <div className="shopList_pname text-sm mb-1">
+                    {auctionProduct.apName}
                   </div>
-                  <div className="shopList_sum text-center">
-                    <div className="shopList_pname text-sm mb-1">
-                      {auctionProduct.apName}
+                  <div className="shopList_price text-sm">
+                    {auctionProduct.apStatus === "ACTIVE"
+                      ? `현재 입찰가: ${formatNumber(
+                          auctionProduct.apCurrentPrice
+                        )}원`
+                      : `경매 시작가: ${formatNumber(
+                          auctionProduct.apStartPrice
+                        )}원`}
+                  </div>
+                  {auctionProduct.apStatus === "CLOSED" && (
+                    <div className="text-sm">
+                      낙찰가:{auctionProduct.apCurrentPrice}원
                     </div>
-                    <div className="shopList_price text-sm">
-                      {auctionProduct.apStatus === "ACTIVE"
-                        ? `현재 입찰가: ${formatNumber(
-                            auctionProduct.apCurrentPrice
-                          )}원`
-                        : `경매 시작가: ${formatNumber(
-                            auctionProduct.apStartPrice
-                          )}원`}
-                    </div>
-                    {auctionProduct.apStatus === "CLOSED" && (
-                      <div className="text-sm">
-                        낙찰가:{auctionProduct.apCurrentPrice}원
-                      </div>
-                    )}
-                    <div className="shopList_end text-sm">
-                      {remainingTimes[index]}
-                    </div>
+                  )}
+                  <div className="shopList_end text-sm">
+                    {remainingTimes[index]}
                   </div>
                 </div>
               </div>
-            ))
-          )}
+            </div>
+          ))}
         </div>
         <div className="shopList_btn fixed right-0 mb-8 mr-8 z-10">
           <div
@@ -195,7 +217,7 @@ const A_ListComponent = () => {
         </div>
         <div
           className="flex justify-center items-center"
-          style={{ marginTop: "120px" }}
+          style={{ marginTop: "0px" }}
         >
           <PagingComponent
             serverData={serverData}
