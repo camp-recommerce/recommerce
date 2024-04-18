@@ -69,6 +69,14 @@ public class AuctionController {
                                       AuctionDTO auctionDTO) {
         auctionDTO.setApno(apno);
 
+        auctionDTO.setApno(apno);
+
+        List<MultipartFile> files = auctionDTO.getFiles();
+
+        List<String> uploadFileNames = customFileUtil.saveFiles(files);
+
+        auctionDTO.setUploadFileNames(uploadFileNames);
+
         log.info("Modify: " + auctionDTO);
 
         service.modify(auctionDTO);

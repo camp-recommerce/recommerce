@@ -6,6 +6,7 @@ import com.recommerceAPI.dto.AuctionDTO;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.repository.AuctionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -96,7 +97,10 @@ public class AuctionServiceImpl implements AuctionService{
 
     @Override
     public void remove(Long apno) {
-        auctionRepository.deleteById(apno);
+        Auction auction = auctionRepository.findById(apno)
+                .orElseThrow(() -> new EntityNotFoundException("Auction not found with apno: " + apno));
+        auction.setDeleted(true); // delFlag를 1로 설정
+        auctionRepository.save(auction);
     }
 
     @Override

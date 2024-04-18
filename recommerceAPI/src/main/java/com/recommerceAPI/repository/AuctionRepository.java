@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("select a, ai from Auction a left join a.imageList ai where " +
             "(:apName is null or a.apName like %:apName%) and " +
-            "(:apCategory is null or a.apCategory like %:apCategory%)")
+            "(:apCategory is null or a.apCategory like %:apCategory%) and " +
+            "a.deleted = false")
     Page<Object[]> selectList(@Param("apName") String apName, @Param("apCategory") String apCategory, Pageable pageable);
 }

@@ -43,6 +43,9 @@ public class Auction {
     @Enumerated(EnumType.STRING)
     private AuctionStatus apStatus;
 
+    @Builder.Default
+    private boolean deleted = false; // 삭제 여부를 나타내는 필드
+
     @ElementCollection
     @Builder.Default
     private List<AuctionImage> imageList = new ArrayList<>();
@@ -84,5 +87,11 @@ public class Auction {
 
     public void clearList() {
         this.imageList.clear();
+    }
+
+    // 현재 경매 정보가 하위에 생겨서 삭제가 안됩니다. delFlag를 이용해서
+    // soft 삭제 방식으로 변경합니다
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 }
