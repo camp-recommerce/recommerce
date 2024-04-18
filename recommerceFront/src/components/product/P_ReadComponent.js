@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { API_SERVER_HOST, getOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
+import Chat from "../product/chat/chatcomponents/Chat";
 
 const host = API_SERVER_HOST;
 
@@ -22,12 +23,25 @@ const P_ReadComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
+  const [socket, setSocket] = useState(null);
+  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+  const [username, setUsername] = useState("user0@aaa.com");
+
+  const openChatModal = () => {
+    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${1}`);
+    newSocket.onopen = () => {
+      console.log("WebSocket connection established");
+      setSocket(newSocket);
+      setIsChatModalOpen(true);
+      console.log(isChatModalOpen);
+    };
+  };
 
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const data = await getOne(pno);
+        const data = await getOne(1);
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -36,12 +50,20 @@ const P_ReadComponent = ({ pno }) => {
       setLoading(false);
     };
 
-    if (pno) {
+    if (1) {
       fetchProduct();
     } else {
       console.error("Product number (pno) is undefined.");
     }
   }, [pno]);
+
+  const closeChatModal = () => {
+    setIsChatModalOpen(false);
+    if (socket) {
+      socket.close();
+      setSocket(null);
+    }
+  };
 
   const handleOpenImg = (imgFile) => {
     setSelectedImgPath(`${host}/product/view/${imgFile}`);
@@ -87,6 +109,22 @@ const P_ReadComponent = ({ pno }) => {
           </div>
           <div className="shopRead_box">
             <div className="shopRead_pdesc">{product.pdesc}</div>
+          </div>
+          <button
+            className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+            onClick={() => openChatModal()}
+          >
+            경매 채팅
+          </button>
+          <div>
+            {isChatModalOpen && (
+              <Chat
+                username={username}
+                room={1}
+                socket={socket}
+                closeModal={closeChatModal}
+              />
+            )}
           </div>
         </div>
       </div>

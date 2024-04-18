@@ -23,7 +23,6 @@ import lombok.extern.log4j.Log4j2;
 @CrossOrigin
 @RequiredArgsConstructor
 @Log4j2
-
 public class ProductController {
 
     // 여기 하나만 조회하는 기능 추가 해주셔야 합니다.
