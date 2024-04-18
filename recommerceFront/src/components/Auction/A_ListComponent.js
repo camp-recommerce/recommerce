@@ -40,6 +40,7 @@ const A_ListComponent = () => {
   useEffect(() => {
     setLoading(true);
     getList({ page, size, apName, apCategory }).then((data) => {
+      console.log(data);
       setServerData(data);
       setLoading(false);
     });
