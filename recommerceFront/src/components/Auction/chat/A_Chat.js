@@ -10,6 +10,7 @@ function A_Chat({
   startPrice,
   bidIncrement,
   imageSrc,
+  room,
 }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
@@ -34,7 +35,7 @@ function A_Chat({
     const currentMonth = new Date().getMonth() + 1;
     // 조건에 맞는 경우에만 메시지 전송
     const messageData = {
-      room: username,
+      room: room,
       author: username,
       message: currentMsg,
       time:
@@ -86,7 +87,7 @@ function A_Chat({
         onClick={handleModalClick}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold text-black">{1}번 채팅방</h2>
+          <h2 className="text-lg font-bold text-black">{room}번 채팅방</h2>
           <button onClick={closeModal}>
             <svg
               className="w-6 h-6 text-gray-600 hover:text-gray-800 transition duration-300"

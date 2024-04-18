@@ -1,6 +1,8 @@
 import React from "react";
+import useCustomLoginPage from "../hooks/useCustomLoginPage";
 
 const Header = () => {
+  const { isLogin } = useCustomLoginPage();
   return (
     <div
       className="header #282222 text-white flex justify-between items-center px-6 py-4"
@@ -30,30 +32,49 @@ const Header = () => {
             판매하기
           </a>
         </div>
-        <div className="left flex space-x-6 ">
-          <a
-            href="http://localhost:3000/user/login"
-            className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
-          >
-            로그인
-          </a>
-          <a
-            href="http://localhost:3000/user/join"
-            className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
-          >
-            회원가입
-          </a>
+        <div className="left flex space-x-6">
+          {isLogin ? (
+            <>
+              <a
+                href="http://localhost:3000/user/mypage"
+                className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
+              >
+                마이페이지
+              </a>
+              <a
+                href="http://localhost:3000/user/logout"
+                className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
+              >
+                로그아웃
+              </a>
+            </>
+          ) : (
+            <>
+              <a
+                href="http://localhost:3000/user/login"
+                className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
+              >
+                로그인
+              </a>
+              <a
+                href="http://localhost:3000/user/join"
+                className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
+              >
+                회원가입
+              </a>
+            </>
+          )}
         </div>
-      </div>
 
-      <div>
-        <button className="menu-button lg:hidden">
-          <img
-            src="https://cdn-icons-png.flaticon.com/512/5602/5602186.png"
-            alt="Menu"
-            className="h-20 w-auto"
-          />
-        </button>
+        <div>
+          <button className="menu-button lg:hidden">
+            <img
+              src="https://cdn-icons-png.flaticon.com/512/5602/5602186.png"
+              alt="Menu"
+              className="h-20 w-auto"
+            />
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -3,12 +3,13 @@ import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import useCustomTimes from "../../hooks/useCustomTimes";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 import { formatDateTime } from "../../util/formatTimeUtil";
 import A_Chat from "../auction/chat/A_Chat";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
+import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 
 const initState = {
   apName: "",
@@ -20,8 +21,6 @@ const host = API_SERVER_HOST;
 
 const A_ReadComponent = () => {
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const [username, setUsername] = useState("user0@aaa.com");
-  const [room, setRoom] = useState(1); // 예시로 '기본 방'으로 설정
   const [auctionProduct, setAuctionProduct] = useState(initState);
   const { moveProductListPage, moveModifyPage } = useCustomMovePage();
   const [loading, setLoading] = useState(false);
@@ -32,10 +31,11 @@ const A_ReadComponent = () => {
   const [socket, setSocket] = useState(null);
   const [formattedDate, setFormattedDate] = useState("");
   const [formattedClosingDate, setFormattedClosingDate] = useState("");
-  const [currentPrice, setCurrentPrice] = useState("");
+  const { loginState } = useCustomLoginPage();
 
   useEffect(() => {
     setLoading(true);
+    console.log(loginState);
     getOne(apno).then((data) => {
       console.log(data);
       setAuctionProduct(data);
@@ -46,23 +46,24 @@ const A_ReadComponent = () => {
     });
   }, [apno]);
 
-  // openChatModal 함수 내에서 WebSocket을 열고 새로운 입찰가를 받았을 때 해당 값을 상태로 업데이트합니다.
   const openChatModal = () => {
-    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${room}`);
+    const newSocket = new WebSocket(
+      `ws:/localhost:8080/api/chat?room=${auctionProduct.apno}`
+    );
+    console.log(socket);
     newSocket.onopen = () => {
       console.log("WebSocket connection established");
       setSocket(newSocket);
-      setRoom(auctionProduct.apno);
       setIsChatModalOpen(true);
       console.log(isChatModalOpen);
     };
   };
 
   const closeChatModal = () => {
-    setIsChatModalOpen(false);
     if (socket) {
-      socket.close();
+      socket.close(1000); // 정상 종료 코드 사용
       setSocket(null);
+      setIsChatModalOpen(false);
     }
   };
 
@@ -137,10 +138,7 @@ const A_ReadComponent = () => {
                   <>
                     <div className="font-bold text-lg">현재 입찰가</div>
                     <div className="text-lg">
-                      {formatNumber(
-                        currentPrice || auctionProduct.apCurrentPrice
-                      )}
-                      원
+                      {formatNumber(auctionProduct.apCurrentPrice)}원
                     </div>
                   </>
                 )}
@@ -183,8 +181,8 @@ const A_ReadComponent = () => {
                 <div>
                   {isChatModalOpen && (
                     <A_Chat
-                      username={username}
-                      room={room}
+                      username={loginState.email}
+                      room={auctionProduct.apno}
                       socket={socket}
                       closeModal={closeChatModal}
                       startPrice={auctionProduct.apStartPrice}

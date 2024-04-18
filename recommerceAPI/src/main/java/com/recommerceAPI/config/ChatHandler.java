@@ -97,7 +97,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
         sessions.remove(session);
         sessionToUsername.remove(session.getId());
-        log.info("{} disconnect", session.getId());
+
         // 세션투유저네임 맵에 반복돌림
         Iterator<Map.Entry<String, List<WebSocketSession>>> iterator = sessionToUsername.entrySet().iterator();
         // 한줄씩 모든 내용 찾기.
@@ -112,8 +112,7 @@ public class ChatHandler extends TextWebSocketHandler {
             if (sessionsInRoom.isEmpty()) {
                 iterator.remove();
             }
-            // 세션이 연결이 끊겼음을 로그로 기록합니다.
-            log.info("{} disconnect", session.getId());
+            log.info("{} disconnect", sessionToUsername);
         }
     }
 

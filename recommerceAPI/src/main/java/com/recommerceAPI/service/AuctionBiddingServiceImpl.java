@@ -36,7 +36,7 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         Long apno = Long.parseLong(chatMessageDTO.getRoom()); // 상품번호
         int bidAmount = Integer.parseInt(chatMessageDTO.getMessage()); // 입찰가격
         String bidTime = chatMessageDTO.getTime(); // 시간
-
+        log.info("chat"+chatMessageDTO);
         // UserRepository를 사용하여 이메일에 해당하는 사용자 정보 가져오기
         Optional<User> result = userRepository.findByEmail(email);
         User bidder = result.orElseThrow();
@@ -44,13 +44,11 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         // AuctionRepository를 사용하여 상품번호에 해당하는 경매 정보 가져오기
         Auction auction = auctionRepository.findById(apno).orElse(null);
         // Auction의 현재 가격 업데이트
+        assert auction != null;
         auction.updateCurrentPrice(bidAmount);
         auctionRepository.save(auction);
 
         // 필요한 정보가 없으면 null 반환
-        if ( auction == null) {
-            return null;
-        }
         // AuctionBidding 객체 생성
         AuctionBidding auctionBidding = AuctionBidding.builder()
                 .auction(auction)
