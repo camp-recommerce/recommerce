@@ -5,10 +5,10 @@ const Join = lazy(() => import("../components/user/JoinComponent"));
 const Login = lazy(() => import("../components/user/LoginComponent"));
 const LogoutPage = lazy(() => import("../components/user/LogoutComponent"));
 const KakaoRedirect = lazy(() =>
-  import("../components/user/KakaoRedirctComponent")
+  import("../components/user/KakaoLoginComponent")
 );
 const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
-const MyPage = lazy(() => import("../components/user/MyComponent"));
+const MyPage = lazy(() => import("../components/user/MyPageComponent"));
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 
