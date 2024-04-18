@@ -45,6 +45,7 @@ public class ProductController {
         return productDTO;
     }
 
+
     @GetMapping("/product/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
 

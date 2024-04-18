@@ -3,9 +3,11 @@ import { postOne } from "../../api/productApi";
 import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";
+import useCustomProductPage from "../../hooks/useCustomProductPage";
 
 const initState = {
   pname: "",
+  pcategory: "기타",
   price: "",
   pstate: "",
   plocat: "",
@@ -18,6 +20,7 @@ const P_AddComponent = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const { moveToPath } = useCustomProductPage();
 
   const uploadRef = useRef();
 
@@ -60,6 +63,7 @@ const P_AddComponent = () => {
 
     //other data
     formData.append("pname", product.pname);
+    formData.append("pcategory", product.pcategory);
     formData.append("price", product.price.replace(/[^\d]/g, ""));
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
@@ -76,8 +80,11 @@ const P_AddComponent = () => {
     });
   };
 
+  const categories = ["신발", "옷", "시계", "기타"];
+
   const closeAlertModal = () => {
     setResult(null);
+    moveToPath("/");
   };
 
   return (
@@ -124,6 +131,22 @@ const P_AddComponent = () => {
                 value={product.pname}
                 onChange={handleChangeProduct}
               ></input>
+            </div>
+          </div>
+          <div className="add_area">
+            <div className="add_wrap">
+              <label>카테고리</label>
+              <select
+                name="pcategory"
+                value={product.pcategory}
+                onChange={handleChangeProduct}
+              >
+                {categories.map((category) => (
+                  <option key={category} value={category}>
+                    {category}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="add_area">

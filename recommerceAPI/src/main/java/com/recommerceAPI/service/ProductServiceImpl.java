@@ -48,6 +48,7 @@ public class ProductServiceImpl implements ProductService {
         Product product = Product.builder()
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
+                .pcategory(productDTO.getPcategory())
                 .pdesc(productDTO.getPdesc())
                 .price(productDTO.getPrice())
                 .build();
@@ -85,6 +86,7 @@ public class ProductServiceImpl implements ProductService {
         ProductDTO productDTO = ProductDTO.builder()
                 .pno(product.getPno())
                 .pname(product.getPname())
+                .pcategory(product.getPcategory())
                 .price(product.getPrice())
                 .pstate(product.getPstate())
                 .plocat(product.getPlocat())
