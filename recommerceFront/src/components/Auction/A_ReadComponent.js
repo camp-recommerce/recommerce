@@ -114,11 +114,18 @@ const A_ReadComponent = () => {
                   {formatNumber(auctionProduct.apStartPrice)}원
                 </div>
               </div>
+
               <div className="flex items-center justify-between mb-4">
-                {auctionProduct.apStatus === "ACTIVE" && (
+                <div className="font-bold text-lg">입찰단위</div>
+                <div className="text-lg">
+                  {formatNumber(auctionProduct.apBidIncrement)}원
+                </div>
+              </div>
+              <div className="flex items-center justify-between mb-4">
+                {(auctionProduct.apStatus === "ACTIVE" ||
+                  auctionProduct.apStatus === "CLOSED") && (
                   <>
                     <div className="font-bold text-lg">현재 입찰가</div>
-
                     <div className="text-lg">
                       {formatNumber(
                         currentPrice || auctionProduct.apCurrentPrice
@@ -129,17 +136,17 @@ const A_ReadComponent = () => {
                 )}
               </div>
               <div className="flex items-center justify-between mb-4">
-                <div className="font-bold text-lg">입찰단위</div>
-                <div className="text-lg">
-                  {formatNumber(auctionProduct.apBidIncrement)}원
-                </div>
-              </div>
-              <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">물품상태</div>
                 <div className="text-lg">
                   {auctionStatusDesc[auctionProduct.apStatus]}
                 </div>
               </div>
+              {auctionProduct.apStatus === "CLOSED" && (
+                <div className="flex items-center justify-between">
+                  <div className="font-bold text-lg">낙찰자</div>
+                  <div className="text-lg">{auctionProduct.apBuyer}</div>
+                </div>
+              )}
               <div className="flex items-center justify-between">
                 <div className="font-bold text-lg">시작시간</div>
                 <div className="text-lg">{formattedDate}</div>
@@ -148,11 +155,13 @@ const A_ReadComponent = () => {
                 <div className="font-bold text-lg">종료시간</div>
                 <div className="text-lg">{formattedClosingDate}</div>
               </div>
-              <div className="flex items-center justify-between mb-4">
-                <div className="font-bold text-lg">경매 시작까지</div>
-                <div className="text-lg">{remainingTime}</div>
-              </div>
 
+              {auctionProduct.apStatus === "PENDING" && (
+                <div className="flex items-center justify-between mb-4">
+                  <div className="font-bold text-lg">경매 시작까지</div>
+                  <div className="text-lg">{remainingTime}</div>
+                </div>
+              )}
               <div className="flex space-x-4">
                 {auctionProduct.apStatus === "ACTIVE" && (
                   <button

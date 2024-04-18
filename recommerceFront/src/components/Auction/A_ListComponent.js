@@ -165,6 +165,11 @@ const A_ListComponent = () => {
                           auctionProduct.apStartPrice
                         )}원`}
                   </div>
+                  {auctionProduct.apStatus === "CLOSED" && (
+                    <div className="text-sm">
+                      낙찰가:{auctionProduct.apCurrentPrice}원
+                    </div>
+                  )}
                   <div className="shopList_end text-sm">
                     {remainingTimes[index]}
                   </div>
