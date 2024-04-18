@@ -4,6 +4,7 @@ import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
+import MapComponent from "../MapComponent";
 
 const initState = {
   pname: "",
@@ -21,6 +22,8 @@ const P_AddComponent = () => {
   const [loading, setLoading] = useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const { moveToPath } = useCustomProductPage();
+  const [location, setLocation] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState("");
 
   const uploadRef = useRef();
 
@@ -52,6 +55,16 @@ const P_AddComponent = () => {
     }
   };
 
+  // 주소 처리
+  const handleLocationSelect = (loc) => {
+    setLocation(loc);
+    setProduct({
+      ...product,
+      plocat: loc.address,
+    });
+    setSelectedAddress(loc.address);
+  };
+
   const handleClickAdd = (e) => {
     const files = uploadRef.current.files;
 
@@ -67,6 +80,8 @@ const P_AddComponent = () => {
     formData.append("price", product.price.replace(/[^\d]/g, ""));
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
+    formData.append("lat", location?.lat || ""); // 위도 추가
+    formData.append("lng", location?.lng || ""); // 경도 추가
     formData.append("pdesc", product.pdesc);
 
     console.log(formData);
@@ -88,7 +103,7 @@ const P_AddComponent = () => {
   };
 
   return (
-    <div className="add_group ">
+    <div className="add_group min-h-[1500px]">
       {loading ? <LoadingModal /> : <></>}
       {result ? (
         <AlertModal
@@ -209,18 +224,6 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>거래장소</label>
-              <input
-                className=""
-                name="plocat"
-                type={"text"}
-                value={product.plocat}
-                onChange={handleChangeProduct}
-              ></input>
-            </div>
-          </div>
-          <div className="add_area">
-            <div className="add_wrap">
               <label>상세설명</label>
               <textarea
                 className=""
@@ -229,6 +232,15 @@ const P_AddComponent = () => {
                 onChange={handleChangeProduct}
                 value={product.pdesc}
               ></textarea>
+            </div>
+          </div>
+          <div className="add_area">
+            <div className="add_wrap flex flex-col max-h-[150px]">
+              <div className="flex">
+                <label>거래장소</label>
+                <p>{selectedAddress}</p>
+              </div>
+              <MapComponent onLocationSelect={handleLocationSelect} />
             </div>
           </div>
         </div>

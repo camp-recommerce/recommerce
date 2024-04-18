@@ -1,85 +1,80 @@
 /*global kakao*/
 import React, { useEffect, useRef, useState } from "react";
 
-const MapComponent = () => {
+const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
   const mapContainer = useRef(null);
   const [map, setMap] = useState(null);
   const [address, setAddress] = useState("");
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [keyword, setKeyword] = useState("");
 
   useEffect(() => {
-    const mapOption = {
-      center: new kakao.maps.LatLng(37.566826, 126.9786567), // 초기 지도 중심좌표
-      level: 3, // 초기 지도 확대 레벨
-    };
-    const initializedMap = new kakao.maps.Map(mapContainer.current, mapOption);
-    setMap(initializedMap);
+    const initializeMap = (lat, lng) => {
+      const mapOption = {
+        center: new kakao.maps.LatLng(lat, lng),
+        level: 3,
+        draggable: !readOnly,
+      };
 
-    // 마커 이미지의 URL, 크기 및 옵션 설정
-    const imageSrc = process.env.PUBLIC_URL + "/images/location.svg", // 마커 이미지의 주소
-      imageSize = new kakao.maps.Size(64, 69), // 마커 이미지의 크기
-      imageOption = { offset: new kakao.maps.Point(32, 69) }; // 이미지에서 마커의 위치를 조정 (이미지의 중앙 아래가 마커 위치)
+      const initializedMap = new kakao.maps.Map(
+        mapContainer.current,
+        mapOption
+      );
+      setMap(initializedMap);
 
-    // 마커 이미지 생성
-    const markerImage = new kakao.maps.MarkerImage(
+      initializedMap.setDraggable(!readOnly);
+
+      // 마커 이미지의 URL, 크기 및 옵션 설정
+      const imageSrc = process.env.PUBLIC_URL + "/images/location.svg", // 마커 이미지의 주소
+        imageSize = new kakao.maps.Size(40, 40), // 마커 이미지의 크기
+        imageOption = { offset: new kakao.maps.Point(32, 69) }; // 이미지에서 마커의 위치를 조정 (이미지의 중앙 아래가 마커 위치)
+
+      const markerImage = new kakao.maps.MarkerImage(
         imageSrc,
         imageSize,
         imageOption
-      ),
-      markerPosition = mapOption.center; // 마커 초기 위치 (지도 중앙)
-
-    // 마커 생성 및 지도에 표시
-    const marker = new kakao.maps.Marker({
-      position: markerPosition,
-      image: markerImage, // 마커 이미지 설정
-    });
-    marker.setMap(initializedMap);
-
-    // 지도 중앙 이동 시 마커 위치 업데이트
-    kakao.maps.event.addListener(initializedMap, "center_changed", () => {
-      const center = initializedMap.getCenter();
-      marker.setPosition(center);
-      setCurrentPosition(center);
-    });
-
-    // 사용자의 현재 위치를 초기 위치로 설정
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const currentLocation = new kakao.maps.LatLng(
-            position.coords.latitude,
-            position.coords.longitude
-          );
-          initializedMap.setCenter(currentLocation);
-          marker.setPosition(currentLocation);
-          setCurrentPosition(currentLocation);
-        },
-        (error) => {
-          console.error("Geolocation error:", error);
-        }
       );
-    }
-  }, []);
+      const marker = new kakao.maps.Marker({
+        position: new kakao.maps.LatLng(lat, lng),
+        image: markerImage,
+      });
 
-  // 주소 검색 및 설정
-  const findAddress = () => {
-    const geocoder = new kakao.maps.services.Geocoder();
-    const center = map.getCenter();
-    geocoder.coord2Address(
-      center.getLng(),
-      center.getLat(),
-      function (result, status) {
-        if (status === kakao.maps.services.Status.OK) {
-          setAddress(
-            result[0].road_address
-              ? result[0].road_address.address_name
-              : "도로명 주소가 없습니다."
-          );
-        }
+      marker.setMap(initializedMap);
+
+      // 지도 중앙 이동 시 마커 위치 업데이트
+      kakao.maps.event.addListener(initializedMap, "center_changed", () => {
+        const center = initializedMap.getCenter();
+        marker.setPosition(center);
+        setCurrentPosition(center);
+      });
+
+      // 사용자의 현재 위치를 초기 위치로 설정
+      if (onLocationSelect) {
+        updateAddress(initializedMap.getCenter());
       }
-    );
-  };
+    };
 
+    if (initialPosition) {
+      initializeMap(initialPosition.lat, initialPosition.lng);
+    } else {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) =>
+            initializeMap(position.coords.latitude, position.coords.longitude),
+          (error) => {
+            console.error("Geolocation error:", error);
+            alert("위치 정보를 찾을 수 없습니다.");
+            initializeMap(37.566826, 126.9786567); // Default location
+          }
+        );
+      } else {
+        alert("브라우저가 Geolocation을 지원하지 않습니다.");
+        initializeMap(37.566826, 126.9786567); // Default location
+      }
+    }
+  }, [initialPosition, readOnly]);
+
+  // 사용자의 현재 위치로 되돌아오는 설정
   const moveToCurrentPosition = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -97,30 +92,86 @@ const MapComponent = () => {
     }
   };
 
+  // 주소 검색
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const geocoder = new kakao.maps.services.Geocoder();
+
+    geocoder.addressSearch(keyword, (result, status) => {
+      if (status === kakao.maps.services.Status.OK) {
+        const coords = new kakao.maps.LatLng(result[0].y, result[0].x);
+        map.setCenter(coords);
+        updateAddress(coords);
+      }
+    });
+  };
+
+  // 주소 검색이나 현재 위치 선택 시 업데이트
+  const updateAddress = (location) => {
+    const geocoder = new kakao.maps.services.Geocoder();
+    geocoder.coord2Address(
+      location.getLng(),
+      location.getLat(),
+      function (result, status) {
+        if (status === kakao.maps.services.Status.OK) {
+          const addressText = result[0].road_address
+            ? result[0].road_address.address_name
+            : "도로명 주소가 없습니다.";
+          setAddress(addressText);
+          // 위치 선택 callback 호출
+          onLocationSelect({
+            address: addressText,
+            lat: location.getLat(),
+            lng: location.getLng(),
+          });
+        }
+      }
+    );
+  };
+
   return (
-    <div className="map-wrap" style={{ width: "100%", height: "800px" }}>
+    <div className="map-wrap" style={{ width: "800px", height: "500px" }}>
       <div ref={mapContainer} className="w-full h-[500px] relative">
-        <button
-          onClick={moveToCurrentPosition}
-          className="absolute bottom-[15px] right-[15px] z-10 w-[50px] h-[50px] rounded-3xl bg-white flex justify-center items-center"
-        >
-          <img
-            src={process.env.PUBLIC_URL + "/images/gps.svg"}
-            className="w-[30px] h-[30px] z-20"
-          />
-        </button>
+        {!readOnly && (
+          <button
+            onClick={moveToCurrentPosition}
+            className="absolute bottom-[15px] right-[15px] z-10 w-[50px] h-[50px] rounded-3xl bg-white flex justify-center items-center"
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/images/gps.svg"}
+              className="w-[30px] h-[30px] z-20"
+            />
+          </button>
+        )}
       </div>
-      <div className="m-4 w-full flex flex-col justify-center items-center">
-        <div className="mb-2 font-extrabold text-lg min-h-[30px]">
+      {!readOnly && (
+        <div className="m-4 w-full flex justify-start items-center">
+          {/* <div className="mb-2 font-extrabold text-lg min-h-[30px]">
           <p>{address}</p>
+        </div> */}
+          <form onSubmit={handleSearch} className="flex w-1/2">
+            <input
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder="행정동 이름 검색..."
+              className="text-sm border rounded shadow py-2 px-4"
+            />
+            <button
+              type="submit"
+              className="ml-2 bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded whitespace-nowrap"
+            >
+              검색
+            </button>
+          </form>
+          <button
+            onClick={() => updateAddress(currentPosition)}
+            className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded ml-2 my-2"
+          >
+            현재 위치 선택하기
+          </button>
         </div>
-        <button
-          onClick={findAddress}
-          className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded mb-4"
-        >
-          현재 위치 선택하기
-        </button>
-      </div>
+      )}
     </div>
   );
 };
