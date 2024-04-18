@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { postOne } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getInitialDateTime } from "../../util/formatTimeUtil";
+import LoadingModal from "../modal/LoadingModal";
 
 const initState = {
   apCategory: "기타",
@@ -91,142 +92,138 @@ const A_AddComponent = () => {
       });
   };
 
-  const AuctionStatus = {
-    PENDING: "경매 대기 중",
-    ACTIVE: "경매 진행 중",
-    CLOSED: "경매 종료",
-    CANCELLED: "경매 취소",
-  };
-
   const categories = ["신발", "옷", "시계", "기타"];
 
   return (
-    <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
-      <div>물품 등록</div>
-      <div className="grid grid-cols-2 gap-10">
-        <div className="flex justify-center items-center">
-          <div className="max-w-md">
-            {imagePreviewUrl ? (
-              <img
-                src={imagePreviewUrl}
-                className="addImage"
-                alt={auction.apName}
+    <>
+      {loading ? <LoadingModal /> : <></>}
+      <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
+        <div>물품 등록</div>
+        <div className="grid grid-cols-2 gap-10">
+          <div className="flex justify-center items-center">
+            <div className="max-w-md">
+              {imagePreviewUrl ? (
+                <img
+                  src={imagePreviewUrl}
+                  className="addImage"
+                  alt={auction.apName}
+                />
+              ) : (
+                <label htmlFor="uploadImage">파일 선택</label>
+              )}
+              <input
+                ref={uploadRef}
+                id="uploadImage"
+                type="file"
+                multiple={true}
+                onChange={handleImagePreview}
               />
-            ) : (
-              <label htmlFor="uploadImage">파일 선택</label>
-            )}
-            <input
-              ref={uploadRef}
-              id="uploadImage"
-              type="file"
-              multiple={true}
-              onChange={handleImagePreview}
-            />
-          </div>
-        </div>
-        <div>
-          <div className="text-lg mb-4">물품 번호: {auction.apno}</div>
-          <div className="max-w-md">
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">카테고리</div>
-              <div className="text-lg">
-                <select
-                  name="apCategory"
-                  value={auction.apCategory}
-                  onChange={handleChangeAuction}
-                >
-                  {categories.map((category) => (
-                    <option key={category} value={category}>
-                      {category}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">물품명</div>
-              <div className="text-lg">
+          </div>
+          <div>
+            <div className="text-lg mb-4">물품 번호: {auction.apno}</div>
+            <div className="max-w-md">
+              <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">카테고리</div>
+                <div className="text-lg">
+                  <select
+                    name="apCategory"
+                    value={auction.apCategory}
+                    onChange={handleChangeAuction}
+                  >
+                    {categories.map((category) => (
+                      <option key={category} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">물품명</div>
+                <div className="text-lg">
+                  <textarea
+                    className=""
+                    name="apName"
+                    type={"text"}
+                    onChange={handleChangeAuction}
+                    value={auction.apName}
+                  ></textarea>
+                </div>
+              </div>
+              <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">물품 상세</div>
                 <textarea
                   className=""
-                  name="apName"
+                  name="apDesc"
                   type={"text"}
                   onChange={handleChangeAuction}
-                  value={auction.apName}
+                  value={auction.apDesc}
                 ></textarea>
               </div>
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">물품 상세</div>
-              <textarea
-                className=""
-                name="apDesc"
-                type={"text"}
-                onChange={handleChangeAuction}
-                value={auction.apDesc}
-              ></textarea>
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">시작가</div>
-              <div className="text-lg">
-                <input
-                  className="text-right"
-                  name="apStartPrice"
-                  type={"text"}
-                  value={formattedPrice}
-                  onChange={handleChangeAuction}
-                ></input>
-                원
+              <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">시작가</div>
+                <div className="text-lg">
+                  <input
+                    className="text-right"
+                    name="apStartPrice"
+                    type={"text"}
+                    value={formattedPrice}
+                    onChange={handleChangeAuction}
+                  ></input>
+                  원
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">입찰단위</div>
-              <div className="text-lg">
-                <input
-                  className="text-right"
-                  name="apBidIncrement"
-                  type={"text"}
-                  value={formattedIncrement}
-                  onChange={handleChangeAuction}
-                ></input>
-                원
+              <div className="flex items-center justify-between mb-4">
+                <div className="font-bold text-lg">입찰단위</div>
+                <div className="text-lg">
+                  <input
+                    className="text-right"
+                    name="apBidIncrement"
+                    type={"text"}
+                    value={formattedIncrement}
+                    onChange={handleChangeAuction}
+                  ></input>
+                  원
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="font-bold text-lg">시작시간</div>
-              <div className="text-lg">
-                <input
-                  className=""
-                  name="apStartTime"
-                  type={"datetime-local"}
-                  value={auction.apStartTime}
-                  onChange={handleChangeAuction}
-                ></input>
+              <div className="flex items-center justify-between">
+                <div className="font-bold text-lg">시작시간</div>
+                <div className="text-lg">
+                  <input
+                    className=""
+                    name="apStartTime"
+                    type={"datetime-local"}
+                    value={auction.apStartTime}
+                    onChange={handleChangeAuction}
+                  ></input>
+                </div>
               </div>
-            </div>
-            <div className="flex items-center justify-between">
-              <div className="font-bold text-lg">종료시간</div>
-              <div className="text-lg">
-                <input
-                  className=""
-                  name="apClosingTime"
-                  type={"datetime-local"}
-                  value={auction.apClosingTime}
-                  onChange={handleChangeAuction}
-                ></input>
+              <div className="flex items-center justify-between">
+                <div className="font-bold text-lg">종료시간</div>
+                <div className="text-lg">
+                  <input
+                    className=""
+                    name="apClosingTime"
+                    type={"datetime-local"}
+                    value={auction.apClosingTime}
+                    onChange={handleChangeAuction}
+                  ></input>
+                </div>
               </div>
-            </div>
-            <div className="flex space-x-4">
-              <button
-                className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                onClick={handleClickAdd}
-              >
-                물품 등록
-              </button>
+              <div className="flex space-x-4">
+                <button
+                  className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                  onClick={handleClickAdd}
+                >
+                  물품 등록
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

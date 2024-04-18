@@ -6,8 +6,9 @@ import useCustomTimes from "../../hooks/useCustomTimes";
 import { useNavigate, useParams } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 import { formatDateTime } from "../../util/formatTimeUtil";
-
 import A_Chat from "../auction/chat/A_Chat";
+import LoadingModal from "../modal/LoadingModal";
+import ImageModal from "../modal/ImageModal";
 
 const initState = {
   apName: "",
@@ -23,7 +24,6 @@ const A_ReadComponent = () => {
   const [room, setRoom] = useState(1); // 예시로 '기본 방'으로 설정
   const [auctionProduct, setAuctionProduct] = useState(initState);
   const { moveProductListPage, moveModifyPage } = useCustomMovePage();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [openImg, setOpenImg] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
@@ -79,7 +79,11 @@ const A_ReadComponent = () => {
 
   return (
     <>
-      <div className="flex justify-center mt-20" style={{ minHeight: "65vh" }}>
+      {loading ? <LoadingModal /> : <></>}
+      <div
+        className="flex justify-center mt-20"
+        style={{ minHeight: "65vh", position: "relative" }}
+      >
         <div className="grid grid-cols-2 gap-10">
           <div className="flex justify-center items-center">
             <div className="max-w-md">
@@ -96,10 +100,17 @@ const A_ReadComponent = () => {
                   }}
                 />
               ))}
+              {openImg && (
+                <ImageModal
+                  openImg={openImg}
+                  callbackFn={closeImageModal}
+                  imagePath={selectedImgPath}
+                />
+              )}
             </div>
           </div>
           <div>
-            <div className="max-w-md">
+            <div className="max-w-md" style={{ minHeight: "550px" }}>
               <div className="text-lg mb-4">{auctionProduct.apCategory}</div>
               <div className="font-bold text-2xl mb-4">
                 {auctionProduct.apName}
@@ -114,7 +125,6 @@ const A_ReadComponent = () => {
                   {formatNumber(auctionProduct.apStartPrice)}원
                 </div>
               </div>
-
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">입찰단위</div>
                 <div className="text-lg">
@@ -155,14 +165,13 @@ const A_ReadComponent = () => {
                 <div className="font-bold text-lg">종료시간</div>
                 <div className="text-lg">{formattedClosingDate}</div>
               </div>
-
               {auctionProduct.apStatus === "PENDING" && (
                 <div className="flex items-center justify-between mb-4">
                   <div className="font-bold text-lg">경매 시작까지</div>
                   <div className="text-lg">{remainingTime}</div>
                 </div>
               )}
-              <div className="flex space-x-4">
+              <div className="flex space-x-4 absolute bottom-20">
                 {auctionProduct.apStatus === "ACTIVE" && (
                   <button
                     className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"

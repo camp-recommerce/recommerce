@@ -6,6 +6,7 @@ import { API_SERVER_HOST } from "../../api/userApi";
 import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 import useCustomTimesList from "../../hooks/useCustomTimesList";
+import LoadingModal from "../modal/LoadingModal";
 
 const host = API_SERVER_HOST;
 
@@ -87,116 +88,122 @@ const A_ListComponent = () => {
   };
 
   return (
-    <div
-      className="flex justify-center items-center flex-col"
-      style={{ minHeight: "75vh" }}
-    >
-      <div className="mb-4 flex items-center" style={{ marginBottom: "40px" }}>
-        <input
-          type="text"
-          value={apNameInput}
-          onChange={handleSearchInputChange}
-          onKeyPress={handleKeyPress}
-          placeholder="상품 이름 검색"
-          style={{
-            width: "400px",
-            padding: "0.375rem 0.75rem",
-            border: "1px solid #ccc",
-            borderRadius: "0.375rem",
-          }}
-        />
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
-          onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
-        >
-          검색
-        </button>
-        <div className="flex items-center ml-4">
-          {categories.map((category) => (
-            <div
-              key={category}
-              className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
-                apCategory === category ||
-                (category === "전체" && apCategory === null)
-                  ? "bg-gray-200"
-                  : ""
-              }`}
-              onClick={() => handleCategoryClick(category)}
-            >
-              {category}
-            </div>
-          ))}
-        </div>
-      </div>
+    <>
+      {loading ? <LoadingModal /> : <></>}
       <div
-        className="shopList_area grid grid-cols-4 gap-2"
-        style={{ width: "80%" }}
+        className="flex justify-center items-center flex-col"
+        style={{ minHeight: "75vh" }}
       >
-        {serverData.dtoList.length === 0 ? (
-          <div></div>
-        ) : (
-          serverData.dtoList.map((auctionProduct, index) => (
-            <div
-              key={auctionProduct.apno}
-              className="shopList_wrap"
-              onClick={() => moveReadPage(auctionProduct.apno)}
-            >
+        <div
+          className="mb-4 flex items-center"
+          style={{ marginBottom: "40px" }}
+        >
+          <input
+            type="text"
+            value={apNameInput}
+            onChange={handleSearchInputChange}
+            onKeyPress={handleKeyPress}
+            placeholder="상품 이름 검색"
+            style={{
+              width: "400px",
+              padding: "0.375rem 0.75rem",
+              border: "1px solid #ccc",
+              borderRadius: "0.375rem",
+            }}
+          />
+          <button
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
+            onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
+          >
+            검색
+          </button>
+          <div className="flex items-center ml-4">
+            {categories.map((category) => (
               <div
-                className="shopList_box"
-                style={{ width: "300px", height: "400px" }}
+                key={category}
+                className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
+                  apCategory === category ||
+                  (category === "전체" && apCategory === null)
+                    ? "bg-gray-200"
+                    : ""
+                }`}
+                onClick={() => handleCategoryClick(category)}
               >
-                <div className="shopList_thum mb-2">
-                  <img
-                    alt={auctionProduct.apno}
-                    src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
-                    style={{ width: "300px", height: "400px" }}
-                  />
-                </div>
-                <div className="shopList_sum text-center">
-                  <div className="shopList_pname text-sm mb-1">
-                    {auctionProduct.apName}
+                {category}
+              </div>
+            ))}
+          </div>
+        </div>
+        <div
+          className="shopList_area grid grid-cols-4 gap-2"
+          style={{ width: "80%" }}
+        >
+          {serverData.dtoList.length === 0 ? (
+            <div></div>
+          ) : (
+            serverData.dtoList.map((auctionProduct, index) => (
+              <div
+                key={auctionProduct.apno}
+                className="shopList_wrap"
+                onClick={() => moveReadPage(auctionProduct.apno)}
+              >
+                <div
+                  className="shopList_box"
+                  style={{ width: "300px", height: "400px" }}
+                >
+                  <div className="shopList_thum mb-2">
+                    <img
+                      alt={auctionProduct.apno}
+                      src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
+                      style={{ width: "300px", height: "400px" }}
+                    />
                   </div>
-                  <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE"
-                      ? `현재 입찰가: ${formatNumber(
-                          auctionProduct.apCurrentPrice
-                        )}원`
-                      : `경매 시작가: ${formatNumber(
-                          auctionProduct.apStartPrice
-                        )}원`}
-                  </div>
-                  {auctionProduct.apStatus === "CLOSED" && (
-                    <div className="text-sm">
-                      낙찰가:{auctionProduct.apCurrentPrice}원
+                  <div className="shopList_sum text-center">
+                    <div className="shopList_pname text-sm mb-1">
+                      {auctionProduct.apName}
                     </div>
-                  )}
-                  <div className="shopList_end text-sm">
-                    {remainingTimes[index]}
+                    <div className="shopList_price text-sm">
+                      {auctionProduct.apStatus === "ACTIVE"
+                        ? `현재 입찰가: ${formatNumber(
+                            auctionProduct.apCurrentPrice
+                          )}원`
+                        : `경매 시작가: ${formatNumber(
+                            auctionProduct.apStartPrice
+                          )}원`}
+                    </div>
+                    {auctionProduct.apStatus === "CLOSED" && (
+                      <div className="text-sm">
+                        낙찰가:{auctionProduct.apCurrentPrice}원
+                      </div>
+                    )}
+                    <div className="shopList_end text-sm">
+                      {remainingTimes[index]}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          ))
-        )}
-      </div>
-      <div className="shopList_btn fixed right-0 mb-8 mr-8 z-10">
+            ))
+          )}
+        </div>
+        <div className="shopList_btn fixed right-0 mb-8 mr-8 z-10">
+          <div
+            className="shopList_addBtn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            onClick={handleClickAdd}
+          >
+            상품 등록
+          </div>
+        </div>
         <div
-          className="shopList_addBtn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handleClickAdd}
+          className="flex justify-center items-center"
+          style={{ marginTop: "120px" }}
         >
-          상품 등록
+          <PagingComponent
+            serverData={serverData}
+            movePage={moveProductListPage}
+          />
         </div>
       </div>
-      <div
-        className="flex justify-center items-center"
-        style={{ marginTop: "120px" }}
-      >
-        <PagingComponent
-          serverData={serverData}
-          movePage={moveProductListPage}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 export default A_ListComponent;
