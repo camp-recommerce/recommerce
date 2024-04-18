@@ -121,7 +121,7 @@ function A_Chat({
             return (
               <A_Message
                 messageContent={messageContent}
-                username={username}
+                author={username}
                 key={uuidv4()}
               />
             );

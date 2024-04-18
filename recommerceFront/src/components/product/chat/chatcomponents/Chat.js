@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Message } from "./Message";
 import { v4 as uuidv4 } from "uuid";
 
-function Chat({ socket, username, room, closeModal }) {
+function Chat({ socket, username, closeModal }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
 
@@ -12,7 +12,7 @@ function Chat({ socket, username, room, closeModal }) {
     const currentMsg = inputRef.current.value;
     if (currentMsg !== "") {
       const messageData = {
-        room: room,
+        room: username,
         author: username,
         message: currentMsg,
         time:
@@ -61,7 +61,7 @@ function Chat({ socket, username, room, closeModal }) {
         onClick={handleModalClick}
       >
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-lg font-bold text-black">{room}번 채팅방</h2>
+          <h2 className="text-lg font-bold text-black">{username} 채팅방</h2>
           <button onClick={closeModal}>
             <svg
               className="w-6 h-6 text-gray-600 hover:text-gray-800 transition duration-300"
@@ -84,7 +84,7 @@ function Chat({ socket, username, room, closeModal }) {
             return (
               <Message
                 messageContent={messageContent}
-                username={username}
+                author={username}
                 key={uuidv4()}
               />
             );

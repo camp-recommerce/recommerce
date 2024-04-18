@@ -3,6 +3,7 @@ import { API_SERVER_HOST, getOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
+import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 
 const host = API_SERVER_HOST;
 
@@ -25,7 +26,7 @@ const P_ReadComponent = ({ pno }) => {
   const [openImg, setOpenImg] = useState(false);
   const [socket, setSocket] = useState(null);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const [username, setUsername] = useState("user0@aaa.com");
+  const { loginState } = useCustomLoginPage();
 
   const openChatModal = () => {
     const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${1}`);
@@ -119,8 +120,7 @@ const P_ReadComponent = ({ pno }) => {
           <div>
             {isChatModalOpen && (
               <Chat
-                username={username}
-                room={1}
+                username={loginState.email}
                 socket={socket}
                 closeModal={closeChatModal}
               />
