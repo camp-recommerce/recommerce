@@ -16,7 +16,7 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     // 사용자의 이메일을 기반으로 구매 아이템 목록을 조회합니다.
-    @GetMapping("/items")
+    @GetMapping("/items/{email}")
     public ResponseEntity<List<PurchaseItemListDTO>> getPurchaseItems(@RequestParam String email) {
         List<PurchaseItemListDTO> purchaseItems = purchaseService.getPurchaseItems(email);
         return ResponseEntity.ok(purchaseItems);
