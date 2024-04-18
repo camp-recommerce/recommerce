@@ -4,6 +4,7 @@ import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+import useCustomChatModal from "../../hooks/useCustomChatModal";
 
 const host = API_SERVER_HOST;
 
@@ -24,27 +25,10 @@ const P_ReadComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
+
   const { loginState } = useCustomLoginPage();
-
-  const openChatModal = () => {
-    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${pno}`);
-    newSocket.onopen = () => {
-      console.log("WebSocket connection established");
-      setSocket(newSocket);
-      setIsChatModalOpen(true);
-      console.log(isChatModalOpen);
-    };
-  };
-
-  const closeChatModal = () => {
-    if (socket) {
-      socket.close(1000); // 정상 종료 코드 사용
-      setSocket(null);
-      setIsChatModalOpen(false);
-    }
-  };
+  const { openChatModal, closeChatModal, isChatModalOpen, socket } =
+    useCustomChatModal(loginState.email);
 
   useEffect(() => {
     const fetchProduct = async () => {
