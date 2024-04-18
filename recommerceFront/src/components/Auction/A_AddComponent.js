@@ -191,22 +191,6 @@ const A_AddComponent = () => {
                 원
               </div>
             </div>
-            <div className="flex items-center justify-between mb-4">
-              <div className="font-bold text-lg">물품상태</div>
-              <div className="text-lg">
-                <select
-                  name="apStatus"
-                  value={auction.apStatus}
-                  onChange={handleChangeAuction}
-                >
-                  {Object.entries(AuctionStatus).map(([key, value]) => (
-                    <option key={key} value={key}>
-                      {value}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
             <div className="flex items-center justify-between">
               <div className="font-bold text-lg">시작시간</div>
               <div className="text-lg">

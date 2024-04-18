@@ -89,7 +89,7 @@ const A_ListComponent = () => {
   return (
     <div
       className="flex justify-center items-center flex-col"
-      style={{ minHeight: "70vh" }}
+      style={{ minHeight: "75vh" }}
     >
       <div className="mb-4 flex items-center" style={{ marginBottom: "20px" }}>
         <input

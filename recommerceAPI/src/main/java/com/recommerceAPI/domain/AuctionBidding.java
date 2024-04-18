@@ -28,5 +28,5 @@ public class AuctionBidding {
 
     private int bidAmount; // 입찰 금액 -> 최종 입찰 금액이 낙찰 금액 되도록
 
-    private LocalDateTime bidTime; // 입찰 시간
+    private String bidTime; // 입찰 시간
 }

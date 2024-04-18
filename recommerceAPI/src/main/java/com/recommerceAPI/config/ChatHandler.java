@@ -2,6 +2,8 @@ package com.recommerceAPI.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recommerceAPI.dto.ChatMessageDTO;
+import com.recommerceAPI.service.AuctionBiddingService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
@@ -14,6 +16,7 @@ import java.util.*;
 
 @Log4j2
 @Component
+@RequiredArgsConstructor
 public class ChatHandler extends TextWebSocketHandler {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
@@ -21,6 +24,7 @@ public class ChatHandler extends TextWebSocketHandler {
     private final  Set<WebSocketSession> sessions = new HashSet<>();
 
     private final Map<String, List<WebSocketSession>> sessionToUsername = new HashMap<>();
+    private final AuctionBiddingService auctionBiddingService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
@@ -57,25 +61,25 @@ public class ChatHandler extends TextWebSocketHandler {
         String payload = message.getPayload();
         log.info("Received message: {}", payload);
 
+        // payload 에 딸려온거 맵퍼 돌리는거
         ChatMessageDTO chatMessageDTO = objectMapper.readValue(payload, ChatMessageDTO.class);
         log.info("Received chat message: {}", chatMessageDTO);
 
-        String author = chatMessageDTO.getAuthor();
-        String room = chatMessageDTO.getRoom();
-        String content = chatMessageDTO.getMessage();
-        String time = chatMessageDTO.getTime(); // time 필드 추가
 
-        log.info("Author: {}", chatMessageDTO.getAuthor());
-        log.info("Room: {}", chatMessageDTO.getRoom());
-        log.info("Message: {}", chatMessageDTO.getMessage());
-        log.info("Time: {}", chatMessageDTO.getTime());
+        String room = chatMessageDTO.getRoom();
+
 
         if (chatMessageDTO.getMessageType() == null) {
             log.error("Message type is null: {}", payload);
             return;
         }
+        if (chatMessageDTO.getMessageType() == ChatMessageDTO.MessageType.BID) {
+            // BID 메시지 처리: 입찰 객체 등록 등 필요한 작업 수행
+            // 예를 들어, 입찰 객체 등록을 위한 메소드 호출 등을 수행할 수 있습니다.
+            auctionBiddingService.saveAuctionBidding(chatMessageDTO);
+        }
 
-        sendMessageToRoom(room, chatMessageDTO, session); // 수정된 부분
+        sendMessageToRoom(room, chatMessageDTO, session);
     }
 
     @Override
