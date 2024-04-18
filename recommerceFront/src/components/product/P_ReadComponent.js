@@ -4,7 +4,10 @@ import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+
 import MapComponent from "../MapComponent";
+
+import useCustomChatModal from "../../hooks/useCustomChatModal";
 
 const host = API_SERVER_HOST;
 
@@ -27,19 +30,10 @@ const P_ReadComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
-  const [socket, setSocket] = useState(null);
-  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
-  const { loginState } = useCustomLoginPage();
 
-  const openChatModal = () => {
-    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${1}`);
-    newSocket.onopen = () => {
-      console.log("WebSocket connection established");
-      setSocket(newSocket);
-      setIsChatModalOpen(true);
-      console.log(isChatModalOpen);
-    };
-  };
+  const { loginState } = useCustomLoginPage();
+  const { openChatModal, closeChatModal, isChatModalOpen, socket } =
+    useCustomChatModal(loginState.email);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -60,14 +54,6 @@ const P_ReadComponent = ({ pno }) => {
       console.error("Product number (pno) is undefined.");
     }
   }, [pno]);
-
-  const closeChatModal = () => {
-    setIsChatModalOpen(false);
-    if (socket) {
-      socket.close();
-      setSocket(null);
-    }
-  };
 
   const handleOpenImg = (imgFile) => {
     setSelectedImgPath(`${host}/product/view/${imgFile}`);
