@@ -135,7 +135,7 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
         {!readOnly && (
           <button
             onClick={moveToCurrentPosition}
-            className="absolute bottom-[15px] right-[15px] z-10 w-[50px] h-[50px] rounded-3xl bg-white flex justify-center items-center"
+            className="absolute bottom-[15px] right-[15px] z-10 w-[60px] h-[60px] border-[0.3px] border-[#2822224f] rounded-[50px] bg-white flex justify-center items-center"
           >
             <img
               src={process.env.PUBLIC_URL + "/images/gps.svg"}
@@ -159,14 +159,14 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
             />
             <button
               type="submit"
-              className="ml-2 bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded whitespace-nowrap"
+              className="ml-2 bg-[#282222] hover:bg-[#6f6e6e] text-white font-bold py-2 px-4 rounded whitespace-nowrap"
             >
               검색
             </button>
           </form>
           <button
             onClick={() => updateAddress(currentPosition)}
-            className="bg-gray-900 hover:bg-gray-800 text-white font-bold py-2 px-4 rounded ml-2 my-2"
+            className="bg-[#282222] hover:bg-[#6f6e6e] text-white font-bold py-2 px-4 rounded ml-2 my-2"
           >
             현재 위치 선택하기
           </button>
