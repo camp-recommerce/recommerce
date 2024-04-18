@@ -91,7 +91,7 @@ const A_ListComponent = () => {
       className="flex justify-center items-center flex-col"
       style={{ minHeight: "75vh" }}
     >
-      <div className="mb-4 flex items-center" style={{ marginBottom: "20px" }}>
+      <div className="mb-4 flex items-center" style={{ marginBottom: "40px" }}>
         <input
           type="text"
           value={apNameInput}
