@@ -1,13 +1,11 @@
-
 import React from "react";
-import MapComponent from "../../components/MapComponent";
+import P_ReadComponent from "../../components/product/P_ReadComponent";
 
 const P_ReadPage = () => {
   return (
-    <div>
-      P_ReadPage
-      <MapComponent />
-    </div>
+    <>
+      <P_ReadComponent />
+    </>
   );
 };
 

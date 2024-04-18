@@ -3,6 +3,7 @@ import { postOne } from "../../api/productApi";
 import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";
+import useCustomProductPage from "../../hooks/useCustomProductPage";
 
 const initState = {
   pname: "",
@@ -18,6 +19,7 @@ const P_AddComponent = () => {
   const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
+  const { moveToPath } = useCustomProductPage();
 
   const uploadRef = useRef();
 
@@ -78,6 +80,7 @@ const P_AddComponent = () => {
 
   const closeAlertModal = () => {
     setResult(null);
+    moveToPath("/");
   };
 
   return (

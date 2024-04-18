@@ -11,7 +11,7 @@ export const getList = async () => {
 
 //상품 상세페이지
 export const getOne = async (pno) => {
-  const res = await axios.get(`${host}/products/read/${pno}`);
+  const res = await axios.get(`${host}/product/read/${pno}`);
 
   return res.data;
 };
