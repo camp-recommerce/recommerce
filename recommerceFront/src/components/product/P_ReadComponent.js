@@ -29,13 +29,21 @@ const P_ReadComponent = ({ pno }) => {
   const { loginState } = useCustomLoginPage();
 
   const openChatModal = () => {
-    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${1}`);
+    const newSocket = new WebSocket(`ws:/localhost:8080/api/chat?room=${pno}`);
     newSocket.onopen = () => {
       console.log("WebSocket connection established");
       setSocket(newSocket);
       setIsChatModalOpen(true);
       console.log(isChatModalOpen);
     };
+  };
+
+  const closeChatModal = () => {
+    if (socket) {
+      socket.close(1000); // 정상 종료 코드 사용
+      setSocket(null);
+      setIsChatModalOpen(false);
+    }
   };
 
   useEffect(() => {
@@ -57,14 +65,6 @@ const P_ReadComponent = ({ pno }) => {
       console.error("Product number (pno) is undefined.");
     }
   }, [pno]);
-
-  const closeChatModal = () => {
-    setIsChatModalOpen(false);
-    if (socket) {
-      socket.close();
-      setSocket(null);
-    }
-  };
 
   const handleOpenImg = (imgFile) => {
     setSelectedImgPath(`${host}/product/view/${imgFile}`);

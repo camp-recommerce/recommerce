@@ -10,6 +10,7 @@ import A_Chat from "../auction/chat/A_Chat";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+import useCustomChatModal from "../../hooks/useCustomChatModal";
 
 const initState = {
   apName: "",
@@ -20,7 +21,6 @@ const initState = {
 const host = API_SERVER_HOST;
 
 const A_ReadComponent = () => {
-  const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [auctionProduct, setAuctionProduct] = useState(initState);
   const { moveProductListPage, moveModifyPage } = useCustomMovePage();
   const [loading, setLoading] = useState(false);
@@ -28,10 +28,11 @@ const A_ReadComponent = () => {
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const { apno } = useParams();
   const remainingTime = useCustomTimes(auctionProduct.apStartTime);
-  const [socket, setSocket] = useState(null);
   const [formattedDate, setFormattedDate] = useState("");
   const [formattedClosingDate, setFormattedClosingDate] = useState("");
   const { loginState } = useCustomLoginPage();
+  const { openChatModal, closeChatModal, isChatModalOpen, socket } =
+    useCustomChatModal(apno);
 
   useEffect(() => {
     setLoading(true);
@@ -45,27 +46,6 @@ const A_ReadComponent = () => {
       setLoading(false);
     });
   }, [apno]);
-
-  const openChatModal = () => {
-    const newSocket = new WebSocket(
-      `ws:/localhost:8080/api/chat?room=${auctionProduct.apno}`
-    );
-    console.log(socket);
-    newSocket.onopen = () => {
-      console.log("WebSocket connection established");
-      setSocket(newSocket);
-      setIsChatModalOpen(true);
-      console.log(isChatModalOpen);
-    };
-  };
-
-  const closeChatModal = () => {
-    if (socket) {
-      socket.close(1000); // 정상 종료 코드 사용
-      setSocket(null);
-      setIsChatModalOpen(false);
-    }
-  };
 
   const closeImageModal = () => {
     setOpenImg(false);
