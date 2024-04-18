@@ -82,12 +82,14 @@ const A_ModifyComponent = () => {
     setAuction({ ...auction });
   };
 
+  // 수정된 handleClickModify 함수
   const handleClickModify = () => {
     const files = uploadRef.current.files;
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
+      formData.append("uploadFileNames", files[i].name); // 파일 이름 추가
     }
 
     formData.append("apCategory", auction.apCategory);
@@ -98,10 +100,7 @@ const A_ModifyComponent = () => {
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
     formData.append("apClosingTime", auction.apClosingTime);
-
-    for (let i = 0; i < auction.uploadFileNames.length; i++) {
-      formData.append("uploadFileNames", auction.uploadFileNames[i]);
-    }
+    console.log(auction.apClosingTime);
 
     setLoading(true);
 

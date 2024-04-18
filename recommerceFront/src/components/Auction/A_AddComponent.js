@@ -70,6 +70,7 @@ const A_AddComponent = () => {
     formData.append("apBidIncrement", auction.apBidIncrement);
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
+    formData.append("apClosingTime", auction.apClosingTime);
     formData.append("apCategory", auction.apCategory);
 
     console.log(formData);
@@ -214,6 +215,18 @@ const A_AddComponent = () => {
                   name="apStartTime"
                   type={"datetime-local"}
                   value={auction.apStartTime}
+                  onChange={handleChangeAuction}
+                ></input>
+              </div>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="font-bold text-lg">종료시간</div>
+              <div className="text-lg">
+                <input
+                  className=""
+                  name="apClosingTime"
+                  type={"datetime-local"}
+                  value={auction.apClosingTime}
                   onChange={handleChangeAuction}
                 ></input>
               </div>
