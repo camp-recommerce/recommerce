@@ -101,7 +101,7 @@ const A_AddComponent = () => {
   const categories = ["신발", "옷", "시계", "기타"];
 
   return (
-    <div className="flex justify-center mt-20">
+    <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
       <div>물품 등록</div>
       <div className="grid grid-cols-2 gap-10">
         <div className="flex justify-center items-center">

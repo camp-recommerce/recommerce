@@ -79,7 +79,7 @@ const A_ReadComponent = () => {
 
   return (
     <>
-      <div className="flex justify-center mt-20">
+      <div className="flex justify-center mt-20" style={{ minHeight: "65vh" }}>
         <div className="grid grid-cols-2 gap-10">
           <div className="flex justify-center items-center">
             <div className="max-w-md">

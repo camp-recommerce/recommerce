@@ -189,7 +189,7 @@ const A_ListComponent = () => {
       </div>
       <div
         className="flex justify-center items-center"
-        style={{ marginTop: "90px" }}
+        style={{ marginTop: "120px" }}
       >
         <PagingComponent
           serverData={serverData}
