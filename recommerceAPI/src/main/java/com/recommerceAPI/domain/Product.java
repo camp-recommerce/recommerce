@@ -27,6 +27,10 @@ public class Product {
     private String pstate; // 제품상태
 
     private String plocat; // 제품판매장소
+    
+    private double lat; // 제품판매장소 위도
+    
+    private double lng; // 제품판매장소 경도
 
     private String pdesc; // 제품설명
 
@@ -64,6 +68,10 @@ public class Product {
     public void changeLocat(String locat){
         this.plocat = locat;
     }
+
+    public void changeLat(double lat) {this.lat = lat;}
+
+    public void changeLng(double lng) {this.lng = lng;}
 
     public void changeState(String state){this.pstate = state;}
 

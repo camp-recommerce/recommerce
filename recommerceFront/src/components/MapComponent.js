@@ -62,14 +62,14 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
           (position) =>
             initializeMap(position.coords.latitude, position.coords.longitude),
           (error) => {
-            console.error("Geolocation error:", error);
+            console.error("Geolocation 에러:", error);
             alert("위치 정보를 찾을 수 없습니다.");
-            initializeMap(37.566826, 126.9786567); // Default location
+            initializeMap(37.566826, 126.9786567); // 에러 시 기본 주소
           }
         );
       } else {
-        alert("브라우저가 Geolocation을 지원하지 않습니다.");
-        initializeMap(37.566826, 126.9786567); // Default location
+        alert("브라우저가 GPS를 지원하지 않습니다.");
+        initializeMap(37.566826, 126.9786567); // 에러 시 기본 주소
       }
     }
   }, [initialPosition, readOnly]);
@@ -86,7 +86,7 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
           map.setCenter(newPos);
         },
         (error) => {
-          console.error("Error accessing geolocation:", error);
+          console.error("Geolocation 접근 에러:", error);
         }
       );
     }

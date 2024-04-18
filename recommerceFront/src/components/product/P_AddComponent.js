@@ -12,6 +12,8 @@ const initState = {
   price: "",
   pstate: "",
   plocat: "",
+  lat: "",
+  lng: "",
   pdesc: "",
   files: [],
 };
@@ -80,8 +82,8 @@ const P_AddComponent = () => {
     formData.append("price", product.price.replace(/[^\d]/g, ""));
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
-    formData.append("lat", location?.lat || ""); // 위도 추가
-    formData.append("lng", location?.lng || ""); // 경도 추가
+    formData.append("lat", location.lat); // 하위 MapComponent에서 콜백 함수로 위도 전달
+    formData.append("lng", location.lng); // 하위 MapComponent에서 콜백 함수로 경도 전달
     formData.append("pdesc", product.pdesc);
 
     console.log(formData);

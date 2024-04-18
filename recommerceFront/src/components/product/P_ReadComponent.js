@@ -4,6 +4,7 @@ import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+import MapComponent from "../MapComponent";
 
 const host = API_SERVER_HOST;
 
@@ -13,6 +14,8 @@ const initState = {
   pstate: "",
   plocat: "",
   pdesc: "",
+  lat: "",
+  lng: "",
   files: [],
   loading: false,
   result: null,
@@ -106,7 +109,16 @@ const P_ReadComponent = ({ pno }) => {
             <div className="shopRead_pstate">{product.pstate}</div>
           </div>
           <div className="shopRead_box">
-            <div className="shopRead_plocat">{product.plocat}</div>
+            <div className="shopRead_plocat h-[300px]">
+              <div className="flex">
+                <label>거래장소</label>
+                <p>{product.plocat}</p>
+              </div>
+              <MapComponent
+                initialPosition={{ lat: product.lat, lng: product.lng }}
+                readOnly={true}
+              />
+            </div>
           </div>
           <div className="shopRead_box">
             <div className="shopRead_pdesc">{product.pdesc}</div>

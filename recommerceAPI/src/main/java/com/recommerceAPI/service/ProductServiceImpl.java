@@ -49,6 +49,10 @@ public class ProductServiceImpl implements ProductService {
                 .pno(productDTO.getPno())
                 .pname(productDTO.getPname())
                 .pcategory(productDTO.getPcategory())
+                .plocat(productDTO.getPlocat())
+                .lat(productDTO.getLat())
+                .lng(productDTO.getLng())
+                .pstate(productDTO.getPstate())
                 .pdesc(productDTO.getPdesc())
                 .price(productDTO.getPrice())
                 .build();
@@ -90,6 +94,8 @@ public class ProductServiceImpl implements ProductService {
                 .price(product.getPrice())
                 .pstate(product.getPstate())
                 .plocat(product.getPlocat())
+                .lat(product.getLat())
+                .lng(product.getLng())
                 .pdesc(product.getPdesc())
                 .build();
 
@@ -119,6 +125,8 @@ public class ProductServiceImpl implements ProductService {
         product.changePrice(productDTO.getPrice());
         product.changeState(productDTO.getPstate());
         product.changeLocat(productDTO.getPlocat());
+        product.changeLat(productDTO.getLat());
+        product.changeLng(productDTO.getLng());
         product.changeDesc(productDTO.getPdesc());
 
         //3. upload File -- clear first

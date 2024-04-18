@@ -21,6 +21,10 @@ public class ProductDTO {
 
     private String plocat; // 제품판매장소
 
+    private double lat; // 제품판매장소 위도
+
+    private double lng; // 제품판매장소 경도
+
     private String pdesc; // 상품 설명
 
     private boolean delFlag; // 삭제 플래그
