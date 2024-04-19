@@ -36,7 +36,7 @@ const Header = () => {
           {isLogin ? (
             <>
               <a
-                href="http://localhost:3000/user/mypage"
+                href="http://localhost:3000/user/mypage/:email"
                 className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
               >
                 마이페이지
