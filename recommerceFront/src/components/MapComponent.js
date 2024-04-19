@@ -130,7 +130,7 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
   };
 
   return (
-    <div className="map-wrap" style={{ width: "800px", height: "500px" }}>
+    <div className="map-wrap" style={{ width: "700px", height: "300px" }}>
       <div ref={mapContainer} className="w-full h-[500px] relative">
         {!readOnly && (
           <button

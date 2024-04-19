@@ -39,7 +39,7 @@ const P_ReadComponent = ({ pno }) => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const data = await getOne(2);
+        const data = await getOne(1);
         setProduct(data);
       } catch (error) {
         console.error("Error fetching product:", error);
@@ -65,7 +65,7 @@ const P_ReadComponent = ({ pno }) => {
   };
 
   return (
-    <div className="shopRead_group">
+    <div className="shopRead_group flex  min-h-[1100px] ">
       {loading ? <LoadingModal /> : <></>}
 
       {/* 상품 영역 */}
@@ -105,6 +105,9 @@ const P_ReadComponent = ({ pno }) => {
                 readOnly={true}
               />
             </div>
+          </div>
+          <div>
+            <button>수정하기</button>
           </div>
           <div className="shopRead_box">
             <div className="shopRead_pdesc">{product.pdesc}</div>

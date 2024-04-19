@@ -32,7 +32,7 @@ const Header = () => {
             판매하기
           </a>
         </div>
-        <div className="left flex space-x-6">
+        <div className="center flex space-x-6">
           {isLogin ? (
             <>
               <a
@@ -65,16 +65,12 @@ const Header = () => {
             </>
           )}
         </div>
+      </div>
 
-        <div>
-          <button className="menu-button lg:hidden">
-            <img
-              src="https://cdn-icons-png.flaticon.com/512/5602/5602186.png"
-              alt="Menu"
-              className="h-20 w-auto"
-            />
-          </button>
-        </div>
+      <div>
+        <button className="menu-button lg:hidden">
+          <img src="/images/menubar.png" alt="Menu" className="h-20 w-auto" />
+        </button>
       </div>
     </div>
   );
