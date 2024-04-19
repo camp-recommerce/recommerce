@@ -8,8 +8,15 @@ const useCustomProductPage = () => {
     navigate({ pathname: path }, { replace: true });
   };
 
+  const moveModifyPage = (num) => {
+    navigate({
+      pathname: `../product/modify/${num}`,
+    });
+  };
+
   return {
     moveToPath,
+    moveModifyPage,
   };
 };
 
