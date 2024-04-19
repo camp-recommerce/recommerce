@@ -2,17 +2,22 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 90vh;
+  height: 80vh;
   width: 100%;
   background-color: #e4dcdc;
 
   .add_container {
     display: flex;
-    margin-top: 50px;
+    margin-top: 30px;
     justify-content: space-around;
-    height: 95%;
+    height: 50%;
     width: 90%;
+
+    .wrap_imagnbtn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
 
     .add_imgArea {
       background-color: #efeaea;
@@ -20,8 +25,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      height: 50%;
-      width: 30%;
+      height: 80%;
+      width: 100%;
+      margin-bottom: 50px;
 
       .addImage {
         max-width: 100%;
@@ -35,9 +41,8 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
       width: 70%;
-      height: 80%;
+      height: 70%;
       margin-left: 40px;
 
       .add_area {
@@ -45,7 +50,7 @@
         width: 100%;
         height: auto;
         gap: 10px;
-        margin: 20px 0;
+        margin: 10px 0;
 
         .add_wrap {
           display: flex;
@@ -75,7 +80,6 @@
 
   .shopList_btn {
     text-align: center;
-    margin-bottom: 100px;
 
     .shopList_addBtn {
       padding: 10px 20px;
@@ -87,7 +91,7 @@
       transition: background-color 0.3s ease;
 
       &:hover {
-        background-color: #45a049;
+        background-color: #3e0962;
       }
     }
   }

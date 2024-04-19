@@ -105,7 +105,7 @@ const P_AddComponent = () => {
   };
 
   return (
-    <div className="add_group min-h-[1500px]">
+    <div className="add_group min-h-[1100px]">
       {loading ? <LoadingModal /> : <></>}
       {result ? (
         <AlertModal
@@ -118,23 +118,35 @@ const P_AddComponent = () => {
       )}
       <div className="add_container">
         {/* 상품 이미지 영역 */}
-        <div className="add_imgArea">
-          {imagePreviewUrl ? (
-            <img
-              src={imagePreviewUrl}
-              className="addImage"
-              alt={product.pname}
+        <div className="wrap_imagnbtn">
+          <div className="add_imgArea">
+            {imagePreviewUrl ? (
+              <img
+                src={imagePreviewUrl}
+                className="addImage"
+                alt={product.pname}
+              />
+            ) : (
+              <></>
+            )}
+            <input
+              ref={uploadRef}
+              id="uploadImage"
+              type="file"
+              multiple={true}
+              onChange={handleImagePreview}
             />
-          ) : (
-            <></>
-          )}
-          <input
-            ref={uploadRef}
-            id="uploadImage"
-            type="file"
-            multiple={true}
-            onChange={handleImagePreview}
-          />
+          </div>
+          {/* 버튼 영역 */}
+          <div className="shopList_btn">
+            <button
+              type="button"
+              className="shopList_addBtn"
+              onClick={handleClickAdd}
+            >
+              상품 등록
+            </button>
+          </div>
         </div>
         {/* 상품 상세 영역 */}
         <div className="add_textArea">
@@ -238,24 +250,16 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap flex flex-col max-h-[150px]">
-              <div className="flex">
+              <div className="flex flex-col">
                 <label>거래장소</label>
-                <p>{selectedAddress}</p>
+                <p>
+                  <strong>{selectedAddress}</strong>
+                </p>
               </div>
               <MapComponent onLocationSelect={handleLocationSelect} />
             </div>
           </div>
         </div>
-      </div>
-      {/* 버튼 영역 */}
-      <div className="shopList_btn">
-        <button
-          type="button"
-          className="shopList_addBtn"
-          onClick={handleClickAdd}
-        >
-          상품 등록
-        </button>
       </div>
     </div>
   );
