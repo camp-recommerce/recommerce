@@ -44,6 +44,6 @@ export const readUser = async (email) => {
 export const sendEmail = async (email) => {
   const formData = new URLSearchParams();
   formData.append("email", email);
-  const res = await axios.post(`${host}/reset-pw`, formData);
+  const res = await jwtAxios.post(`${host}/reset-pw`, formData);
   return res.data;
 };
