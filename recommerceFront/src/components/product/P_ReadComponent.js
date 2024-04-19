@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import { API_SERVER_HOST, getOne } from "../../api/productApi";
+import { getOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+import { API_SERVER_HOST } from "../../api/userApi";
 
 import MapComponent from "../MapComponent";
 

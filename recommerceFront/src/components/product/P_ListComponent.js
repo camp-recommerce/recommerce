@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { formatNumber } from "../../util/formatNumberUtil"; // 숫자 포맷팅 유틸리티
-import { API_SERVER_HOST, getList } from "../../api/productApi";
+import { getList } from "../../api/productApi";
+import { API_SERVER_HOST } from "../../api/userApi";
 
 const host = API_SERVER_HOST;
 

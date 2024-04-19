@@ -1,5 +1,5 @@
 import axios from "axios";
-export const API_SERVER_HOST = "http://localhost:8080";
+import { API_SERVER_HOST } from "./userApi";
 
 const host = `${API_SERVER_HOST}`;
 
