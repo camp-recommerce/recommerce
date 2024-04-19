@@ -5,7 +5,6 @@ import AlertModal from "../modal/AlertModal";
 import { useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 
-// 전체 폼에 대한 유효성 검사 스키마
 const validationSchema = Yup.object({
   email: Yup.string()
     .email("유효한 이메일을 입력하세요.")
@@ -26,12 +25,7 @@ const validationSchema = Yup.object({
 });
 
 const ModifyComponent = () => {
-  const [error, setError] = useState("");
-
   const loginInfo = useSelector((state) => state.loginSlice);
-
-  const email = loginInfo.email;
-
   const [user, setUser] = useState({
     email: "",
     pw: "",
@@ -39,152 +33,152 @@ const ModifyComponent = () => {
     phone: "",
     birth: "",
   });
-
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState(""); // 에러 메시지 상태 추가
-
+  const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        // 서버에서 사용자 정보 가져오기
-        const userData = await readUser(email);
-        const { pw, ...restInfo } = userData;
-
-        // 사용자 정보 설정
-        setUser(restInfo);
+        const userData = await readUser(loginInfo.email);
+        setUser(userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
     };
 
-    if (email) {
+    if (loginInfo.email) {
       fetchUserData();
     }
-  }, [email]);
+  }, [loginInfo.email]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setError("");
-    //비동기 방식의 문제점을 방지하기 위해 함수 방식을 사용
-    setUser((prevUser) => ({
-      ...prevUser,
-      [name]: value,
-    }));
+    setUser((prevUser) => ({ ...prevUser, [name]: value }));
   };
 
   const handleClickModify = async () => {
     try {
-      // 전체 폼 데이터에 대한 유효성 검사 실행
       await validationSchema.validate(user, { abortEarly: false });
-      // 유효성 검사 통과하면, 수정 요청 보내기
       await modifyUser(user);
-      // 성공 처리
       setResult(true);
     } catch (error) {
-      setResult(false); // 결과 상태를 실패로 설정
-      if (error instanceof Yup.ValidationError) {
-        // 유효성 검사 실패 시 첫 번째 에러 메시지를 표시
-        setErrorMessage(error.errors[0]);
-      }
+      setResult(false);
+      setErrorMessage(error.errors[0] || "An unexpected error occurred.");
     }
   };
 
-  const closeModal = () => {
-    setResult(null);
-    navigate("/");
+  // 스타일 객체 정의
+  const styles = {
+    formWrap: {
+      maxWidth: "600px",
+      margin: "40px auto",
+      padding: "20px",
+      border: "1px solid #ccc",
+      borderRadius: "8px",
+      backgroundColor: "#f7f7f7",
+      boxShadow: "0 2px 5px rgba(0, 0, 0, 0.1)",
+    },
+    formField: {
+      marginBottom: "20px",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      border: "1px solid #ddd",
+      borderRadius: "4px",
+    },
+    button: {
+      padding: "10px 20px",
+      backgroundColor: "#000",
+      color: "white",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer",
+      fontSize: "1rem",
+    },
+    title: {
+      textAlign: "center",
+      marginBottom: "20px",
+      fontSize: "1.5rem",
+      color: "#333",
+    },
+    errorMessage: {
+      color: "red",
+      textAlign: "center",
+      marginBottom: "10px",
+    },
   };
+
   return (
-    <div className="mt-6">
-      {result ? (
+    <div style={styles.formWrap}>
+      {result && (
         <AlertModal
-          title={"회원정보"}
-          content={"수정이 완료되었습니다"}
-          callbackFn={closeModal}
-        ></AlertModal>
-      ) : (
-        <></>
+          title="회원정보 수정"
+          content="수정이 완료되었습니다."
+          callbackFn={() => navigate("/")}
+        />
       )}
-      <div>
-        <div className="errorMessage">
-          {errorMessage && (
-            <div className="text-red-500 font-bold mb-4">{errorMessage}</div>
-          )}
-        </div>
-        <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-          <div className="w-1/5 p-6 text-right font-bold">E-mail</div>
+      <h2 style={styles.title}>회원정보 수정</h2>
+      <div style={styles.errorMessage}>
+        {errorMessage && <div>{errorMessage}</div>}
+      </div>
+      <form>
+        <div style={styles.formField}>
+          <label>Email</label>
           <input
-            className="w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md bg-gray-200"
+            style={styles.input}
             name="email"
             type="text"
             value={user.email}
+            onChange={handleChange}
             readOnly
           />
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-          <div className="w-1/5 p-6 text-right font-bold">Password</div>
+        <div style={styles.formField}>
+          <label>비밀번호</label>
           <input
-            className="w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md"
+            style={styles.input}
             name="pw"
-            type={"password"}
-            placeholder="필수 입력"
+            type="password"
             value={user.pw}
             onChange={handleChange}
-          ></input>
+          />
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-          <div className="w-1/5 p-6 text-right font-bold">nickname</div>
+        <div style={styles.formField}>
+          <label>닉네임</label>
           <input
-            className="w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md"
+            style={styles.input}
             name="nickname"
             type="text"
             value={user.nickname}
             onChange={handleChange}
-          ></input>
+          />
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-          <div className="w-1/5 p-6 text-right font-bold">phone</div>
+        <div style={styles.formField}>
+          <label>P.H</label>
           <input
-            className="w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md"
+            style={styles.input}
             name="phone"
             type="text"
             value={user.phone}
             onChange={handleChange}
-          ></input>
+          />
         </div>
-      </div>
-      <div className="flex justify-center">
-        <div className="relative mb-4 flex w-full flex-wrap items-stretch">
-          <div className="w-1/5 p-6 text-right font-bold">birth</div>
+        <div style={styles.formField}>
+          <label>생년월일</label>
           <input
-            className="w-4/5 p-6 rounded-r border border-solid border-neutral-300 shadow-md"
+            style={styles.input}
             name="birth"
             type="text"
             value={user.birth}
             onChange={handleChange}
-          ></input>
+          />
         </div>
-      </div>
-      <div className="flex justify-center">
-        {error && <div className="errorMessage">{error}</div>}
-        {/* {error && <div className="text-red-500">{error}</div>} */}
-        <div className="relative mb-4 flex w-full flex-wrap justify-end">
-          <button
-            type="button"
-            className="rounded p-4 m-2 text-xl w-32 text-white bg-yellow-500"
-            onClick={handleClickModify}
-          >
-            Modify
-          </button>
-        </div>
-      </div>
+        <button style={styles.button} onClick={handleClickModify} type="button">
+          수정하기
+        </button>
+      </form>
     </div>
   );
 };

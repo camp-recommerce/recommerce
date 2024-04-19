@@ -1,132 +1,146 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import $ from "jquery";
 import { readUser } from "../../api/userApi";
 import { fetchSaleItems } from "../../api/salesApi";
-import { fetchPurchaseItems } from "../../api/purchaseApi"; // API 함수 임포트
+import { fetchPurchaseItems } from "../../api/purchaseApi";
 
 const MyPageComponent = () => {
-  const user = useSelector((state) => state.loginSlice); // 리덕스 스토어에서 로그인 정보 가져오기
-  const [userData, setUserData] = useState(null); // 사용자 데이터 상태
-  const [saleItems, setSaleItems] = useState([]); // 판매 아이템 상태
-  const [purchaseItems, setPurchaseItems] = useState([]); // 구매 아이템 상태
-  const [activeMenu, setActiveMenu] = useState("profile"); // 활성 메뉴 상태
+  const user = useSelector((state) => state.loginSlice);
+  const [userData, setUserData] = useState(null);
+  const [saleItems, setSaleItems] = useState([]);
+  const [purchaseItems, setPurchaseItems] = useState([]);
+  const [activeMenu, setActiveMenu] = useState("profile");
 
-  const email = user.email; // 사용자 이메일
+  const email = user.email;
 
   useEffect(() => {
-    $(document).ready(function () {
-      $(".menuButtons button").css({
-        padding: "10px 20px",
-        margin: "5px",
-        background: "#4CAF50",
-        color: "white",
-        border: "none",
-        borderRadius: "5px",
-      });
-
-      $(".InfoBundle").css({
-        marginTop: "20px",
-        padding: "15px",
-        backgroundColor: "#f8f8f8",
-      });
-
-      $(".userInfo div, .userSettings button").css({
-        margin: "10px 0",
-      });
-    });
-
-    // 사용자 데이터와 판매, 구매 목록을 불러오는 함수
-    const fetchUserData = async () => {
-      try {
-        const userData = await readUser(email);
-        setUserData(userData);
-      } catch (error) {
-        console.error("Error fetching user data:", error);
-      }
-    };
-
-    const fetchSales = async () => {
-      try {
-        const sales = await fetchSaleItems(email);
-        setSaleItems(sales);
-      } catch (error) {
-        console.error("Error fetching sale items:", error);
-      }
-    };
-
-    const fetchPurchases = async () => {
-      try {
-        const purchases = await fetchPurchaseItems(email);
-        setPurchaseItems(purchases);
-      } catch (error) {
-        console.error("Error fetching purchase items:", error);
-      }
-    };
-
     if (email) {
-      fetchUserData();
-      fetchSales();
-      fetchPurchases();
+      const fetchData = async () => {
+        try {
+          const userData = await readUser(email);
+          setUserData(userData);
+          const sales = await fetchSaleItems(email);
+          setSaleItems(sales);
+          const purchases = await fetchPurchaseItems(email);
+          setPurchaseItems(purchases);
+        } catch (error) {
+          console.error("Error fetching data:", error);
+        }
+      };
+      fetchData();
     }
   }, [email]);
 
+  // Inline styles
+  const styles = {
+    myPageBundle: {
+      padding: "20px",
+      margin: "20px auto",
+      maxWidth: "800px",
+      backgroundColor: "#fff",
+      borderRadius: "8px",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+      fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
+    },
+    menuButtons: {
+      display: "flex",
+      justifyContent: "space-around",
+      marginBottom: "20px",
+    },
+    button: {
+      padding: "10px 15px",
+      backgroundColor: "#000",
+      color: "#fff",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+      fontSize: "16px",
+      fontWeight: "bold",
+    },
+    infoBundle: {
+      backgroundColor: "#f9f9f9",
+      padding: "15px",
+      border: "1px solid #ccc",
+      borderRadius: "5px",
+    },
+    userInfo: {
+      marginBottom: "10px",
+    },
+    list: {
+      listStyle: "none",
+      paddingLeft: "0",
+    },
+    listItem: {
+      padding: "5px 0",
+    },
+    title: {
+      fontWeight: "bold",
+      fontSize: "18px",
+      marginBottom: "10px",
+    },
+  };
+
   return (
-    <div className="myPageBundle">
-      <span>마이 페이지</span>
-      <div className="menuButtons">
-        {/* 메뉴 버튼을 클릭하면 activeMenu 상태를 변경 */}
-        <button onClick={() => setActiveMenu("profile")}>프로필</button>
-        <button onClick={() => setActiveMenu("settings")}>설정</button>
-        <button onClick={() => setActiveMenu("purchases")}>구매 목록</button>
-        <button onClick={() => setActiveMenu("sales")}>판매 목록</button>
+    <div style={styles.myPageBundle}>
+      <h1 style={styles.title}>마이페이지</h1>
+      <div style={styles.menuButtons}>
+        <button style={styles.button} onClick={() => setActiveMenu("profile")}>
+          프로필
+        </button>
+        <button style={styles.button} onClick={() => setActiveMenu("settings")}>
+          정보변경
+        </button>
+        <button
+          style={styles.button}
+          onClick={() => setActiveMenu("purchases")}
+        >
+          구매목록
+        </button>
+        <button style={styles.button} onClick={() => setActiveMenu("sales")}>
+          판매목록
+        </button>
       </div>
-      <div className="InfoBundle">
-        {/* activeMenu 상태에 따라 조건부 렌더링으로 해당 정보 표시 */}
+      <div style={styles.infoBundle}>
         {activeMenu === "profile" && userData && (
-          <div className="userInfo">
-            <div>E-mail: {userData.email}</div>
-            <div>닉네임: {userData.nickname}</div>
-            <div>P.H: {userData.phone}</div>
-            <div>생년월일: {userData.birth}</div>
+          <div style={styles.userInfo}>
+            <p>Email: {userData.email}</p>
+            <p>닉네임: {userData.nickname}</p>
+            <p>P.H: {userData.phone}</p>
+            <p>생년월일: {userData.birth}</p>
           </div>
         )}
         {activeMenu === "settings" && (
-          <div className="userSettings">
+          <div style={styles.userInfo}>
             <Link to={`/user/modify`}>
-              <button>정보 수정</button>
+              <button style={styles.button}>정보 변경</button>
             </Link>
             <Link to={`/user/remove/${email}`}>
-              <button>회원 탈퇴</button>
+              <button style={styles.button}>탈퇴하기</button>
             </Link>
           </div>
         )}
         {activeMenu === "purchases" &&
           purchaseItems &&
           purchaseItems.length > 0 && (
-            <div>
-              <h2>구매한 상품 목록</h2>
-              <ul>
-                {purchaseItems.map((item) => (
-                  <li key={item.id}>
-                    {item.name} - {item.price}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
-          <div>
-            <h2>판매한 상품 목록</h2>
-            <ul>
-              {saleItems.map((item) => (
-                <li key={item.id}>
-                  {item.name} - {item.price}
+            <ul style={styles.list}>
+              <li style={styles.title}>구매리스트:</li>
+              {purchaseItems.map((item) => (
+                <li key={item.id} style={styles.listItem}>
+                  {item.name} - ${item.price}
                 </li>
               ))}
             </ul>
-          </div>
+          )}
+        {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
+          <ul style={styles.list}>
+            <li style={styles.title}>판매리스트:</li>
+            {saleItems.map((item) => (
+              <li key={item.id} style={styles.listItem}>
+                {item.name} - ${item.price}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </div>

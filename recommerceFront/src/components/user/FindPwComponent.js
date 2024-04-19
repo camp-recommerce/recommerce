@@ -17,10 +17,8 @@ const FindPwComponent = () => {
     }
 
     try {
-      // 'sendEmail' 함수를 사용하여 비밀번호 재설정 요청을 보냅니다.
       await sendEmail(email);
       alert("임시 비밀번호를 발송했습니다. 이메일을 확인해주세요.");
-      // 비밀번호 재설정 요청이 성공적으로 처리된 후, 원하는 경로로 네비게이션 할 수 있습니다.
       navigate("/user/login");
     } catch (error) {
       if (error.response) {
@@ -37,20 +35,48 @@ const FindPwComponent = () => {
     }
   };
 
-  return (
-    <div className="findWrap">
-      <div className="findTitle">
-        <div>
-          <span className="findText">이메일</span>을 입력해주세요
-        </div>
-      </div>
-      <div className="inputSection">
-        <input type="email" value={email} onChange={handleEmailChange} />
-      </div>
+  // 인라인 스타일 정의
+  const styles = {
+    findWrap: {
+      maxWidth: "400px",
+      margin: "2rem auto",
+      padding: "2rem",
+      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+      borderRadius: "10px",
+      backgroundColor: "#fff",
+      textAlign: "center",
+    },
+    input: {
+      width: "100%",
+      padding: "10px",
+      margin: "10px 0",
+      border: "1px solid #ccc",
+      borderRadius: "5px",
+    },
+    button: {
+      width: "100%",
+      padding: "10px 20px",
+      backgroundColor: "#000",
+      color: "white",
+      border: "none",
+      borderRadius: "5px",
+      cursor: "pointer",
+    },
+  };
 
-      <div className="findBottom">
-        <button onClick={handleSubmit}>임시비밀번호 발송</button>
-      </div>
+  return (
+    <div style={styles.findWrap}>
+      <h2>비밀번호 찾기</h2>
+      <input
+        type="email"
+        value={email}
+        onChange={handleEmailChange}
+        style={styles.input}
+        placeholder="이메일 입력"
+      />
+      <button onClick={handleSubmit} style={styles.button}>
+        임시비밀번호 발송
+      </button>
     </div>
   );
 };
