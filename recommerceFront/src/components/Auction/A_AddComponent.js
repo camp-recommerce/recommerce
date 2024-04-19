@@ -72,7 +72,6 @@ const A_AddComponent = () => {
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
     formData.append("apClosingTime", auction.apClosingTime);
-    formData.append("apCategory", auction.apCategory);
 
     console.log(formData);
 

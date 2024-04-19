@@ -11,11 +11,11 @@ public class LocalDateTimeFormatter implements Formatter<LocalDateTime> {
     @Override
     public LocalDateTime parse(String text, Locale locale) {
 
-        return LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        return LocalDateTime.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss"));
     }
 
     @Override
     public String print(LocalDateTime object, Locale locale) {
-        return DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(object);
+        return DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss").format(object);
     }
 }
