@@ -30,6 +30,8 @@ const P_ReadComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
+  const [selectedAddress, setSelectedAddress] = useState("");
+  const [location, setLocation] = useState(null);
 
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
@@ -62,6 +64,11 @@ const P_ReadComponent = ({ pno }) => {
 
   const closeImageModal = () => {
     setOpenImg(false);
+  };
+
+  const handleLocationSelect = (loc) => {
+    setLocation(loc);
+    setSelectedAddress(loc.address);
   };
 
   return (
@@ -100,6 +107,7 @@ const P_ReadComponent = ({ pno }) => {
                 <label>거래장소</label>
                 <p>{product.plocat}</p>
               </div>
+              <p>{selectedAddress}</p>
               <MapComponent
                 initialPosition={{ lat: product.lat, lng: product.lng }}
                 readOnly={true}

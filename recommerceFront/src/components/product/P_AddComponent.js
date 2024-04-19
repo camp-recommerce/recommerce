@@ -60,10 +60,6 @@ const P_AddComponent = () => {
   // 주소 처리
   const handleLocationSelect = (loc) => {
     setLocation(loc);
-    setProduct({
-      ...product,
-      plocat: loc.address,
-    });
     setSelectedAddress(loc.address);
   };
 
@@ -252,10 +248,14 @@ const P_AddComponent = () => {
             <div className="add_wrap flex flex-col max-h-[150px]">
               <div className="flex flex-col">
                 <label>거래장소</label>
-                <p>
-                  <strong>{selectedAddress}</strong>
-                </p>
+                <input
+                  name="plocat"
+                  type="text"
+                  value={product.plocat}
+                  onChange={handleChangeProduct}
+                />
               </div>
+              <p>{selectedAddress}</p>
               <MapComponent onLocationSelect={handleLocationSelect} />
             </div>
           </div>
