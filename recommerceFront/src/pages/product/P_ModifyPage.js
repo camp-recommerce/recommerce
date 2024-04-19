@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import P_ModifyComponent from "../../components/product/P_ModifyComponent";
 
 const P_ModifyPage = () => {

@@ -14,9 +14,16 @@ const useCustomProductPage = () => {
     });
   };
 
+  const moveBeforeReadPage = (num) => {
+    navigate({
+      pathname: `../product/read/${num}`,
+    });
+  };
+
   return {
     moveToPath,
     moveModifyPage,
+    moveBeforeReadPage,
   };
 };
 
