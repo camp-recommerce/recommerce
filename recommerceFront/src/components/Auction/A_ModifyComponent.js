@@ -90,7 +90,6 @@ const A_ModifyComponent = () => {
 
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
-      formData.append("uploadFileNames", files[i].name); // 파일 이름 추가
     }
 
     formData.append("apCategory", auction.apCategory);
@@ -102,6 +101,10 @@ const A_ModifyComponent = () => {
     formData.append("apStartTime", auction.apStartTime);
     formData.append("apClosingTime", auction.apClosingTime);
     console.log(auction.apClosingTime);
+
+    for (let i = 0; i < auction.uploadFileNames.length; i++) {
+      formData.append("uploadFileNames", auction.uploadFileNames[i]); // 파일 이름 추가
+    }
 
     setLoading(true);
 
