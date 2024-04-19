@@ -246,7 +246,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap flex flex-col max-h-[150px]">
-              <div className="flex flex-col">
+              <div className="flex">
                 <label>거래장소</label>
                 <input
                   name="plocat"

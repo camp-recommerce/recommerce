@@ -2,7 +2,7 @@ import React from "react";
 
 const Footer = () => {
   return (
-    <footer className="footer bg-gray-100 py-6 z-30">
+    <footer className="footer bg-gray-100 py-6 z-[9999]">
       <div className="footer_text text-gray-700 text-center">
         <strong>대표 </strong> 000 |<strong>사업자 번호</strong> 000-00-00000
         <br />
