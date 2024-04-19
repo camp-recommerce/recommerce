@@ -10,6 +10,7 @@ import "../../scss/product/ReadPage.scss";
 import MapComponent from "../MapComponent";
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
+import { API_SERVER_HOST } from "../../api/userApi";
 
 const host = API_SERVER_HOST;
 
