@@ -1,7 +1,7 @@
 import axios from "axios";
 import { API_SERVER_HOST } from "./userApi";
 
-const rest_api_key = `cbc1c2cf5b61f138188937b778d7a860`; //REST키값
+const rest_api_key = `69a6e26cfb73f2448ae8c5f69c2b1ee4`; //javaScript키
 
 const redirect_uri = `http://localhost:3000/user/kakao`;
 
