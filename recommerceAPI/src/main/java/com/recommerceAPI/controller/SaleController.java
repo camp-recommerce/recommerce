@@ -17,7 +17,7 @@ public class SaleController {
     private final SaleService saleService;
 
     // 사용자의 이메일을 기반으로 해당 사용자의 판매 목록을 조회하는 엔드포인트
-    @GetMapping("/{email}")
+    @GetMapping("/items/{email}")
     public ResponseEntity<List<SaleItemListDTO>> getSaleItems(@PathVariable String email) {
         List<SaleItemListDTO> saleItems = saleService.getSaleItems(email);
         return ResponseEntity.ok(saleItems);
