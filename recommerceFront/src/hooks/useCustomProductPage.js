@@ -8,8 +8,22 @@ const useCustomProductPage = () => {
     navigate({ pathname: path }, { replace: true });
   };
 
+  const moveModifyPage = (num) => {
+    navigate({
+      pathname: `../product/modify/${num}`,
+    });
+  };
+
+  const moveBeforeReadPage = (num) => {
+    navigate({
+      pathname: `../product/read/${num}`,
+    });
+  };
+
   return {
     moveToPath,
+    moveModifyPage,
+    moveBeforeReadPage,
   };
 };
 

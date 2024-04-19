@@ -4,7 +4,8 @@ import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
-import { API_SERVER_HOST } from "../../api/userApi";
+import useCustomProductPage from "../../hooks/useCustomProductPage";
+import "../../scss/product/ReadPage.scss";
 
 import MapComponent from "../MapComponent";
 
@@ -31,9 +32,7 @@ const P_ReadComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
-  const [selectedAddress, setSelectedAddress] = useState("");
-  const [location, setLocation] = useState(null);
-
+  const { moveModifyPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal(loginState.email);
@@ -73,14 +72,15 @@ const P_ReadComponent = ({ pno }) => {
   };
 
   return (
-    <div className="shopRead_group flex  min-h-[1100px] ">
+    <div className="shopRead_group ">
       {loading ? <LoadingModal /> : <></>}
 
       {/* 상품 영역 */}
       <div className="shopRead_img">
         <img
           alt="product"
-          src={`${host}/api/products/view/${product.uploadFileNames}`}
+          // src={`${host}/api/products/view/${product.uploadFileNames}`}
+          src="/winter.jpg"
           onClick={handleOpenImg}
         />
       </div>
@@ -103,9 +103,14 @@ const P_ReadComponent = ({ pno }) => {
             <div className="shopRead_pstate">{product.pstate}</div>
           </div>
           <div className="shopRead_box">
-            <div className="shopRead_plocat h-[300px]">
+            <div className="shopRead_pdesc">{product.pdesc}</div>
+          </div>
+          <div className="shopRead_box_location">
+            <div className="shopRead_plocat">
               <div className="flex">
-                <label>거래장소</label>
+                <label>
+                  <strong>거래장소 :</strong>
+                </label>
                 <p>{product.plocat}</p>
               </div>
               <p>{selectedAddress}</p>
@@ -115,14 +120,11 @@ const P_ReadComponent = ({ pno }) => {
               />
             </div>
           </div>
-          <div>
-            <button>수정하기</button>
-          </div>
-          <div className="shopRead_box">
-            <div className="shopRead_pdesc">{product.pdesc}</div>
+          <div className="btn_modify">
+            <button onClick={() => moveModifyPage(1)}>수정하기</button>
           </div>
           <button
-            className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
             onClick={() => openChatModal()}
           >
             경매 채팅

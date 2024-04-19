@@ -3,7 +3,7 @@ import { VariableSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 // 임시 dummyList 생성
-const dummyList = new Array(100).fill(0).map((_, idx) => ({
+const dummyList = new Array(1000).fill(0).map((_, idx) => ({
   id: idx,
   name: `List ${idx}`,
 }));

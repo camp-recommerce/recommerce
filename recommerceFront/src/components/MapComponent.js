@@ -133,8 +133,8 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
   };
 
   return (
-    <div className="map-wrap" style={{ width: "700px", height: "300px" }}>
-      <div ref={mapContainer} className="w-[700px] h-[300px] relative">
+    <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
+      <div ref={mapContainer} className="w-full h-[350px] relative">
         {!readOnly && (
           <button
             onClick={moveToCurrentPosition}
