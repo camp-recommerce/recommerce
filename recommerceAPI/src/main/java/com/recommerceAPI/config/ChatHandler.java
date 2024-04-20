@@ -1,10 +1,15 @@
 package com.recommerceAPI.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.recommerceAPI.domain.Auction;
+import com.recommerceAPI.domain.AuctionBidding;
+import com.recommerceAPI.dto.AuctionBiddingDTO;
 import com.recommerceAPI.dto.ChatMessageDTO;
+import com.recommerceAPI.repository.AuctionBiddingRepository;
 import com.recommerceAPI.service.AuctionBiddingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -13,6 +18,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Component
@@ -25,14 +31,17 @@ public class ChatHandler extends TextWebSocketHandler {
 
     private final Map<String, List<WebSocketSession>> sessionToUsername = new HashMap<>();
     private final AuctionBiddingService auctionBiddingService;
+    private final AuctionBiddingRepository auctionBiddingRepository;
+    private final ModelMapper modelMapper;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
         log.info("{} connect", session.getId());
-        // 여기서 세션과 사용자 이름을 매핑하고 저장
+        // 여기서 세션과 room
         URI uri = session.getUri();
         String room = extractRoomFromUri(uri);
+
         List<WebSocketSession> sessionList = sessionToUsername.getOrDefault(room, new ArrayList<>());
         sessionList.add(session);
         sessionToUsername.put(room, sessionList);
@@ -41,6 +50,8 @@ public class ChatHandler extends TextWebSocketHandler {
         String time = " ";
         ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION,time );
 
+
+        sendPreviousChatHistory(Long.valueOf(room),session);
         sendMessageToRoom(room,notificationDTO,session);
     }
 
@@ -55,6 +66,29 @@ public class ChatHandler extends TextWebSocketHandler {
         }
         return null;
     }
+    private void sendPreviousChatHistory(Long room, WebSocketSession session) {
+        // 경매에서 사용한 옥션 바이딩 도메인을 챗 형식으로 변환하고 해당하는 room 에 전부 쏩니다.
+        // 아마 1:1 채팅과 오류는 없을겁니다
+        List<AuctionBidding> previousChatHistory = auctionBiddingRepository.findByAuction_Apno(room);
+
+        List<ChatMessageDTO> chatMessageDTOList = previousChatHistory.stream()
+                .map(auctionBidding -> {
+                    ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
+                    chatMessageDTO.setRoom(String.valueOf(auctionBidding.getAuction().getApno()));
+                    chatMessageDTO.setMessage(String.valueOf(auctionBidding.getBidAmount()));
+                    chatMessageDTO.setMessageType(ChatMessageDTO.MessageType.BID);
+                    chatMessageDTO.setAuthor(auctionBidding.getBidder().getEmail());
+                    chatMessageDTO.setTime(auctionBidding.getBidTime());
+                    return chatMessageDTO;
+                })
+                .collect(Collectors.toList());
+
+        log.info(chatMessageDTOList);
+        // 변환된 채팅 내역을 해당 세션에 전송합니다.
+        for (ChatMessageDTO chatMessageDTO : chatMessageDTOList) {
+            sendMessage(session, chatMessageDTO);
+        }
+    }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -65,9 +99,7 @@ public class ChatHandler extends TextWebSocketHandler {
         ChatMessageDTO chatMessageDTO = objectMapper.readValue(payload, ChatMessageDTO.class);
         log.info("Received chat message: {}", chatMessageDTO);
 
-
         String room = chatMessageDTO.getRoom();
-
 
         if (chatMessageDTO.getMessageType() == null) {
             log.error("Message type is null: {}", payload);

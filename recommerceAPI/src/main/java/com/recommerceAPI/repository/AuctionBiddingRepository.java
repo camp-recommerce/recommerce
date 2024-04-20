@@ -14,4 +14,5 @@ public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, 
     List<AuctionBidding> findByBidderEmailAndAuctionApno(@Param("email") String email, @Param("apno") Long apno);
 
     List<AuctionBidding> findByAuction(Auction auction);
+    List<AuctionBidding> findByAuction_Apno(Long apno);
 }

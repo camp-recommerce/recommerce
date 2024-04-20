@@ -2,7 +2,6 @@ package com.recommerceAPI.dto;
 
 import lombok.*;
 
-
 @Builder
 @Getter
 @Setter
@@ -12,7 +11,6 @@ public class ChatMessageDTO {
     public enum MessageType {
         ENTER, MESSAGE, NOTIFICATION,BID
     }
-
 
     private String room;
     private String message;

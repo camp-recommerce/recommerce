@@ -64,7 +64,6 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
     public List<AuctionBiddingDTO> findAuctionBiddingByEmailAndAuctionApno(String email, Long apno) {
         List<AuctionBidding>  auctionBiddingList =  auctionBiddingRepository.findByBidderEmailAndAuctionApno(email, apno);
 
-
         // 옥션 바이딩 정보를 AuctionBiddingDTO로 변환하여 리스트에 추가
         List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();
         for (AuctionBidding auctionBidding : auctionBiddingList) {
@@ -72,7 +71,7 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
             auctionBiddingDTOList.add(auctionBiddingDTO);
         }
 
-
         return auctionBiddingDTOList;
     }
+
 }

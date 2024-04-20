@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from "uuid";
 import { API_SERVER_HOST } from "../../../api/userApi";
 import { getOne } from "../../../api/auctionApi";
 
-
 function A_Chat({
   socket,
   username,
@@ -13,16 +12,22 @@ function A_Chat({
   bidIncrement,
   imageSrc,
   room,
+  currentPrice
 }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
   const messageBottomRef = useRef(null);
-  const [auctionProduct, setAuctionProduct] = useState(0);
   const host = API_SERVER_HOST;
+  const [currentBid, setCurrentBid] = useState(currentPrice); // 현재 입찰가 상태 추가
 
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     const parsedMsg = parseInt(currentMsg);
+    
+    if (isNaN(parsedMsg)) {
+      window.alert("입력된 값이 숫자가 아닙니다. 숫자를 입력해주세요.");
+      return;
+    }
 
     // 입력된 메시지가 숫자가 아니거나, startPrice보다 작은 경우 알림창으로 알림
     if (isNaN(parsedMsg) || parsedMsg <= startPrice) {
@@ -35,7 +40,15 @@ function A_Chat({
       window.alert("입찰 단위가 맞지 않습니다.");
       return;
     }
+
+    // 입찰가가 현재 입찰가보다 낮을 경우 알림창으로 알림
+    if (parsedMsg <= currentBid) {
+      window.alert("입찰가가 현재 입찰가보다 낮습니다.");
+      return;
+    }
+
     const currentMonth = new Date().getMonth() + 1;
+
     // 조건에 맞는 경우에만 메시지 전송
     const messageData = {
       room: room,
@@ -51,11 +64,10 @@ function A_Chat({
         new Date(Date.now()).getMinutes(),
       messageType: "BID",
     };
-    
     socket.send(JSON.stringify(messageData));
     setMessageList((list) => [...list, messageData]);
     inputRef.current.value = "";
-    
+    setCurrentBid(parsedMsg); // 입찰 성공 시 현재 입찰가 업데이트
   };
 
   useEffect(() => {
@@ -63,9 +75,7 @@ function A_Chat({
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setMessageList((list) => [...list, data]);
-        getOne(room).then((data)=>{
-          setAuctionProduct(data);
-        }) 
+      
       };
     }
   }, [socket]);
@@ -73,20 +83,21 @@ function A_Chat({
   useEffect(() => {
     messageBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
+  
 
   const handleModalClick = (e) => {
     e.stopPropagation(); // 모달 내부 클릭 시 닫히지 않도록 이벤트 전파 중단
   };
 
   const handleOutsideClick = (e) => {
-    // closeModal(); // 모달 외부 클릭 시 모달 닫기
+    closeModal(); // 모달 외부 클릭 시 모달 닫기
   };
 
   return (
     <div
       className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
       style={{ zIndex: 999 }}
-      // onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
+      onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
     >
       <div className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"></div>
       <div
@@ -119,7 +130,7 @@ function A_Chat({
           <div>
             <div>시작 가격: {startPrice}원</div>
             <div>입찰 단위: {bidIncrement}원</div>
-            <div>현재 입찰가: {auctionProduct.apCurrentPrice}</div>
+            <div>현재 입찰가: {currentBid}원</div> {/* 현재 입찰가 표시 */}
           </div>
         </div>
         <div
@@ -149,7 +160,9 @@ function A_Chat({
           />
           <button
             className="bg-blue-500 text-white px-4 py-2 rounded-md transition duration-300 hover:bg-blue-600 flex-shrink-0"
-            onClick={sendMessage}
+            onClick={() => {
+              sendMessage();
+            }}
           >
             입찰
           </button>

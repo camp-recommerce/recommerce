@@ -168,6 +168,8 @@ const A_ReadComponent = () => {
                       startPrice={auctionProduct.apStartPrice}
                       bidIncrement={auctionProduct.apBidIncrement}
                       imageSrc={auctionProduct.uploadFileNames}
+                      currentPrice = {auctionProduct.apCurrentPrice}
+                    
                     />
                   )}
                 </div>
