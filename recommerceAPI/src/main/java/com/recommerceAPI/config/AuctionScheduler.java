@@ -24,11 +24,9 @@ public class AuctionScheduler {
     private final AuctionBiddingRepository auctionBiddingRepository;
 
     // 3분마다 실행되는 스케줄링 작업
-    @Scheduled(fixedRate = 3000 * 60)
+    @Scheduled(fixedRate = 1000 * 60)
     public void updateAuctionStatus() {
         LocalDateTime currentTime = LocalDateTime.now();
-
-
 
         // 경매 대기 중 (PENDING): 현재 시간이 경매 시작 시간 이전인 경우
         List<Auction> pendingAuctions = auctionRepository.findByApStartTimeAfter(currentTime);

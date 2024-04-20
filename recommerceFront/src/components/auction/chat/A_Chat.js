@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { A_Message } from "./A_Message";
 import { v4 as uuidv4 } from "uuid";
 import { API_SERVER_HOST } from "../../../api/userApi";
+import { getOne } from "../../../api/auctionApi";
+
 
 function A_Chat({
   socket,
@@ -15,6 +17,7 @@ function A_Chat({
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
   const messageBottomRef = useRef(null);
+  const [auctionProduct, setAuctionProduct] = useState(0);
   const host = API_SERVER_HOST;
 
   const sendMessage = async () => {
@@ -48,9 +51,11 @@ function A_Chat({
         new Date(Date.now()).getMinutes(),
       messageType: "BID",
     };
+    
     socket.send(JSON.stringify(messageData));
     setMessageList((list) => [...list, messageData]);
     inputRef.current.value = "";
+    
   };
 
   useEffect(() => {
@@ -58,6 +63,9 @@ function A_Chat({
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setMessageList((list) => [...list, data]);
+        getOne(room).then((data)=>{
+          setAuctionProduct(data);
+        }) 
       };
     }
   }, [socket]);
@@ -71,14 +79,14 @@ function A_Chat({
   };
 
   const handleOutsideClick = (e) => {
-    closeModal(); // 모달 외부 클릭 시 모달 닫기
+    // closeModal(); // 모달 외부 클릭 시 모달 닫기
   };
 
   return (
     <div
       className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
       style={{ zIndex: 999 }}
-      onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
+      // onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
     >
       <div className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"></div>
       <div
@@ -111,6 +119,7 @@ function A_Chat({
           <div>
             <div>시작 가격: {startPrice}원</div>
             <div>입찰 단위: {bidIncrement}원</div>
+            <div>현재 입찰가: {auctionProduct.apCurrentPrice}</div>
           </div>
         </div>
         <div

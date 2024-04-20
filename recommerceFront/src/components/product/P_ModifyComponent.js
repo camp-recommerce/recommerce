@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  API_SERVER_HOST,
   deleteOne,
   getOne,
   putOne,
@@ -10,6 +9,7 @@ import AlertModal from "../modal/AlertModal";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import ImageModal from "../modal/ImageModal";
 import "../../scss/product/ModifyPage.scss";
+import {API_SERVER_HOST} from "../../api/userApi"
 
 const initState = {
   pname: "",
