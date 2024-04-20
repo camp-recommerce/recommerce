@@ -18,7 +18,8 @@ function A_Chat({
   const [messageList, setMessageList] = useState([]);
   const messageBottomRef = useRef(null);
   const host = API_SERVER_HOST;
-  const [currentBid, setCurrentBid] = useState(currentPrice); // 현재 입찰가 상태 추가
+  const [currentBid, setCurrentBid] = useState(currentPrice || startPrice);
+
 
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;

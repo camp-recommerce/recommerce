@@ -71,6 +71,12 @@ public class ChatHandler extends TextWebSocketHandler {
         // 아마 1:1 채팅과 오류는 없을겁니다
         List<AuctionBidding> previousChatHistory = auctionBiddingRepository.findByAuction_Apno(room);
 
+        // 경매 채팅 내용이 없는 경우 예외 처리
+        if (previousChatHistory.isEmpty()) {
+            log.info("No chat history found for the auction.");
+            return;
+        }
+
         List<ChatMessageDTO> chatMessageDTOList = previousChatHistory.stream()
                 .map(auctionBidding -> {
                     ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
