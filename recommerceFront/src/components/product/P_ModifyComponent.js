@@ -78,7 +78,7 @@ const P_ModifyComponent = ({ pno }) => {
 
     setLoading(true);
 
-    putOne(pno, formData).then((data) => {
+    putOne(1, formData).then((data) => {
       setResult("Modified");
       setLoading(false);
     });

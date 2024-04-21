@@ -67,10 +67,10 @@ const P_ReadComponent = ({ pno }) => {
     setOpenImg(false);
   };
 
-  const handleLocationSelect = (loc) => {
-    setLocation(loc);
-    setSelectedAddress(loc.address);
-  };
+  // const handleLocationSelect = (loc) => {
+  //   setLocation(loc);
+  //   setSelectedAddress(loc.address);
+  // };
 
   return (
     <div className="shopRead_group ">
@@ -114,7 +114,7 @@ const P_ReadComponent = ({ pno }) => {
                 </label>
                 <p>{product.plocat}</p>
               </div>
-              <p>{selectedAddress}</p>
+              {/* <p>{selectedAddress}</p> */}
               <MapComponent
                 initialPosition={{ lat: product.lat, lng: product.lng }}
                 readOnly={true}

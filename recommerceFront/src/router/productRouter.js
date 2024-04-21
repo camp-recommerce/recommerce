@@ -3,7 +3,7 @@ import { Navigate } from "react-router-dom";
 
 const Loading = <div>Loading...</div>;
 const ImageSlice = lazy(() => import("../pages/MainPage"));
-const ProductList = lazy(() => import("../pages/product/P_ListPage"));
+const ProductList = lazy(() => import("../components/product/P_InfiniteComponent"));
 const ProductRead = lazy(() => import("../pages/product/P_ReadPage"));
 const ProductAdd = lazy(() => import("../pages/product/P_AddPage"));
 const ProductModify = lazy(() => import("../pages/product/P_ModifyPage"));
@@ -13,10 +13,12 @@ const productRouter = () => {
     {
       path: "/",
       element: (
-        <Suspense fallback={Loading}>
+        
+          <div id="parentDiv"  style={{ overflowY: "scroll", height: "100vh" }}>
           <ImageSlice />
           <ProductList />
-        </Suspense>
+          </div>
+
       ),
     },
     {

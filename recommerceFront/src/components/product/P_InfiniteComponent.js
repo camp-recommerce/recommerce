@@ -1,35 +1,37 @@
-import React from "react";
-import { VariableSizeList as List } from "react-window";
-import AutoSizer from "react-virtualized-auto-sizer";
 
-// 임시 dummyList 생성
-const dummyList = new Array(1000).fill(0).map((_, idx) => ({
-  id: idx,
-  name: `List ${idx}`,
-}));
+import { useState } from "react";
+import InfiniteScroll from "react-infinite-scroll-component";
+import { ClipLoader } from "react-spinners";
 
-const P_InfiniteComponent = () => (
-  <div
-    className="ListContainer"
-    style={{ width: "100%", height: "100vh", overflow: "hidden" }}
-  >
-    {" "}
-    {/* AutoSizer가 전체 화면을 사용하도록 설정 */}
-    <AutoSizer>
-      {({ width, height }) => (
-        <List
-          height={height}
-          width={width}
-          itemCount={dummyList.length}
-          itemSize={() => 50}
-        >
-          {({ index, style }) => (
-            <div style={style}>{dummyList[index].name}</div>
-          )}
-        </List>
-      )}
-    </AutoSizer>
-  </div>
+const P_InfiniteComponent = () => {
+
+const [dataSource, setDataSource] = useState(Array.from({length:20}));
+const [hasMore, setHasMore] = useState(true);
+
+const fetchMoreData= ()=> {
+  if(dataSource.length <200){
+  setTimeout(()=> {
+    setDataSource(dataSource.concat(Array.from({length:20})))
+  },500);
+}else{
+  setHasMore(false);
+}
+};
+
+  return(
+    <InfiniteScroll
+      dataLength={dataSource.length}
+      next={fetchMoreData}
+      hasMore={hasMore} // 더 많은 항목을 가져올 수 있는지 여부를 지정합니다.
+      loader={<ClipLoader color={"#123abc"} loading={true} size={150} />}
+      endMessage={<p>You are all set!</p>}
+      scrollableTarget="parentDiv">
+
+      {dataSource.map((item, index) => {
+        return <div key={index}>This is a div #{index + 1}</div>;
+      })}
+    </InfiniteScroll>
 );
+};
 
 export default P_InfiniteComponent;

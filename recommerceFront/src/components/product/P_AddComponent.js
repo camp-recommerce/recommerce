@@ -61,6 +61,11 @@ const P_AddComponent = () => {
   const handleLocationSelect = (loc) => {
     setLocation(loc);
     setSelectedAddress(loc.address);
+    // 선택된 주소를 자동으로 입력
+    setProduct({
+      ...product,
+      plocat: loc.address,
+    });
   };
 
   const handleClickAdd = (e) => {
