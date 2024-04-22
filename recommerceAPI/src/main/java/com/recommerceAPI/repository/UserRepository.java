@@ -1,6 +1,7 @@
 package com.recommerceAPI.repository;
 
 import com.recommerceAPI.domain.User;
+import com.recommerceAPI.dto.UserProfileDTO;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -27,5 +28,11 @@ public interface UserRepository extends JpaRepository<User, String> {
     @EntityGraph(attributePaths = {"userRoleList"})
     Optional<User> findByEmail(String email);
 
-
+    @Query("SELECT new com.recommerceAPI.dto.UserProfileDTO(u.email, " +
+            "(SELECT pi.category FROM PurchaseItem pi WHERE pi.buyer = u GROUP BY pi.category ORDER BY COUNT(pi) DESC), " +
+            "(SELECT p.pcategory FROM Product p WHERE p.user = u GROUP BY p.pcategory ORDER BY COUNT(p) DESC), " +
+            "(SELECT AVG(p.price) FROM Product p WHERE p.user = u), " +
+            "(SELECT p.plocat FROM Product p WHERE p.user = u GROUP BY p.plocat ORDER BY COUNT(p) DESC)) " +
+            "FROM User u WHERE u.email = :email")
+    UserProfileDTO findUserProfileByEmail(@Param("email") String email);
 }
