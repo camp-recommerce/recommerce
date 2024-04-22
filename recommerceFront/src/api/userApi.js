@@ -56,17 +56,18 @@ export const updatePostcode = async (email, postcode) => {
   return res.data;
 };
 
-// 주소 업데이트
-export const updateAddress = async (
+export const updateAddress = async (//이렇게하니깐 돼네..하
   email,
   address,
   detailAddress,
   postcode
 ) => {
-  const res = await jwtAxios.put(`${host}/address/${email}`, {
-    address,
-    detailAddress, // 상세 주소 추가
-    postcode,
+  const res = await jwtAxios.put(`${host}/address/${email}`, null, {
+    params: {
+      newAddress: address,
+      newPostcode: postcode,
+      detailAddress
+    },
   });
   return res.data;
 };

@@ -2,13 +2,16 @@ import React, { useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateAddress, updatePostcode } from "../../api/userApi";
+import AlertModal from "../modal/AlertModal"; // 모달 컴포넌트 import
 
 const AddressComponent = () => {
   const { email } = useParams();
   const [address, setAddress] = useState("");
   const [zoneCode, setZoneCode] = useState("");
-  const [detailAddress, setDetailAddress] = useState(""); // 상세 주소 상태 추가
+  const [detailAddress, setDetailAddress] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [modalShow, setModalShow] = useState(false); // 모달 표시 상태
+  const [modalContent, setModalContent] = useState(""); // 모달 내용
   const navigate = useNavigate();
 
   const handleComplete = (data) => {
@@ -19,12 +22,18 @@ const AddressComponent = () => {
   const saveAddress = async () => {
     setIsLoading(true);
     try {
-      await updateAddress(email, address, detailAddress, zoneCode); // API 호출 시 상세 주소 포함
-      console.log("주소 및 우편번호 업데이트 성공");
-      navigate(`/user/mypage/${email}`);
+      await updateAddress(email, address, detailAddress, zoneCode);
+      setModalContent("주소가 성공적으로 업데이트 되었습니다."); // 성공 메시지 설정
+      setModalShow(true); // 모달 표시
+      setTimeout(() => {
+        setModalShow(false);
+        navigate(`/user/mypage/${email}`);
+      }, 2000);
     } catch (error) {
       console.error("주소 및 우편번호 업데이트 실패:", error);
-      alert("주소 및 우편번호 업데이트에 실패했습니다.");
+      setModalContent("주소 업데이트에 실패했습니다."); // 실패 메시지 설정
+      setModalShow(true); // 모달 표시
+      setTimeout(() => setModalShow(false), 2000);
     } finally {
       setIsLoading(false);
     }
@@ -58,6 +67,7 @@ const AddressComponent = () => {
           저장하기
         </button>
       )}
+      {modalShow && <AlertModal title="알림" content={modalContent} />} {/* 모달 컴포넌트 사용 */}
     </div>
   );
 };
