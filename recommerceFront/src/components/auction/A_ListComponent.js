@@ -68,7 +68,8 @@ const A_ListComponent = () => {
   const handleCategoryClick = (category) => {
     // "전체"를 선택한 경우
     if (category === "전체") {
-      setApCategory(null); // apCategory를 null로 설정
+      setApCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApName(""); // 입력값도 초기화합니다.
     } else {
       setApCategory(category);
     }
@@ -208,14 +209,26 @@ const A_ListComponent = () => {
             </div>
           ))}
         </div>
-        <div className="shopList_btn fixed right-0 mb-8 mr-8 z-10">
+        <div style={{ position: "relative" }}>
           <div
-            className="shopList_addBtn bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+            className="shopList_addBtn bg-blue-500 hover:bg-blue-700 text-white font-bold"
+            style={{
+              width: "80px",
+              height: "40px",
+              lineHeight: "40px",
+              textAlign: "center",
+              position: "absolute",
+              bottom: "0",
+              left: "850px",
+              zIndex: "10",
+              borderRadius: "5px" /* 모서리 둥글게 설정 */,
+            }}
             onClick={handleClickAdd}
           >
             상품 등록
           </div>
         </div>
+
         <div
           className="flex justify-center items-center"
           style={{ marginTop: "0px" }}
