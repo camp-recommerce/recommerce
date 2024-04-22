@@ -1,6 +1,7 @@
 package com.recommerceAPI.controller;
 
 import com.recommerceAPI.domain.User;
+import com.recommerceAPI.dto.ChatAlarmDTO;
 import com.recommerceAPI.dto.LoginDTO;
 import com.recommerceAPI.dto.UserDTO;
 import com.recommerceAPI.repository.UserRepository;
@@ -47,8 +48,6 @@ public class UserController {
 
         return claims;
     }
-
-
 
     // 사용자 등록을 처리하는 엔드포인트
     @PostMapping("/join")
@@ -114,6 +113,13 @@ public class UserController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password for deletion"));
         }
+    }
+    @PutMapping("/chat-alarm")
+    public Map<String ,String> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO, String email){
+
+        userService.updateChatAlarms(email,chatAlarmDTO);
+
+        return Map.of("alaram","send");
     }
 
 
