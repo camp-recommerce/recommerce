@@ -1,5 +1,6 @@
 package com.recommerceAPI.service;
 
+import com.recommerceAPI.dto.ChatAlarmDTO;
 import com.recommerceAPI.dto.UserDTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -28,5 +29,7 @@ public interface UserService {
     boolean validateCurrentPassword(String email, String currentPassword);
 
     boolean validatePasswordForDeletion(String email, String deletionPassword);
+
+    void updateChatAlarms(String email, ChatAlarmDTO chatAlarmDTO);
 
 }
