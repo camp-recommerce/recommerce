@@ -12,6 +12,7 @@ const initState = {
   price: "",
   pstate: "",
   plocat: "",
+  addressLine: "",
   lat: "",
   lng: "",
   pdesc: "",
@@ -62,15 +63,14 @@ const P_AddComponent = () => {
     setLocation(loc);
     setSelectedAddress(loc.address);
     // 선택된 주소를 자동으로 입력
-    setProduct({
-      ...product,
-      plocat: loc.address,
-    });
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      addressLine: loc.addressLine,
+    }));
   };
 
   const handleClickAdd = (e) => {
     const files = uploadRef.current.files;
-
     const formData = new FormData();
 
     for (let i = 0; i < files.length; i++) {
@@ -83,6 +83,7 @@ const P_AddComponent = () => {
     formData.append("price", product.price.replace(/[^\d]/g, ""));
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
+    formData.append("addressLine", product.addressLine);
     formData.append("lat", location.lat); // 하위 MapComponent에서 콜백 함수로 위도 전달
     formData.append("lng", location.lng); // 하위 MapComponent에서 콜백 함수로 경도 전달
     formData.append("pdesc", product.pdesc);
