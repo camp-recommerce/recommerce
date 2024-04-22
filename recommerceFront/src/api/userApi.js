@@ -6,7 +6,9 @@ const host = `${API_SERVER_HOST}/api/user`;
 
 // 로그인
 export const loginPost = async (loginParam) => {
-  const header = { headers: { "Content-Type": "x-www-form-urlencoded" } };
+  const header = {
+    headers: { "Content-Type": "x-www-form-urlencoded" },
+  };
 
   const form = new FormData();
   form.append("username", loginParam.email);
@@ -45,5 +47,26 @@ export const sendEmail = async (email) => {
   const formData = new URLSearchParams();
   formData.append("email", email);
   const res = await jwtAxios.post(`${host}/reset-pw`, formData);
+  return res.data;
+};
+
+// 우편번호 업데이트
+export const updatePostcode = async (email, postcode) => {
+  const res = await jwtAxios.put(`${host}/postcode/${email}`, { postcode });
+  return res.data;
+};
+
+// 주소 업데이트
+export const updateAddress = async (
+  email,
+  address,
+  detailAddress,
+  postcode
+) => {
+  const res = await jwtAxios.put(`${host}/address/${email}`, {
+    address,
+    detailAddress, // 상세 주소 추가
+    postcode,
+  });
   return res.data;
 };

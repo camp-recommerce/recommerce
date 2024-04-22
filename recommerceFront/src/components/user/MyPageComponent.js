@@ -81,12 +81,26 @@ const MyPageComponent = () => {
     },
   };
 
+  // 주소 및 우편번호 정보 표시 함수
+  const handleAddressInfo = () => {
+    if (userData) {
+      const address = userData.address || "등록된 주소가 없습니다.";
+      const postcode = userData.postcode || "등록된 우편번호가 없습니다.";
+      alert(`주소: ${address}\n우편번호: ${postcode}`);
+    } else {
+      alert("사용자 정보를 불러올 수 없습니다.");
+    }
+  };
+
   return (
     <div style={styles.myPageBundle}>
       <h1 style={styles.title}>마이페이지</h1>
       <div style={styles.menuButtons}>
         <button style={styles.button} onClick={() => setActiveMenu("profile")}>
           프로필
+        </button>
+        <button style={styles.button} onClick={handleAddressInfo}>
+          나의 주소
         </button>
         <button style={styles.button} onClick={() => setActiveMenu("settings")}>
           정보변경
@@ -115,11 +129,15 @@ const MyPageComponent = () => {
             <Link to={`/user/modify`}>
               <button style={styles.button}>정보 변경</button>
             </Link>
+            <Link to={`/user/address/${email}`}>
+              <button style={styles.button}>주소 변경</button>
+            </Link>
             <Link to={`/user/remove/${email}`}>
               <button style={styles.button}>탈퇴하기</button>
             </Link>
           </div>
         )}
+
         {activeMenu === "purchases" &&
           purchaseItems &&
           purchaseItems.length > 0 && (

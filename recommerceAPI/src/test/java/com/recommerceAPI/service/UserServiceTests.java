@@ -76,5 +76,42 @@ class UserServiceTests {
         assertEquals("newEncodedPassword", user.getPw());
     }
 
+    @Test
+    void testUpdatePostcodeSuccess() throws Exception {
+        // Given
+        String email = "test@example.com";
+        String newPostcode = "12345";
+        User mockUser = new User();
+        mockUser.setEmail(email);
+        mockUser.setPostcode("00000");
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.of(mockUser));
+        when(userRepository.save(any(User.class))).thenReturn(mockUser);
+
+        // When
+        User updatedUser = userService.updatePostcode(email, newPostcode);
+
+        // Then
+        assertEquals(newPostcode, updatedUser.getPostcode());
+        verify(userRepository).save(mockUser);
+    }
+
+    @Test
+    void testUpdatePostcodeUserNotFound() {
+        // Given
+        String email = "nonexistent@example.com";
+
+        when(userRepository.findByEmail(email)).thenReturn(Optional.empty());
+
+        // Then
+        Exception exception = assertThrows(Exception.class, () -> {
+            // When
+            userService.updatePostcode(email, "12345");
+        });
+
+        assertTrue(exception.getMessage().contains("User not found with email: " + email));
+    }
+
+
 
 }
