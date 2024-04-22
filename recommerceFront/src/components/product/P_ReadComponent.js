@@ -81,7 +81,7 @@ const P_ReadComponent = () => {
       // 상품을 찾지 못한 경우에 대한 조건 추가
       window.alert("이미 추가된 상품입니다.");
     } else {
-      changeCart({ email: loginState.email, pno: 1, qty: 1 });
+      changeCart({ email: loginState.email, pno: pno, qty: 1 });
       refreshCart();
     }
   };
