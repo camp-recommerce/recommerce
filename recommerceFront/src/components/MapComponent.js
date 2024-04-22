@@ -47,11 +47,6 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
       kakao.maps.event.addListener(initializedMap, "dragend", () => {
         updateAddress(initializedMap.getCenter());
       });
-
-      // 사용자의 현재 위치를 초기 위치로 설정
-      if (onLocationSelect) {
-        updateAddress(initializedMap.getCenter());
-      }
     };
 
     if (initialPosition) {
@@ -114,17 +109,18 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
       location.getLat(),
       function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-          const roadAddressText = result[0].road_address
+          const roadAddressText = result[0].road_address // 도로명 주소 가져오고, 도로명 주소 없는 곳에만 지번 주소 가져옴
             ? result[0].road_address.address_name
             : result[0].address.address_name;
-          const addressText = result[0].address
-            ? result[0].address.address_name
-            : "지번 주소가 없습니다.";
+          const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
+          const addressInfo = result[0].address; // 지번 주소 정보 객체
+          const addressLine = `${addressInfo.region_1depth_name} ${addressInfo.region_2depth_name} ${addressInfo.region_3depth_name}`;
           if (!readOnly && onLocationSelect) {
             onLocationSelect({
               address: roadAddressText,
               lat: location.getLat(),
               lng: location.getLng(),
+              addressLine: addressLine,
             });
           }
         }
