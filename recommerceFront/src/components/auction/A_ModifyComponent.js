@@ -88,6 +88,19 @@ const A_ModifyComponent = () => {
     const files = uploadRef.current.files;
     const formData = new FormData();
 
+    const startTime = new Date(auction.apStartTime);
+    const closingTime = new Date(auction.apClosingTime);
+    const now = new Date();
+
+    if (startTime < now) {
+      alert("경매 시작 시간은 현재 시간보다 이전으로 설정할 수 없습니다.");
+      return;
+    }
+    if (closingTime <= startTime) {
+      alert("입찰 마감 시간은 시작 시간보다 이전으로 설정할 수 없습니다.");
+      return;
+    }
+
     for (let i = 0; i < files.length; i++) {
       formData.append("files", files[i]);
     }
