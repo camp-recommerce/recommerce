@@ -89,6 +89,7 @@ public class ProductServiceImpl implements ProductService {
                 .pname(productDTO.getPname())
                 .pcategory(productDTO.getPcategory())
                 .plocat(productDTO.getPlocat())
+                .addressLine(productDTO.getAddressLine())
                 .lat(productDTO.getLat())
                 .lng(productDTO.getLng())
                 .pstate(productDTO.getPstate())
@@ -133,6 +134,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(product.getPrice())
                 .pstate(product.getPstate())
                 .plocat(product.getPlocat())
+                .addressLine(product.getAddressLine())
                 .lat(product.getLat())
                 .lng(product.getLng())
                 .pdesc(product.getPdesc())
@@ -164,6 +166,7 @@ public class ProductServiceImpl implements ProductService {
         product.changePrice(productDTO.getPrice());
         product.changeState(productDTO.getPstate());
         product.changeLocat(productDTO.getPlocat());
+        product.changeAddressLine(productDTO.getAddressLine());
         product.changeLat(productDTO.getLat());
         product.changeLng(productDTO.getLng());
         product.changeDesc(productDTO.getPdesc());

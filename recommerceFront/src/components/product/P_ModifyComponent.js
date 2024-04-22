@@ -1,21 +1,21 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  deleteOne,
-  getOne,
-  putOne,
-} from "../../api/productApi";
+import { deleteOne, getOne, putOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import AlertModal from "../modal/AlertModal";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import ImageModal from "../modal/ImageModal";
 import "../../scss/product/ModifyPage.scss";
-import {API_SERVER_HOST} from "../../api/userApi"
+import { API_SERVER_HOST } from "../../api/userApi";
+import MapComponent from "../MapComponent";
 
 const initState = {
   pname: "",
   price: 0,
   pstate: "",
   plocat: "",
+  addressLine: "",
+  lat: "",
+  lng: "",
   pdesc: "",
   delFlag: false,
   uploadFileNames: [],
@@ -32,6 +32,8 @@ const P_ModifyComponent = ({ pno }) => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const { moveBeforeReadPage } = useCustomProductPage();
+  const [location, setLocation] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState("");
   const uploadRef = useRef();
 
   useEffect(() => {
@@ -41,6 +43,7 @@ const P_ModifyComponent = ({ pno }) => {
       setFormattedPrice(
         data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       );
+      setLocation({ lat: data.lat, lng: data.lng });
     });
   }, [pno]);
 
@@ -64,6 +67,17 @@ const P_ModifyComponent = ({ pno }) => {
     }
   };
 
+  // 주소 처리
+  const handleLocationSelect = (loc) => {
+    setLocation(loc);
+    setSelectedAddress(loc.address);
+    // 선택된 주소를 자동으로 입력
+    setProduct((prevProduct) => ({
+      ...prevProduct,
+      addressLine: loc.addressLine,
+    }));
+  };
+
   const handleClickModify = () => {
     const files = uploadRef.current.files;
     const formData = new FormData();
@@ -73,6 +87,9 @@ const P_ModifyComponent = ({ pno }) => {
     formData.append("price", product.price);
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
+    formData.append("addressLine", product.addressLine);
+    formData.append("lat", location.lat); // 하위 MapComponent에서 콜백 함수로 위도 전달
+    formData.append("lng", location.lng); // 하위 MapComponent에서 콜백 함수로 경도 전달
     formData.append("pdesc", product.pdesc);
     formData.append("delFlag", product.delFlag);
 
@@ -146,7 +163,7 @@ const P_ModifyComponent = ({ pno }) => {
                 <div className="imageContainer">
                   <img
                     alt={product.pname}
-                    // src={`${host}/api/products/view/s_${imgFile}`}
+                    // src={`${host}/product/view/s_${imgFile}`}
                     src="/winter.jpg"
                     onClick={handleOpenImg}
                   />
@@ -254,6 +271,24 @@ const P_ModifyComponent = ({ pno }) => {
             >
               {product.pdesc}
             </textarea>
+          </div>
+          <div className="modify_area">
+            <div className="modify_wrap flex flex-col max-h-[150px]">
+              <div className="flex">
+                <label>거래장소</label>
+                <input
+                  name="plocat"
+                  type="text"
+                  value={product.plocat}
+                  onChange={handleChangeProduct}
+                />
+              </div>
+              <p>{selectedAddress}</p>
+              <MapComponent
+                initialPosition={location}
+                onLocationSelect={handleLocationSelect}
+              />
+            </div>
           </div>
           <div className="modify-wrap r">
             <div className="modify-info">삭제 여부</div>

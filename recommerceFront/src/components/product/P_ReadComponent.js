@@ -19,6 +19,7 @@ const initState = {
   price: "",
   pstate: "",
   plocat: "",
+  addressLine: "",
   pdesc: "",
   lat: "",
   lng: "",
