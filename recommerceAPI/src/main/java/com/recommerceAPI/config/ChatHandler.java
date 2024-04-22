@@ -7,6 +7,7 @@ import com.recommerceAPI.dto.AuctionBiddingDTO;
 import com.recommerceAPI.dto.ChatMessageDTO;
 import com.recommerceAPI.repository.AuctionBiddingRepository;
 import com.recommerceAPI.service.AuctionBiddingService;
+import com.recommerceAPI.service.ChatMessageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -31,28 +32,33 @@ public class ChatHandler extends TextWebSocketHandler {
 
     private final Map<String, List<WebSocketSession>> sessionToUsername = new HashMap<>();
     private final AuctionBiddingService auctionBiddingService;
-    private final AuctionBiddingRepository auctionBiddingRepository;
-    private final ModelMapper modelMapper;
+
+    private final ChatMessageService chatMessageService;
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
         sessions.add(session);
         log.info("{} connect", session.getId());
-        // 여기서 세션과 room
         URI uri = session.getUri();
         String room = extractRoomFromUri(uri);
+
+        if (isNumeric(room)) {
+            // 숫자 형식이라면 아래옥션바이딩 서비스를 호출
+            auctionBiddingService.sendPreviousBidHistory(Long.valueOf(room), session);
+        } else {
+            // 이메일 형식이라면 채팅 메시지 서비스를 호출
+            chatMessageService.sendPreviousChatHistory(room, session);
+        }
 
         List<WebSocketSession> sessionList = sessionToUsername.getOrDefault(room, new ArrayList<>());
         sessionList.add(session);
         sessionToUsername.put(room, sessionList);
+
         String author = "알림";
         String message = "유저 입장";
         String time = " ";
-        ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION,time );
-
-
-        sendPreviousChatHistory(Long.valueOf(room),session);
-        sendMessageToRoom(room,notificationDTO,session);
+        ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION, time);
+        sendMessageToRoom(room, notificationDTO, session);
     }
 
     private String extractRoomFromUri(URI uri) {
@@ -66,29 +72,10 @@ public class ChatHandler extends TextWebSocketHandler {
         }
         return null;
     }
-    private void sendPreviousChatHistory(Long room, WebSocketSession session) {
-        // 경매에서 사용한 옥션 바이딩 도메인을 챗 형식으로 변환하고 해당하는 room 에 전부 쏩니다.
-        // 아마 1:1 채팅과 오류는 없을겁니다
-        List<AuctionBidding> previousChatHistory = auctionBiddingRepository.findByAuction_Apno(room);
-
-        List<ChatMessageDTO> chatMessageDTOList = previousChatHistory.stream()
-                .map(auctionBidding -> {
-                    ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
-                    chatMessageDTO.setRoom(String.valueOf(auctionBidding.getAuction().getApno()));
-                    chatMessageDTO.setMessage(String.valueOf(auctionBidding.getBidAmount()));
-                    chatMessageDTO.setMessageType(ChatMessageDTO.MessageType.BID);
-                    chatMessageDTO.setAuthor(auctionBidding.getBidder().getEmail());
-                    chatMessageDTO.setTime(auctionBidding.getBidTime());
-                    return chatMessageDTO;
-                })
-                .collect(Collectors.toList());
-
-        log.info(chatMessageDTOList);
-        // 변환된 채팅 내역을 해당 세션에 전송합니다.
-        for (ChatMessageDTO chatMessageDTO : chatMessageDTOList) {
-            sendMessage(session, chatMessageDTO);
-        }
+    private boolean isNumeric(String str) {
+        return str != null && str.matches("\\d+");
     }
+
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
@@ -109,6 +96,9 @@ public class ChatHandler extends TextWebSocketHandler {
             // BID 메시지 처리: 입찰 객체 등록 등 필요한 작업 수행
             // 예를 들어, 입찰 객체 등록을 위한 메소드 호출 등을 수행할 수 있습니다.
             auctionBiddingService.saveAuctionBidding(chatMessageDTO);
+        }
+        if(chatMessageDTO.getMessageType()== ChatMessageDTO.MessageType.MESSAGE){
+            chatMessageService.saveChat(chatMessageDTO);
         }
 
         sendMessageToRoom(room, chatMessageDTO, session);

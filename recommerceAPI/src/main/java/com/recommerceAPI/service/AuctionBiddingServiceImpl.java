@@ -1,5 +1,6 @@
 package com.recommerceAPI.service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.recommerceAPI.domain.Auction;
 import com.recommerceAPI.domain.AuctionBidding;
 import com.recommerceAPI.domain.User;
@@ -12,11 +13,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Log4j2
@@ -27,6 +32,7 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
     private final AuctionRepository auctionRepository;
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     // ChatMessageDTO를 받아서 옥션 바이딩 객체를 저장하는 메소드
     @Override
@@ -72,6 +78,46 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         }
 
         return auctionBiddingDTOList;
+    }
+
+    @Override
+    public void sendPreviousBidHistory(Long room, WebSocketSession session) {
+        // 경매에서 사용한 옥션 바이딩 도메인을 챗 형식으로 변환하고 해당하는 room 에 전부 쏩니다.
+        // 아마 1:1 채팅과 오류는 없을겁니다
+        List<AuctionBidding> previousChatHistory = auctionBiddingRepository.findByAuction_Apno(room);
+
+        // 경매 채팅 내용이 없는 경우 예외 처리
+        if (previousChatHistory.isEmpty()) {
+            log.info("No chat history found for the auction.");
+            return;
+        }
+
+        List<ChatMessageDTO> chatMessageDTOList = previousChatHistory.stream()
+                .map(auctionBidding -> {
+                    ChatMessageDTO chatMessageDTO = new ChatMessageDTO();
+                    chatMessageDTO.setRoom(String.valueOf(auctionBidding.getAuction().getApno()));
+                    chatMessageDTO.setMessage(String.valueOf(auctionBidding.getBidAmount()));
+                    chatMessageDTO.setMessageType(ChatMessageDTO.MessageType.BID);
+                    chatMessageDTO.setAuthor(auctionBidding.getBidder().getEmail());
+                    chatMessageDTO.setTime(auctionBidding.getBidTime());
+                    return chatMessageDTO;
+                })
+                .collect(Collectors.toList());
+
+        log.info(chatMessageDTOList);
+        // 변환된 채팅 내역을 해당 세션에 전송합니다.
+        for (ChatMessageDTO chatMessageDTO : chatMessageDTOList) {
+            sendMessage(session, chatMessageDTO);
+        }
+    }
+
+    private void sendMessage(WebSocketSession session, ChatMessageDTO messageDTO) {
+        log.info("----------------------------"+messageDTO);
+        try {
+            session.sendMessage(new TextMessage(objectMapper.writeValueAsString(messageDTO)));
+        } catch (IOException e) {
+            log.error("Error sending message to session {}: {}", session.getId(), e.getMessage(), e);
+        }
     }
 
 }

@@ -35,6 +35,8 @@ const P_ReadComponent = ({ pno }) => {
   const [openImg, setOpenImg] = useState(false);
   const { moveModifyPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
+  const [location, setLocation] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null);
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal(loginState.email);
 

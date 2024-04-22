@@ -12,18 +12,18 @@ function A_Chat({
   bidIncrement,
   imageSrc,
   room,
-  currentPrice
+  currentPrice,
 }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
   const messageBottomRef = useRef(null);
   const host = API_SERVER_HOST;
-  const [currentBid, setCurrentBid] = useState(currentPrice); // 현재 입찰가 상태 추가
+  const [currentBid, setCurrentBid] = useState(currentPrice || startPrice);
 
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     const parsedMsg = parseInt(currentMsg);
-    
+
     if (isNaN(parsedMsg)) {
       window.alert("입력된 값이 숫자가 아닙니다. 숫자를 입력해주세요.");
       return;
@@ -75,7 +75,6 @@ function A_Chat({
       socket.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setMessageList((list) => [...list, data]);
-      
       };
     }
   }, [socket]);
@@ -83,7 +82,6 @@ function A_Chat({
   useEffect(() => {
     messageBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);
-  
 
   const handleModalClick = (e) => {
     e.stopPropagation(); // 모달 내부 클릭 시 닫히지 않도록 이벤트 전파 중단
@@ -127,14 +125,16 @@ function A_Chat({
             src={`${host}/auction/view/${imageSrc}`}
             className="w-24 h-24 mr-8"
           />
-          <div>
+          <div className="flex flex-col">
+            {" "}
+            {/* Flexbox 레이아웃 활성화 */}
             <div>시작 가격: {startPrice}원</div>
             <div>입찰 단위: {bidIncrement}원</div>
             <div>현재 입찰가: {currentBid}원</div> {/* 현재 입찰가 표시 */}
           </div>
         </div>
         <div
-          className="border border-gray-300 rounded-lg overflow-y-auto mb-4"
+          className="border border-gray-300 rounded-lg overflow-y-auto mb-4 flex flex-col"
           style={{ height: "630px" }}
         >
           {messageList.map((messageContent) => {
