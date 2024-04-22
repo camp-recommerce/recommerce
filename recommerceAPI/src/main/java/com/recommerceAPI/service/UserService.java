@@ -1,6 +1,7 @@
 package com.recommerceAPI.service;
-
 import com.recommerceAPI.dto.ChatAlarmDTO;
+import com.recommerceAPI.domain.User;
+
 import com.recommerceAPI.dto.UserDTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,9 +27,11 @@ public interface UserService {
     void modifyUser(UserDTO userDTO);
 
 
-    boolean validateCurrentPassword(String email, String currentPassword);
+    // 우편번호 업데이트를 위한 메서드 선언
+    User updatePostcode(String email, String newPostcode) throws Exception;
 
-    boolean validatePasswordForDeletion(String email, String deletionPassword);
+    // 주소를 업데이트 위한 메서든 선언
+    User updateAddress(String email, String newAddress, String newPostcode) throws Exception;
 
     void updateChatAlarms(String email, ChatAlarmDTO chatAlarmDTO);
 

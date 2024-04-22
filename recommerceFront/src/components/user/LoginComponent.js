@@ -61,6 +61,7 @@ const LoginComponent = () => {
       marginTop: "10px",
       fontSize: "1rem",
     },
+
     title: {
       textAlign: "center",
       marginBottom: "20px",

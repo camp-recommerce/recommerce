@@ -93,25 +93,25 @@ public class UserController {
             return ResponseEntity.notFound().build(); // 사용자를 찾을 수 없음
         }
     }
-    // 현재 비밀번호 검증을 처리하는 엔드포인트
-    @GetMapping("/validate-password")
-    public ResponseEntity<?> validateCurrentPassword(@RequestParam String email, @RequestParam String currentPassword) {
-        boolean isValid = userService.validateCurrentPassword(email, currentPassword);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Password is valid"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password"));
+
+    // 우편번호 업데이트를 위한 API 엔드포인트
+    @PutMapping("/postcode/{email}")
+    public ResponseEntity<String> updatePostcode(@PathVariable String email, @RequestBody UserDTO userDTO) {
+        try {
+            userService.updatePostcode(email, userDTO.getPostcode());
+            return ResponseEntity.ok("우편번호가 성공적으로 업데이트되었습니다.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("우편번호 업데이트 실패: " + e.getMessage());
         }
     }
 
-    // 계정 삭제 전 비밀번호 검증을 처리하는 엔드포인트
-    @GetMapping("/validate-deletion")
-    public ResponseEntity<?> validatePasswordForDeletion(@RequestParam String email, @RequestParam String deletionPassword) {
-        boolean isValid = userService.validatePasswordForDeletion(email, deletionPassword);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Password is valid for deletion"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password for deletion"));
+    @PutMapping("/address/{email}")
+    public ResponseEntity<?> updateAddress(@PathVariable String email, @RequestParam String newAddress, @RequestParam String newPostcode) {
+        try {
+            User updatedUser = userService.updateAddress(email, newAddress, newPostcode);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
     @PutMapping("/chat-alarm")
@@ -121,6 +121,5 @@ public class UserController {
 
         return Map.of("alaram","send");
     }
-
 
 }

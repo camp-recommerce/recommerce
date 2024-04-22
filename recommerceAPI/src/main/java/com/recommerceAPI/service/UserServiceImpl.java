@@ -7,6 +7,7 @@ import com.recommerceAPI.domain.UserRole;
 import com.recommerceAPI.dto.ChatAlarmDTO;
 import com.recommerceAPI.dto.UserDTO;
 import com.recommerceAPI.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
@@ -78,21 +79,32 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    // 사용자의 개인정보 변경 시 비밀번호 확인 메서드
+    // UserService 인터페이스에서 선언된 우편번호 업데이트 메서드 구현
     @Override
-    public boolean validateCurrentPassword(String email, String currentPassword) {
+    public User updatePostcode(String email, String newPostcode) throws Exception {
+        // 이메일을 사용하여 사용자 정보를 조회합니다.
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+                .orElseThrow(() -> new Exception("User not found with email: " + email));
 
-        return passwordEncoder.matches(currentPassword, user.getPw());
+        // 새로운 우편번호를 사용자 정보에 설정합니다.
+        user.setPostcode(newPostcode);
+
+        // 사용자 정보를 저장하고 업데이트된 정보를 반환합니다.
+        return userRepository.save(user);
     }
 
     @Override
-    public boolean validatePasswordForDeletion(String email, String deletionPassword) {
+    public User updateAddress(String email, String newAddress, String newPostcode) throws Exception {
+        // 이메일을 사용하여 사용자 정보를 조회합니다.
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+                .orElseThrow(() -> new Exception("User not found with email: " + email));
 
-        return passwordEncoder.matches(deletionPassword, user.getPw());
+        // 새로운 주소와 우편번호를 사용자 정보에 설정합니다.
+        user.setAddress(newAddress);
+        user.setPostcode(newPostcode);
+
+        // 사용자 정보를 저장하고 업데이트된 정보를 반환합니다.
+        return userRepository.save(user);
     }
 
     @Override
