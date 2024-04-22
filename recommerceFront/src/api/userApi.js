@@ -47,3 +47,9 @@ export const sendEmail = async (email) => {
   const res = await jwtAxios.post(`${host}/reset-pw`, formData);
   return res.data;
 };
+
+// 특정 사용자 프로필 정보 가져오기
+export const getUserProfile = async (email) => {
+  const res = await axios.get(`${host}/profile/${email}`, {});
+  return res.data;
+};
