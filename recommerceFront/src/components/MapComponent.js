@@ -154,7 +154,7 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              placeholder="상세 주소 입력"
+              placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
               className="text-sm border rounded shadow py-2 px-4"
             />
             <button
