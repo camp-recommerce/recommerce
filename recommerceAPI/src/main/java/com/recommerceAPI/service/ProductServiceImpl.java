@@ -1,17 +1,17 @@
 package com.recommerceAPI.service;
 
+
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 
 import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
-import com.recommerceAPI.dto.PageRequestDTO;
-import com.recommerceAPI.dto.PageResponseDTO;
-import com.recommerceAPI.dto.PageResponsePpDTO;
-import com.recommerceAPI.dto.ProductDTO;
+
+import com.recommerceAPI.dto.*;
 import com.recommerceAPI.repository.ProductRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -36,40 +36,60 @@ public class ProductServiceImpl implements ProductService {
     private final ModelMapper modelMapper;
 
 
+
+
     @Override
-       public PageResponsePpDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory) {
+    public ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory) {
+        log.info("getList..............");
 
-           log.info("getList..............");
+        // 페이지 요청을 처리하기 위한 Pageable 객체 생성, pno 기준 내림차순 정렬
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
 
-           Pageable pageable = PageRequest.of(
-                   pageRequestDTO.getPage() - 1,
-                   pageRequestDTO.getSize(),
-                   Sort.by("pno").descending());
+        // Repository에서 데이터를 가져옴
+        Page<Object[]> result = productRepository.selectList(pname, pcategory, pageable);
 
-           Page<Object[]> result = productRepository.selectList(pname,pageable);
+        // 결과를 ProductDTO 리스트로 변환
+        List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
+            Product product = (Product) arr[0];
+            ProductImage productImage = (ProductImage) arr[1];
 
-           List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
+            ProductDTO productDTO = new ProductDTO(
+                product.getPno(),
+                product.getPname(),
+                product.getPcategory(),
+                product.getPrice(),
+                product.getPstate(),
+                product.getPlocat(),
+                product.getLat(),
+                product.getLng(),
+                product.getPdesc(),
+                product.isDelFlag(),
+                null, // 파일 리스트는 조건에 따라 설정
+                null  // 업로드 파일 이름 리스트 초기화
+            );
 
-               Product product = (Product) arr[0];
-               ProductImage productImage = (ProductImage) arr[1];
+            if (productImage != null) {
+                productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
+            }
 
-               ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+            return productDTO;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
 
-               if (productImage != null) {
-                   productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
-               }
+        // 전체 아이템 수 계산
+        long totalCount = result.getTotalElements();
 
-               return productDTO;
-           }).collect(Collectors.toList());
-
-           long totalCount = result.getTotalElements();
-
-           return PageResponsePpDTO.<ProductDTO>withAll()
-                   .dtoList(dtoList)
-                   .totalCount(totalCount)
-                   .pageRequestDTO(pageRequestDTO)
-                   .build();
-       }
+        // 페이지 정보 및 데이터 리스트를 포함하는 DTO 객체 생성
+        return new ProductPageResponseDTO<>(
+            dtoList,
+            pageRequestDTO.getPage(),
+            result.getTotalPages(),
+            totalCount,
+            result.hasNext()
+        );
+    }
 
 
     @Override
@@ -183,9 +203,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public void remove(Long pno) {
-
         productRepository.updateToDelete(pno, true);
-
     }
 
 

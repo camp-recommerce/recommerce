@@ -12,6 +12,7 @@ import MapComponent from "../MapComponent";
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
+import { useParams } from "react-router-dom";
 
 const host = API_SERVER_HOST;
 
@@ -29,7 +30,8 @@ const initState = {
   imagePreviewUrl: "",
 };
 
-const P_ReadComponent = ({ pno }) => {
+const P_ReadComponent = () => {
+  const { pno } = useParams();
   const [product, setProduct] = useState(initState);
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
@@ -43,20 +45,17 @@ const P_ReadComponent = ({ pno }) => {
     useCustomChatModal(loginState.email);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    if (pno) {
       setLoading(true);
-      try {
-        const data = await getOne(1);
-        setProduct(data);
-      } catch (error) {
-        console.error("Error fetching product:", error);
-        // 오류 처리 로직
-      }
-      setLoading(false);
-    };
-
-    if (1) {
-      fetchProduct();
+      getOne(pno)
+        .then((data) => {
+          setProduct(data);
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching product:", error);
+          setLoading(false);
+        });
     } else {
       console.error("Product number (pno) is undefined.");
     }
@@ -137,7 +136,9 @@ const P_ReadComponent = ({ pno }) => {
             </div>
           </div>
           <div className="btn_modify">
-            <button onClick={() => moveModifyPage(1)}>수정하기</button>
+            <button onClick={() => moveModifyPage(product.pno)}>
+              수정하기
+            </button>
           </div>
           <button
             className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"

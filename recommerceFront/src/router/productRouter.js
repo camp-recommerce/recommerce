@@ -18,10 +18,10 @@ const productRouter = () => {
     {
       path: "/",
       element: (
-        <div id="parentDiv" style={{ overflowY: "scroll", height: "100vh" }}>
+        <Suspense fallback={Loading}>
           <ImageSlice />
           <ProductList />
-        </div>
+        </Suspense>
       ),
     },
     {

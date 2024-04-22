@@ -5,12 +5,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.recommerceAPI.dto.PageRequestDTO;
-import com.recommerceAPI.dto.PageResponseDTO;
-import com.recommerceAPI.dto.PageResponsePpDTO;
 import com.recommerceAPI.dto.ProductDTO;
+import com.recommerceAPI.dto.ProductPageResponseDTO;
 import com.recommerceAPI.service.ProductService;
 import com.recommerceAPI.util.CustomFileUtil;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.jaxb.SpringDataJaxb;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -29,13 +30,15 @@ public class ProductController {
     private final ProductService productService;
     private final CustomFileUtil fileUtil;
 
+    //상품 목록
     @GetMapping("/")
-       public PageResponsePpDTO<ProductDTO> list(PageRequestDTO pageRequestDTO, String pname, String pcategory){
+    public ProductPageResponseDTO getProductList(PageRequestDTO pageRequestDTO, String pname, String pcategory){
+    
+            log.info("list----------------------"+ pageRequestDTO);
+    
+            return productService.getList(pageRequestDTO, pname, pcategory);
+        }
 
-           log.info("list----------------------"+ pageRequestDTO);
-
-           return productService.getList(pageRequestDTO, pname, pcategory);
-       }
 
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API
