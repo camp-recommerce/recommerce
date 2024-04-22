@@ -82,7 +82,7 @@ const P_ReadComponent = () => {
       window.alert("이미 추가된 상품입니다.");
     } else {
       changeCart({ email: loginState.email, pno: pno, qty: 1 });
-      refreshCart();
+      window.alert("찜 했습니다!")
     }
   };
 

@@ -15,8 +15,8 @@ const P_CartItemComponent = ({
 }) => {
   const host = API_SERVER_HOST;
   const handleDelete = () => {
-    const newQty = 0;
-    changeCart({ email, wino, pno, qty: newQty });
+    
+    changeCart({ email, wino, pno, qty: 0});
   };
 
   return (
