@@ -12,6 +12,7 @@ const AddressComponent = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false); // 모달 표시 상태
   const [modalContent, setModalContent] = useState(""); // 모달 내용
+  const [errorMessage, setErrorMessage] = useState(""); // 주소 입력 오류 메시지
   const navigate = useNavigate();
 
   const handleComplete = (data) => {
@@ -20,6 +21,11 @@ const AddressComponent = () => {
   };
 
   const saveAddress = async () => {
+    if (!address) {
+      setErrorMessage("주소를 입력해주세요."); // 주소 입력 여부 확인
+      return;
+    }
+
     setIsLoading(true);
     try {
       await updateAddress(email, address, detailAddress, zoneCode);
@@ -39,8 +45,37 @@ const AddressComponent = () => {
     }
   };
 
+  // 인라인 CSS
+  const styles = {
+    container: {
+      maxWidth: "500px",
+      margin: "0 auto",
+      padding: "20px",
+    },
+    input: {
+      width: "100%",
+      padding: "8px",
+      marginTop: "8px",
+      marginBottom: "8px",
+      border: "1px solid #ccc",
+      borderRadius: "4px",
+    },
+    button: {
+      padding: "10px 20px",
+      backgroundColor: "#000",
+      color: "#fff",
+      border: "none",
+      borderRadius: "4px",
+      cursor: "pointer",
+    },
+    errorMessage: {
+      color: "red",
+      marginTop: "5px",
+    },
+  };
+
   return (
-    <div>
+    <div style={styles.container}>
       <h2>주소 검색</h2>
       <DaumPostcode onComplete={handleComplete} />
       <div>
@@ -56,18 +91,20 @@ const AddressComponent = () => {
             type="text"
             value={detailAddress}
             onChange={(e) => setDetailAddress(e.target.value)}
+            style={styles.input}
             placeholder="건물명, 호수 등"
           />
         </label>
       </div>
+      {errorMessage && <div style={styles.errorMessage}>{errorMessage}</div>}
       {isLoading ? (
         <div>저장 중...</div>
       ) : (
-        <button onClick={saveAddress} disabled={isLoading}>
+        <button style={styles.button} onClick={saveAddress} disabled={isLoading}>
           저장하기
         </button>
       )}
-      {modalShow && <AlertModal title="알림" content={modalContent} />} {/* 모달 컴포넌트 사용 */}
+      {modalShow && <AlertModal title="알림" content={modalContent} />}
     </div>
   );
 };

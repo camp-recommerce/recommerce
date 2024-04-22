@@ -56,7 +56,7 @@ export const updatePostcode = async (email, postcode) => {
   return res.data;
 };
 
-export const updateAddress = async (//이렇게하니깐 돼네..하
+export const updateAddress = async (
   email,
   address,
   detailAddress,
@@ -66,8 +66,8 @@ export const updateAddress = async (//이렇게하니깐 돼네..하
     params: {
       newAddress: address,
       newPostcode: postcode,
-      detailAddress
     },
   });
   return res.data;
 };
+
