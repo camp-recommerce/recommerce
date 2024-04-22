@@ -13,6 +13,7 @@ import MapComponent from "../MapComponent";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useParams } from "react-router-dom";
+import { sendAlarm } from "../../api/chatAlarmApi";
 
 const host = API_SERVER_HOST;
 
@@ -43,6 +44,9 @@ const P_ReadComponent = () => {
   const [selectedAddress, setSelectedAddress] = useState(null);
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal(loginState.email);
+  const [email,setEmail] = useState(null);
+
+  const alarm = {userEmail : "user0@aaa.com", roomId:loginState.email+" "+pno}
 
   useEffect(() => {
     if (pno) {
@@ -50,6 +54,7 @@ const P_ReadComponent = () => {
       getOne(pno)
         .then((data) => {
           setProduct(data);
+          setEmail(loginState.email)
           setLoading(false);
         })
         .catch((error) => {
@@ -141,11 +146,15 @@ const P_ReadComponent = () => {
             </button>
           </div>
           <button
-            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-            onClick={() => openChatModal()}
-          >
-            경매 채팅
-          </button>
+  className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+  onClick={() => {
+    openChatModal();
+    sendAlarm(alarm, );
+    console.log(alarm)
+  }}
+>
+  경매 채팅
+</button>
           <button
             className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5"
             onClick={() => handleClickAddCart()}
@@ -155,7 +164,7 @@ const P_ReadComponent = () => {
           <div>
             {isChatModalOpen && (
               <Chat
-                username={loginState.email}
+                username={loginState.email+" "+pno}
                 socket={socket}
                 closeModal={closeChatModal}
               />

@@ -47,3 +47,4 @@ export const sendEmail = async (email) => {
   const res = await jwtAxios.post(`${host}/reset-pw`, formData);
   return res.data;
 };
+

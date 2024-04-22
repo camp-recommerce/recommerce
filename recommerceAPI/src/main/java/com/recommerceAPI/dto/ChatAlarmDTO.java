@@ -11,7 +11,7 @@ public class ChatAlarmDTO {
 
     private Long id;
     private String userEmail;
-    private Long roomId;
+    private String roomId;
     private boolean read;
     private String createdAt;
 

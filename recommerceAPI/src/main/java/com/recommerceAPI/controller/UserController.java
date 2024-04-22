@@ -114,13 +114,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password for deletion"));
         }
     }
-    @PutMapping("/chat-alarm")
-    public Map<String ,String> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO, String email){
 
-        userService.updateChatAlarms(email,chatAlarmDTO);
-
-        return Map.of("alaram","send");
-    }
 
 
 }

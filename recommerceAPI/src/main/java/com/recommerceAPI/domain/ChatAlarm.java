@@ -19,7 +19,7 @@ public class ChatAlarm {
     @JoinColumn(name = "user_email")
     private User user;
 
-    private Long roomId;
+    private String roomId;
     private boolean read;
     private String createdAt; // LocalDateTime 대신 String으로 변경
 

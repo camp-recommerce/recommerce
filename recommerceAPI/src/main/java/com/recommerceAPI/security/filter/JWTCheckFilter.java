@@ -36,8 +36,8 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         log.info("check uri: " + path);
 
         // 특정 경로에 대한 요청은 필터링하지 않도록 설정합니다.
-        List<String> skipPaths = List.of("/api/user/", "/mountain", "/sea", "/images", "/api/products/view", "review/view", "/confirm",
-                "/api/products","/api/chat","/auction", "/product","/");
+        List<String> skipPaths = List.of("/api/user/login", "/mountain", "/sea", "/images", "/api/products/view", "review/view", "/confirm",
+                "/api/chat","/auction");
 
 
         return skipPaths.stream().anyMatch(path::startsWith);

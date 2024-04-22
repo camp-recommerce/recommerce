@@ -49,6 +49,7 @@ function Chat({ socket, username, closeModal }) {
   return (
     <div
       className="fixed top-0 left-0 w-full h-full flex justify-center items-center"
+      style={{zIndex:999}}
       onClick={handleOutsideClick}
     >
       <div
