@@ -36,7 +36,7 @@ const P_ReadComponent = ({ pno }) => {
   const [openImg, setOpenImg] = useState(false);
   const { moveModifyPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
-  const { changeCart, cartItems } = useCustomWishListPage();
+  const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
@@ -77,11 +77,13 @@ const P_ReadComponent = ({ pno }) => {
   // };
 
   const handleClickAddCart = () => {
-    const addedItem = cartItems.find((item) => item.pno === parseInt(pno));
-    if (addedItem) {
+    const addedItem = cartItems.find((item) => item.pno === Number(pno)); // 명시적인 형변환
+    if (addedItem !== undefined) {
+      // 상품을 찾지 못한 경우에 대한 조건 추가
       window.alert("이미 추가된 상품입니다.");
     } else {
       changeCart({ email: loginState.email, pno: 1, qty: 1 });
+      refreshCart();
     }
   };
 
@@ -144,7 +146,7 @@ const P_ReadComponent = ({ pno }) => {
             경매 채팅
           </button>
           <button
-            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5"
             onClick={() => handleClickAddCart()}
           >
             찜

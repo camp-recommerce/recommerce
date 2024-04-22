@@ -22,6 +22,12 @@ function FixedMenu() {
   const moveShoppingBasket = useCallback(() => {
     navigate({ pathname: "/product/cart" });
   });
+  useEffect(() => {
+    if (isLogin) {
+      refreshCart();
+    }
+    // 장바구니 상태 최신화
+  }, [isLogin]);
 
   useEffect(() => {
     const handleScrollToTop = () => {
@@ -57,7 +63,7 @@ function FixedMenu() {
             style={{ height: 50 }}
             onClick={moveShoppingBasket}
           >
-            장바구니
+            장바구니({cartItems.length})
           </button>
           <button
             className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
