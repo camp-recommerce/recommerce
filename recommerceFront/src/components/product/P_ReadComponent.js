@@ -6,6 +6,7 @@ import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ReadPage.scss";
+import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 
 import MapComponent from "../MapComponent";
 
@@ -35,6 +36,7 @@ const P_ReadComponent = ({ pno }) => {
   const [openImg, setOpenImg] = useState(false);
   const { moveModifyPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
+  const { changeCart, cartItems } = useCustomWishListPage();
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
@@ -73,6 +75,15 @@ const P_ReadComponent = ({ pno }) => {
   //   setLocation(loc);
   //   setSelectedAddress(loc.address);
   // };
+
+  const handleClickAddCart = () => {
+    const addedItem = cartItems.find((item) => item.pno === parseInt(pno));
+    if (addedItem) {
+      window.alert("이미 추가된 상품입니다.");
+    } else {
+      changeCart({ email: loginState.email, pno: 1, qty: 1 });
+    }
+  };
 
   return (
     <div className="shopRead_group ">
@@ -131,6 +142,12 @@ const P_ReadComponent = ({ pno }) => {
             onClick={() => openChatModal()}
           >
             경매 채팅
+          </button>
+          <button
+            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+            onClick={() => handleClickAddCart()}
+          >
+            찜
           </button>
           <div>
             {isChatModalOpen && (

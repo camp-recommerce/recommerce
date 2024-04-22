@@ -63,6 +63,7 @@ const beforeRes = async (res) => {
   const data = res.data;
 
   if (data && data.error === "ERROR_ACCESS_TOKEN") {
+    console.log(data.error);
     const userCookieValue = getCookie("user");
 
     const result = await refreshJWT(

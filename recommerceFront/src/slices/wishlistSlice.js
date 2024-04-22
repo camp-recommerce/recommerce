@@ -14,12 +14,11 @@ export const postWishlistItemsAsync = createAsyncThunk(
     return postWishlistItems(param);
   }
 );
-
 const initState = [];
 
 const wishlistSlice = createSlice({
-  name: "cartSlice",
-  initialState: initState,
+  name: "wishlistSlice",
+  initialState: [initState],
   extraReducers: (builder) => {
     builder
       .addCase(getWishlistItemsAsync.fulfilled, (state, action) => {

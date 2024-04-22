@@ -5,7 +5,7 @@ import {
 } from "../slices/wishlistSlice";
 
 const useCustomWishListPage = () => {
-  const cartItems = useSelector((state) => state.cartSlice);
+  const cartItems = useSelector((state) => state.wishlistSlice);
   const dispatch = useDispatch();
   const refreshCart = () => {
     dispatch(getWishlistItemsAsync());

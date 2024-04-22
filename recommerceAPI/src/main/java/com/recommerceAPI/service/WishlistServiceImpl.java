@@ -56,13 +56,14 @@ public class WishlistServiceImpl implements WishlistService {
 
         //사용자의 카트
         Wishlist wishlist = getWishlist(email);
+        log.info(wishlist);
 
         WishlistItem wishlistItem = null;
 
         //이미 동일한 상품이 담긴적이 있을 수 있으므로
         wishlistItem = wishlistItemRepository.getItemOfPno(email, pno);
-
-        if(wishlist == null){
+        log.info(wishlistItem);
+        if(wishlistItem == null){
             Product product = Product.builder().pno(pno).build();
             wishlistItem = WishlistItem.builder().product(product).wishlist(wishlist).qty(qty).build();
 

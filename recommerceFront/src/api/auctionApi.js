@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_SERVER_HOST } from "./userApi";
+import jwtAxios from "../util/jwtUtil";
 
 const host = `${API_SERVER_HOST}/auction`;
 
@@ -8,7 +9,7 @@ export const getList = async (pageParam) => {
   const { page, size, apName, apCategory } = pageParam;
 
   try {
-    const res = await axios.get(`${host}/list`, {
+    const res = await jwtAxios.get(`${host}/list`, {
       params: { page, size, apName, apCategory },
     });
     return res.data;
