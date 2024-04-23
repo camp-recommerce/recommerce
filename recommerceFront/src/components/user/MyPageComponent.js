@@ -85,7 +85,7 @@ const MyPageComponent = () => {
   const handleAddressInfo = () => {
     setActiveMenu("address"); // "나의 주소" 버튼을 눌렀을 때 activeMenu를 "address"로 설정
   };
-  
+
   return (
     <div style={styles.myPageBundle}>
       <h1 style={styles.title}>마이페이지</h1>
@@ -93,7 +93,10 @@ const MyPageComponent = () => {
         <button style={styles.button} onClick={() => setActiveMenu("profile")}>
           프로필
         </button>
-        <button style={styles.button} onClick={() => handleAddressInfo("address")}>
+        <button
+          style={styles.button}
+          onClick={() => handleAddressInfo("address")}
+        >
           나의 주소
         </button>
         <button style={styles.button} onClick={() => setActiveMenu("settings")}>
@@ -110,61 +113,65 @@ const MyPageComponent = () => {
         </button>
       </div>
       <div style={styles.infoBundle}>
-  {activeMenu === "profile" && userData && (
-    <div style={styles.userInfo}>
-      <p>Email: {userData.email}</p>
-      <p>닉네임: {userData.nickname}</p>
-      <p>P.H: {userData.phone}</p>
-      <p>생년월일: {userData.birth}</p>
-    </div>
-  )}
+        {activeMenu === "profile" && userData && (
+          <div style={styles.userInfo}>
+            <p>Email: {userData.email}</p>
+            <p>닉네임: {userData.nickname}</p>
+            <p>P.H: {userData.phone}</p>
+            <p>생년월일: {userData.birth}</p>
+            <Link to={`../profile/${email}`}>
+              <button style={styles.button}>프로필 보기</button>
+            </Link>
+          </div>
+        )}
 
-  {activeMenu === "address" && userData && (
-    <div style={styles.userInfo}>
-      <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
-      <p>우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}</p>
-    </div>
-  )}
+        {activeMenu === "address" && userData && (
+          <div style={styles.userInfo}>
+            <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
+            <p>
+              우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}
+            </p>
+          </div>
+        )}
 
-  {activeMenu === "settings" && (
-    <div style={styles.userInfo}>
-      <Link to={`/user/modify`}>
-        <button style={styles.button}>정보 변경</button>
-      </Link>
-      <Link to={`/user/address/${email}`}>
-        <button style={styles.button}>주소 변경</button>
-      </Link>
-      <Link to={`/user/remove/${email}`}>
-        <button style={styles.button}>탈퇴하기</button>
-      </Link>
-    </div>
-  )}
+        {activeMenu === "settings" && (
+          <div style={styles.userInfo}>
+            <Link to={`/user/modify`}>
+              <button style={styles.button}>정보 변경</button>
+            </Link>
+            <Link to={`/user/address/${email}`}>
+              <button style={styles.button}>주소 변경</button>
+            </Link>
+            <Link to={`/user/remove/${email}`}>
+              <button style={styles.button}>탈퇴하기</button>
+            </Link>
+          </div>
+        )}
 
-  {activeMenu === "purchases" &&
-    purchaseItems &&
-    purchaseItems.length > 0 && (
-      <ul style={styles.list}>
-        <li style={styles.title}>구매리스트:</li>
-        {purchaseItems.map((item) => (
-          <li key={item.id} style={styles.listItem}>
-            {item.name} - ${item.price}
-          </li>
-        ))}
-      </ul>
-    )}
+        {activeMenu === "purchases" &&
+          purchaseItems &&
+          purchaseItems.length > 0 && (
+            <ul style={styles.list}>
+              <li style={styles.title}>구매리스트:</li>
+              {purchaseItems.map((item) => (
+                <li key={item.id} style={styles.listItem}>
+                  {item.name} - ${item.price}
+                </li>
+              ))}
+            </ul>
+          )}
 
-  {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
-    <ul style={styles.list}>
-      <li style={styles.title}>판매리스트:</li>
-      {saleItems.map((item) => (
-        <li key={item.id} style={styles.listItem}>
-          {item.name} - ${item.price}
-        </li>
-      ))}
-    </ul>
-  )}
-</div>
-
+        {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
+          <ul style={styles.list}>
+            <li style={styles.title}>판매리스트:</li>
+            {saleItems.map((item) => (
+              <li key={item.id} style={styles.listItem}>
+                {item.name} - ${item.price}
+              </li>
+            ))}
+          </ul>
+        )}
+      </div>
     </div>
   );
 };

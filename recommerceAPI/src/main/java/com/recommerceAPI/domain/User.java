@@ -26,6 +26,9 @@ public class User {
     private String Postcode; //우편번호
     private String address; // 사용자 주소
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile; // 사용자 프로필
+
     //product와 연결
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();

@@ -13,5 +13,7 @@ public class PurchaseItemDTO {
 
     private Long puino;
     // 구매 아이템 번호. 구매 아이템을 식별하는 고유한 ID입니다.
+
+    private String pcategory; // 상품 카테고리 필드 추가
 }
 

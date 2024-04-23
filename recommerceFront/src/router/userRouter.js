@@ -10,6 +10,7 @@ const MyPage = lazy(() => import("../components/user/MyPageComponent"));
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const Address = lazy(() => import("../components/user/AddressComponent"));
+const Profile = lazy(() => import("../components/user/ProfileComponent"));
 
 const userRouter = () => {
   return [
@@ -90,6 +91,14 @@ const userRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <Address />
+        </Suspense>
+      ),
+    },
+    {
+      path: "profile/:email",
+      element: (
+        <Suspense fallback={Loading}>
+          <Profile />
         </Suspense>
       ),
     },
