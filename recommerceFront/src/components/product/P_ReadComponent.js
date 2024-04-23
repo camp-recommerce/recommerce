@@ -39,8 +39,6 @@ const P_ReadComponent = () => {
   const { moveModifyPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
   const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
-  const [location, setLocation] = useState(null);
-  const [selectedAddress, setSelectedAddress] = useState(null);
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal(loginState.email);
 
@@ -69,11 +67,6 @@ const P_ReadComponent = () => {
   const closeImageModal = () => {
     setOpenImg(false);
   };
-
-  // const handleLocationSelect = (loc) => {
-  //   setLocation(loc);
-  //   setSelectedAddress(loc.address);
-  // };
 
   const handleClickAddCart = () => {
     const addedItem = cartItems.find((item) => item.pno === Number(pno)); // 명시적인 형변환
@@ -128,7 +121,6 @@ const P_ReadComponent = () => {
                 </label>
                 <p>{product.plocat}</p>
               </div>
-              {/* <p>{selectedAddress}</p> */}
               <MapComponent
                 initialPosition={{ lat: product.lat, lng: product.lng }}
                 readOnly={true}

@@ -77,39 +77,39 @@ const P_InfiniteComponent = () => {
       {loading ? <LoadingModal /> : <></>}
       <InfiniteScroll
         className="infiniteBox"
-        dataLength={8}
+        dataLength={serverData.dtoList.length}
         next={fetchMoreData}
         pageStart={0}
         hasMore={serverData.hasMore}
         loader={<ClipLoader color={"#123abc"} loading={true} size={100} />}
         endMessage={<p>You are all set!</p>}
       >
-        {serverData.dtoList &&
-          serverData.dtoList.map((product) => (
-            <div
-              key={product.pno}
-              className="shopList_wrap"
-              onClick={() => moveReadPage(product.pno)}
-            >
-              <div className="shopList_box">
+        <div className="shopList_container">
+          {serverData.dtoList &&
+            serverData.dtoList.map((product) => (
+              <div
+                key={product.pno}
+                className="shopList_wrap"
+                onClick={() => moveReadPage(product.pno)}
+              >
                 <div className="shopList_pname text-sm mb-1 text-center">
                   {product.pname}
                 </div>
-                <div className="shopList_pname text-sm mb-1 text-center">
+                <div className="shopList_price text-sm mb-1 text-center">
                   {product.price}원
                 </div>
-                <div className="shopList_pname text-sm mb-1 text-center">
+                <div className="shopList_pstate text-sm mb-1 text-center">
                   {product.pstate}
                 </div>
-                <div className="shopList_pname text-sm mb-1 text-center">
+                <div className="shopList_plocat text-sm mb-1 text-center">
                   {product.plocat}
                 </div>
-                <div className="shopList_pname text-sm mb-1 text-center">
+                <div className="shopList_pdesc text-sm mb-1 text-center">
                   {product.pdesc}
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+        </div>
       </InfiniteScroll>
     </>
   );

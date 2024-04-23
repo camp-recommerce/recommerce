@@ -56,8 +56,6 @@ const productRouter = () => {
         </Suspense>
       ),
     },
-    { path: "", element: <Navigate replace to="list/?page=1&size=12" /> },
-    { path: "list", element: <Navigate replace to="list/?page=1&size=12" /> },
   ];
 };
 
