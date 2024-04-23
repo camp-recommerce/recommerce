@@ -41,7 +41,9 @@ const ModifyComponent = () => {
     const fetchUserData = async () => {
       try {
         const userData = await readUser(loginInfo.email);
-        setUser(userData);
+        // 비밀번호를 제외하고 사용자 데이터를 설정합니다.
+        // 이렇게 하면 비밀번호 필드는 빈 값으로 유지됩니다.
+        setUser({ ...userData, pw: "" });
       } catch (error) {
         console.error("Error fetching user data:", error);
       }

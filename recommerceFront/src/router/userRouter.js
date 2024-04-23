@@ -78,14 +78,6 @@ const userRouter = () => {
       ),
     },
     {
-      path: "postcode/:email", // 동적 파라미터로 수정
-      element: (
-        <Suspense fallback={Loading}>
-          <Address />
-        </Suspense>
-      ),
-    },
-    {
       path: "address/:email", // 주소 업데이트를 위한 동적 파라미터
       element: (
         <Suspense fallback={Loading}>

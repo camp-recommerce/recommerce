@@ -26,13 +26,27 @@ public interface UserService {
     // @param userDTO 수정할 사용자 정보를 담고 있는 UserDTO 객체입니다.
     void modifyUser(UserDTO userDTO);
 
+    // 주소와 상세주소를 업데이트하는 메서드 선언
+    // @param email 사용자의 이메일
+    // @param newAddress 사용자의 새 주소
+    // @param newPostcode 사용자의 새 우편번호
+    // @param addressDetail 사용자의 새 상세주소
+    // @return User 업데이트된 사용자 정보를 반환합니다.
+    // @throws Exception 처리 중 발생할 수 있는 예외
+    User updateAddress(String email, String newAddress, String newPostcode, String addressDetail) throws Exception;
 
-    // 우편번호 업데이트를 위한 메서드 선언
-    User updatePostcode(String email, String newPostcode) throws Exception;
-
-    // 주소를 업데이트 위한 메서든 선언
-    User updateAddress(String email, String newAddress, String newPostcode) throws Exception;
-
+    // 채팅 알림 설정을 업데이트하는 메서드 선언
     void updateChatAlarms(String email, ChatAlarmDTO chatAlarmDTO);
+
+    //비밀번호찾기 전송
+    String resetPassword(String email)throws EmailNotExistException;
+
+    static class EmailNotExistException extends RuntimeException{
+
+        public EmailNotExistException(String message){
+            super(message);
+        }
+
+    }
 
 }

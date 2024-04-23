@@ -33,4 +33,6 @@ public class UserDTO {
     private String Postcode;
 
     private String address; // 사용자 주소
+
+    private String addressDetail; //  상세 주소
 }

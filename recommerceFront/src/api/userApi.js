@@ -46,28 +46,23 @@ export const readUser = async (email) => {
 export const sendEmail = async (email) => {
   const formData = new URLSearchParams();
   formData.append("email", email);
-  const res = await jwtAxios.post(`${host}/reset-pw`, formData);
+  const res = await axios.post(`${host}/reset-pw`, formData);
   return res.data;
 };
 
-// 우편번호 업데이트
-export const updatePostcode = async (email, postcode) => {
-  const res = await jwtAxios.put(`${host}/postcode/${email}`, { postcode });
-  return res.data;
-};
-
+//주소, 우편번호, 상세주소
 export const updateAddress = async (
   email,
   address,
-  detailAddress,
+  addressDetail,
   postcode
 ) => {
   const res = await jwtAxios.put(`${host}/address/${email}`, null, {
     params: {
       newAddress: address,
       newPostcode: postcode,
+      addressDetail: addressDetail,
     },
   });
   return res.data;
 };
-

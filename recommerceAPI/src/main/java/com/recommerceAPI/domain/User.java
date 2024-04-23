@@ -25,6 +25,7 @@ public class User {
     private double averageRating; // 사용자의 평균 평점
     private String Postcode; //우편번호
     private String address; // 사용자 주소
+    private String addressDetail; // 추가된 상세 주소 필드
 
     //product와 연결
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)

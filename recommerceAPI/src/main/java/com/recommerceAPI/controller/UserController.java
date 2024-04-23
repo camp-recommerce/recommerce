@@ -13,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -29,6 +30,8 @@ public class UserController {
     private final UserService userService;
 
     private final UserRepository userRepository;
+
+    private final JavaMailSender javaMailSender;
 
     @GetMapping("/kakao")
     public Map<String, Object> getUserFromKakao(String accessToken) {
@@ -94,26 +97,21 @@ public class UserController {
         }
     }
 
-    // 우편번호 업데이트를 위한 API 엔드포인트
-    @PutMapping("/postcode/{email}")
-    public ResponseEntity<String> updatePostcode(@PathVariable String email, @RequestBody UserDTO userDTO) {
-        try {
-            userService.updatePostcode(email, userDTO.getPostcode());
-            return ResponseEntity.ok("우편번호가 성공적으로 업데이트되었습니다.");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("우편번호 업데이트 실패: " + e.getMessage());
-        }
-    }
 
     @PutMapping("/address/{email}")
-    public ResponseEntity<?> updateAddress(@PathVariable String email, @RequestParam String newAddress, @RequestParam String newPostcode) {
+    public ResponseEntity<?> updateAddress(@PathVariable String email,
+                                           @RequestParam String newAddress,
+                                           @RequestParam String newPostcode,
+                                           @RequestParam String addressDetail) {  // 상세 주소를 위한 매개변수 추가
         try {
-            User updatedUser = userService.updateAddress(email, newAddress, newPostcode);
+            // 상세 주소 포함하여 주소 정보 업데이트 메서드 호출
+            User updatedUser = userService.updateAddress(email, newAddress, newPostcode, addressDetail);
             return ResponseEntity.ok(updatedUser);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
+
     @PutMapping("/chat-alarm")
     public Map<String ,String> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO, String email){
 
@@ -122,4 +120,14 @@ public class UserController {
         return Map.of("alaram","send");
     }
 
+    //이메일로 비밀번호 전송
+    @PostMapping("/reset-pw")
+    public ResponseEntity<String> resetPassword(@RequestParam("email") String email) {
+        try {
+            String message = userService.resetPassword(email);
+            return ResponseEntity.ok(message);
+        } catch (UserService.EmailNotExistException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+        }
+    }
 }
