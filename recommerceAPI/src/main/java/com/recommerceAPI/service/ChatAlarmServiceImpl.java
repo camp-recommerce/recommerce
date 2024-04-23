@@ -4,6 +4,7 @@ import com.recommerceAPI.domain.ChatAlarm;
 import com.recommerceAPI.domain.User;
 import com.recommerceAPI.domain.Wishlist;
 import com.recommerceAPI.dto.ChatAlarmDTO;
+import com.recommerceAPI.dto.ChatAlarmListDTO;
 import com.recommerceAPI.repository.ChatAlarmRepository;
 import com.recommerceAPI.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +25,7 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     @Override
-    public ChatAlarm saveChatAlarm(ChatAlarmDTO chatAlarmDTO) {
+    public List<ChatAlarmDTO> saveModChatAlarm(ChatAlarmDTO chatAlarmDTO) {
         String email = chatAlarmDTO.getUserEmail();
         boolean isRead = chatAlarmDTO.isReadCheck(); // 알림을 읽었는지 여부
 
@@ -39,35 +40,36 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
                 // 기존 알림 업데이트
                 ChatAlarm chatAlarm = existingChatAlarm.get();
                 chatAlarm.setMessage(chatAlarmDTO.getMessage()); // 필요한 경우 다른 필드도 업데이트
-                return chatAlarmRepository.save(chatAlarm);
+                chatAlarmRepository.save(chatAlarm);
+
+                return getAlarmList(email);
             } else {
                 // 읽힌 알림이 없으면 새 알림 생성
                 ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
                 chatAlarm.setUser(user);
-                return chatAlarmRepository.save(chatAlarm);
+                chatAlarmRepository.save(chatAlarm);
+                return getAlarmList(email);
             }
         } else {
             // 읽히지 않은 알림이므로 새 알림 생성
             ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
             chatAlarm.setUser(user);
-            return chatAlarmRepository.save(chatAlarm);
+            chatAlarmRepository.save(chatAlarm);
+            return getAlarmList(email);
         }
     }
-
-
+    
     @Override
     public List<ChatAlarmDTO> getAlarmList(String email){
         // 사용자 이메일에 해당하는 모든 채팅 알람을 조회합니다.
-        List<ChatAlarm> chatAlarms = chatAlarmRepository.findAllUnreadByUserEmail(email);
-        // 모델맵퍼로 스트림 돌려서 전부 DTO 로 변환해서 list 형식으로 반환
+        List<ChatAlarm> chatAlarms = chatAlarmRepository.getUnreadChatAlarmsByUserEmail(email);
+
+        // ChatAlarm을 ChatAlarmDTO로 변환하여 리스트로 반환합니다.
         return chatAlarms.stream()
-                .map(this::convertToDTO)
+                .map(chatAlarm -> modelMapper.map(chatAlarm, ChatAlarmDTO.class))
                 .collect(Collectors.toList());
     }
 
-    private ChatAlarmDTO convertToDTO(ChatAlarm chatAlarm) {
-        return modelMapper.map(chatAlarm, ChatAlarmDTO.class);
-    }
 
 }
 

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
+import useCustomChatModal from "../../hooks/useCustomChatModal";
+import useCustomLogin from "../../hooks/useCustomLoginPage";
+import Chat from "../product/chat/chatcomponents/Chat";
 
 const AlarmModal = ({ closeModal, email }) => {
   const { alarmList, sendAlarm, refreshAlarm } = useCustomChatAlarm();
+  const {loginState} = useCustomLogin();
   const [groupedAlarms, setGroupedAlarms] = useState([]);
+  const { closeChatModal, openChatModal,isChatModalOpen,socket } = useCustomChatModal(); // useCustomChatModal 훅을 사용하여 openChatModal 함수 가져오기
 
   const handleOutsideClick = (e) => {
     if (e.target.classList.contains("modal-overlay")) {
@@ -11,18 +16,6 @@ const AlarmModal = ({ closeModal, email }) => {
     }
   };
 
-  const handleAlarmClick = async () => {
-    // 알람 목록을 순회하며 각각의 알람을 읽음 상태로 변경하고 전송
-    for (const alarm of alarmList) {
-      const readAlarm = {
-        ...alarm,
-        readCheck: true,
-        // 읽음 처리
-      };
-      sendAlarm(readAlarm); // 알람을 배열로 감싸서 전송
-    }
-    refreshAlarm(); // 알람 목록을 업데이트
-  };
 
   useEffect(() => {
     const groupAlarms = () => {
@@ -45,12 +38,24 @@ const AlarmModal = ({ closeModal, email }) => {
       <div key={index}>
         <h3 className="text-lg font-semibold mt-6">발신자: {senderEmail}</h3>
         <p>알람 개수: {groupedAlarms[senderEmail]}</p>
-        <button onClick={handleAlarmClick}>읽음으로 표시</button>{" "}
-        {/* 클릭 시 모든 알림을 읽음으로 표시 */}
+        <button onClick={() => openChatModal(alarmList.find(alarm => alarm.senderEmail === senderEmail)?.roomId)}>
+          채팅창 열기
+        </button>
+        {isChatModalOpen && (
+          <Chat
+            room={alarmList.find(alarm => alarm.senderEmail === senderEmail)?.roomId} // 해당 발신자의 roomId 사용
+            username={loginState.email}
+            socket={socket}
+            closeModal={() => {
+              closeChatModal();
+              closeModal();
+            }}
+          />
+        )}
       </div>
     ));
   };
-
+  
   return (
     <div
       className="fixed top-0 right-0 bottom-0 left-0 bg-gray-800 bg-opacity-50 flex items-center justify-center z-50 modal-overlay"
@@ -62,6 +67,7 @@ const AlarmModal = ({ closeModal, email }) => {
       >
         <h2 className="text-lg font-semibold">{email}님의 채팅 알림</h2>
         <div className="mt-4">{renderGroupedAlarms()}</div>
+        
       </div>
     </div>
   );

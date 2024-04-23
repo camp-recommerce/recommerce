@@ -1,6 +1,7 @@
 package com.recommerceAPI.controller;
 
 import com.recommerceAPI.dto.ChatAlarmDTO;
+import com.recommerceAPI.dto.ChatAlarmListDTO;
 import com.recommerceAPI.service.ChatAlarmService;
 import com.recommerceAPI.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +19,10 @@ import java.util.Map;
 public class ChatAlarmController {
     private final ChatAlarmService chatAlarmService;
     @PostMapping("/send")
-    public Map<String ,String> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO){
+    public List<ChatAlarmDTO> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO){
 
-        chatAlarmService.saveChatAlarm(chatAlarmDTO);
+       return chatAlarmService.saveModChatAlarm(chatAlarmDTO);
 
-        return Map.of("alaram","send");
     }
 
     @GetMapping("/list")
