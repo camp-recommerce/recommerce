@@ -104,8 +104,8 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-            ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
-            chatAlarm.setUser(user); // 사용자 설정
+        ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
+        chatAlarm.setUser(user); // 사용자 설정
 
         // 변경된 사용자 정보를 저장합니다.
         userRepository.save(user);

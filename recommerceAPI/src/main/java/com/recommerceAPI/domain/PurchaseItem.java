@@ -4,6 +4,7 @@ package com.recommerceAPI.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
@@ -29,6 +30,8 @@ public class PurchaseItem {
     private Purchase purchase; // 연결된 구매.
 
     private String fileName; // 수정: 상품 이미지 파일 경로 또는 URL
+
+
 }
 
 

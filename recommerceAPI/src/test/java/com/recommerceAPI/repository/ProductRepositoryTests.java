@@ -2,8 +2,11 @@ package com.recommerceAPI.repository;
 
 
 import com.recommerceAPI.domain.Product;
+import com.recommerceAPI.service.ProductService;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -13,6 +16,12 @@ public class ProductRepositoryTests {
 
 @Autowired
   ProductRepository productRepository;
+
+    @Mock
+    private PurchaseRepository purchaseRepository;
+
+    @InjectMocks
+    private ProductService productService;
 
   @Test
   public void testInsert() {
@@ -33,6 +42,7 @@ public class ProductRepositoryTests {
 //          product.addImageString("IMAGE2.jpg");
 
           productRepository.save(product);
+
 
 
       }

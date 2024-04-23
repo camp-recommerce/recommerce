@@ -23,5 +23,7 @@ public class Purchase {
     @JoinColumn(name="member_buyer")
     private User buyer;
 
+
+
     // 구매 관련 필드들 추가
 }

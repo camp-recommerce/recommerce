@@ -10,6 +10,9 @@ const MyPage = lazy(() => import("../components/user/MyPageComponent"));
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const Address = lazy(() => import("../components/user/AddressComponent"));
+const PublicProfile = lazy(() =>
+  import("../components/user/PublicProfileComponent")
+); // 추가
 
 const userRouter = () => {
   return [
@@ -54,7 +57,7 @@ const userRouter = () => {
       ),
     },
     {
-      path: "mypage/:email", // 동적 파라미터로 설정
+      path: "mypage/:email",
       element: (
         <Suspense fallback={Loading}>
           <MyPage />
@@ -62,7 +65,7 @@ const userRouter = () => {
       ),
     },
     {
-      path: "remove/:email", // 동적 파라미터로 설정
+      path: "remove/:email",
       element: (
         <Suspense fallback={Loading}>
           <Remove />
@@ -78,10 +81,18 @@ const userRouter = () => {
       ),
     },
     {
-      path: "address/:email", // 주소 업데이트를 위한 동적 파라미터
+      path: "address/:email",
       element: (
         <Suspense fallback={Loading}>
           <Address />
+        </Suspense>
+      ),
+    },
+    {
+      path: "profile/:email", // 공개 프로필 페이지 라우트 추가
+      element: (
+        <Suspense fallback={Loading}>
+          <PublicProfile />
         </Suspense>
       ),
     },

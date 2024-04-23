@@ -176,6 +176,7 @@ const JoinComponent = () => {
             onChange={handleChange}
           />
         </div>
+
         <button style={styles.submitButton} type="submit">
           제출
         </button>

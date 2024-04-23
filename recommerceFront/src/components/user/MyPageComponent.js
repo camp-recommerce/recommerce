@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { readUser } from "../../api/userApi";
 import { fetchSaleItems } from "../../api/salesApi";
 import { fetchPurchaseItems } from "../../api/purchaseApi";
@@ -11,6 +11,7 @@ const MyPageComponent = () => {
   const [saleItems, setSaleItems] = useState([]);
   const [purchaseItems, setPurchaseItems] = useState([]);
   const [activeMenu, setActiveMenu] = useState("profile");
+  const navigate = useNavigate(); // useNavigate 훅 사용
 
   const email = user.email;
 
@@ -31,6 +32,16 @@ const MyPageComponent = () => {
       fetchData();
     }
   }, [email]);
+
+  // 주소 정보가 없을 경우 주소 변경 페이지로 리디렉션
+  useEffect(() => {
+    if (
+      userData &&
+      (!userData.address || !userData.postcode || !userData.addressDetail)
+    ) {
+      navigate(`/user/address/${email}`);
+    }
+  }, [userData, navigate, email]);
 
   // Inline styles
   const styles = {
