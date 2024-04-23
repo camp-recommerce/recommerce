@@ -6,7 +6,7 @@ import useCustomProductPage from "../../hooks/useCustomProductPage";
 import ImageModal from "../modal/ImageModal";
 import "../../scss/product/ModifyPage.scss";
 import { API_SERVER_HOST } from "../../api/userApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const initState = {
   pname: "",
@@ -31,6 +31,7 @@ const P_ModifyComponent = () => {
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const { moveBeforeReadPage } = useCustomProductPage();
   const uploadRef = useRef();
+  const navigate = useNavigate();
 
   useEffect(() => {
     getOne(pno).then((data) => {
@@ -103,6 +104,7 @@ const P_ModifyComponent = () => {
     deleteOne(product).then((data) => {
       setResult("Deleted");
       setLoading(false);
+      navigate("/");
     });
   };
 

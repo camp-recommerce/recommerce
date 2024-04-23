@@ -65,6 +65,9 @@ public class CustomSecurityConfig {
         http.exceptionHandling(config -> {config.accessDeniedHandler(new CustomAccessDeniedHandler());
         });
 
+
+
+
         return http.build();
     }
 

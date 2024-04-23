@@ -1,6 +1,53 @@
 * {
   box-sizing: border-box;
 }
+.searchBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 90%;
+  margin: 10px auto;
+  padding-top: 40px;
+  border-top: 1px solid rgb(195, 194, 194); /* 상단에 선 추가 */
+
+  .inputBox {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+
+    .searchInput {
+      width: 350px;
+      background-color: rgb(228, 228, 227);
+      border-radius: 10px;
+      padding: 10px;
+      margin-right: 40px;
+      color: black;
+    }
+    .btn_search {
+      height: 100%;
+      color: white;
+      background-color: rgb(25, 5, 3);
+      border-radius: 10px;
+      padding: 15px;
+      white-space: nowrap;
+    }
+    .btn_search:hover {
+      background-color: rgb(81, 81, 81);
+    }
+  }
+  .categoryBox {
+    display: flex;
+    width: 50%;
+    height: auto;
+    align-items: center;
+    justify-content: space-around;
+    margin: 0 auto;
+    margin-bottom: 30px;
+  }
+}
 .infiniteBox {
   display: flex;
   flex-direction: column;
