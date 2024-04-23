@@ -32,7 +32,7 @@ const A_ReadComponent = () => {
   const [formattedClosingDate, setFormattedClosingDate] = useState("");
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
-    useCustomChatModal(apno);
+    useCustomChatModal();
 
   useEffect(() => {
     setLoading(true);
@@ -153,7 +153,7 @@ const A_ReadComponent = () => {
                 {auctionProduct.apStatus === "ACTIVE" && (
                   <button
                     className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                    onClick={() => openChatModal()}
+                    onClick={() => openChatModal(apno)}
                   >
                     경매 채팅
                   </button>
@@ -168,8 +168,7 @@ const A_ReadComponent = () => {
                       startPrice={auctionProduct.apStartPrice}
                       bidIncrement={auctionProduct.apBidIncrement}
                       imageSrc={auctionProduct.uploadFileNames}
-                      currentPrice = {auctionProduct.apCurrentPrice}
-                    
+                      currentPrice={auctionProduct.apCurrentPrice}
                     />
                   )}
                 </div>

@@ -30,6 +30,5 @@ public interface UserService {
 
     boolean validatePasswordForDeletion(String email, String deletionPassword);
 
-    void updateChatAlarms(String email, ChatAlarmDTO chatAlarmDTO);
 
 }

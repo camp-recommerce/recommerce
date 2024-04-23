@@ -59,7 +59,6 @@ const beforeRes = async (res) => {
 
   console.log(res);
 
-  //'ERROR_ACCESS_TOKEN'
   const data = res.data;
 
   if (data && data.error === "ERROR_ACCESS_TOKEN") {
