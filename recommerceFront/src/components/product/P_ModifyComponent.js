@@ -1,15 +1,12 @@
 import { useEffect, useRef, useState } from "react";
-import {
-  deleteOne,
-  getOne,
-  putOne,
-} from "../../api/productApi";
+import { deleteOne, getOne, putOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import AlertModal from "../modal/AlertModal";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import ImageModal from "../modal/ImageModal";
 import "../../scss/product/ModifyPage.scss";
-import {API_SERVER_HOST} from "../../api/userApi"
+import { API_SERVER_HOST } from "../../api/userApi";
+import { useParams } from "react-router-dom";
 
 const initState = {
   pname: "",
@@ -23,7 +20,8 @@ const initState = {
 
 const host = API_SERVER_HOST;
 
-const P_ModifyComponent = ({ pno }) => {
+const P_ModifyComponent = () => {
+  const { pno } = useParams();
   const [product, setProduct] = useState({ ...initState });
   const [openImg, setOpenImg] = useState(false);
   const [result, setResult] = useState(null);
@@ -35,7 +33,7 @@ const P_ModifyComponent = ({ pno }) => {
   const uploadRef = useRef();
 
   useEffect(() => {
-    getOne(1).then((data) => {
+    getOne(pno).then((data) => {
       setProduct(data);
       // 데이터 로딩 시 숫자 가격을 콤마 포맷으로 변환하여 상태에 저장
       setFormattedPrice(
@@ -78,7 +76,7 @@ const P_ModifyComponent = ({ pno }) => {
 
     setLoading(true);
 
-    putOne(1, formData).then((data) => {
+    putOne(pno, formData).then((data) => {
       setResult("Modified");
       setLoading(false);
     });
@@ -121,8 +119,6 @@ const P_ModifyComponent = ({ pno }) => {
   const closeImageModal = () => {
     setOpenImg(false);
   };
-
-  const categories = ["신발", "옷", "시계", "기타"];
 
   return (
     <div className="modify_group">
