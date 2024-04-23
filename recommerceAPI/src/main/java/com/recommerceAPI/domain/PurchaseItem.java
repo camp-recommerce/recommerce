@@ -29,6 +29,8 @@ public class PurchaseItem {
     @JoinColumn(name = "purchase_puno") // 수정
     private Purchase purchase; // 연결된 구매.
 
+    private String pcategory; // 상품 카테고리
+
     private String fileName; // 수정: 상품 이미지 파일 경로 또는 URL
 
 

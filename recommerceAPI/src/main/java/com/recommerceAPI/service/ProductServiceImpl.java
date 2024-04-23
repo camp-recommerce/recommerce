@@ -63,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getPrice(),
                 product.getPstate(),
                 product.getPlocat(),
+                product.getAddressLine(),
                 product.getLat(),
                 product.getLng(),
                 product.getPdesc(),

@@ -27,6 +27,9 @@ public class User {
     private String address; // 사용자 주소
     private String addressDetail; // 추가된 상세 주소 필드
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private UserProfile userProfile; // 사용자 프로필
+
     //product와 연결
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();

@@ -22,6 +22,8 @@ public class SaleItem {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long sino; // 판매 아이템 번호.
 
+    // SaleItem 테스트를 위해 연관관계인 product 객체도 test시 함께 생성하기 위한 임시 코드
+//    @ManyToOne(cascade = CascadeType.PERSIST)
     @ManyToOne
     @JoinColumn(name = "product_pno")
     private Product product; // 연결된 상품.
@@ -29,6 +31,10 @@ public class SaleItem {
     @ManyToOne
     @JoinColumn(name = "sale_sno")
     private Sale sale; // 연결된 판매.
+
+    private String pcategory; // 상품 카테고리
+    private int price; // 상품 가격
+    private String addressLine; // 제품판매장소 동 정보
 
     private String fileName; // 상품 이미지 파일 경로 또는 URL
 }

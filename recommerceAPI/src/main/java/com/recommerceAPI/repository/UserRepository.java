@@ -27,12 +27,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     // @EntityGraph를 사용하여 사용자의 역할 정보도 함께 가져옵니다.
     @EntityGraph(attributePaths = {"userRoleList"})
     Optional<User> findByEmail(String email);
-
-    @Query("SELECT new com.recommerceAPI.dto.UserProfileDTO(u.email, " +
-            "(SELECT pi.category FROM PurchaseItem pi WHERE pi.buyer = u GROUP BY pi.category ORDER BY COUNT(pi) DESC), " +
-            "(SELECT p.pcategory FROM Product p WHERE p.user = u GROUP BY p.pcategory ORDER BY COUNT(p) DESC), " +
-            "(SELECT AVG(p.price) FROM Product p WHERE p.user = u), " +
-            "(SELECT p.plocat FROM Product p WHERE p.user = u GROUP BY p.plocat ORDER BY COUNT(p) DESC)) " +
-            "FROM User u WHERE u.email = :email")
-    UserProfileDTO findUserProfileByEmail(@Param("email") String email);
 }
