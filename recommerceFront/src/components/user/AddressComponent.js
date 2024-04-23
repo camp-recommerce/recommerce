@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import DaumPostcode from "react-daum-postcode";
 import { useNavigate, useParams } from "react-router-dom";
-import { updateAddress, updatePostcode } from "../../api/userApi";
+import { updateAddress } from "../../api/userApi";
 import AlertModal from "../modal/AlertModal"; // 모달 컴포넌트 import
 
 const AddressComponent = () => {
@@ -72,11 +72,17 @@ const AddressComponent = () => {
       color: "red",
       marginTop: "5px",
     },
+    title: {
+      fontWeight: "bold", // 글자 굵기 두껍게
+      fontSize: "24px", // 글자 크기를 24px로 설정
+      marginBottom: "10px",
+    },
   };
 
   return (
     <div style={styles.container}>
-      <h2>주소 검색</h2>
+      <h2 style={styles.title}>주소를 입력해주세요</h2>
+      <h2>주소를 정확하게 입력해주세요. </h2>
       <DaumPostcode onComplete={handleComplete} />
       <div>
         <b>우편번호:</b> {zoneCode}

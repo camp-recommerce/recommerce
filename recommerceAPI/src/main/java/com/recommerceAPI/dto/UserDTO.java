@@ -30,7 +30,7 @@ public class UserDTO {
     private double averageRating;
 
     //사용자 우편번호
-    private String Postcode;
+    private String postcode;
 
     private String address; // 사용자 주소
 

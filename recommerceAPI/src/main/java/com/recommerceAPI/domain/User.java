@@ -23,7 +23,7 @@ public class User {
     private String phone; // 사용자 전화번호
     private String birth; // 사용자 생년월일
     private double averageRating; // 사용자의 평균 평점
-    private String Postcode; //우편번호
+    private String postcode; //우편번호
     private String address; // 사용자 주소
     private String addressDetail; // 추가된 상세 주소 필드
 

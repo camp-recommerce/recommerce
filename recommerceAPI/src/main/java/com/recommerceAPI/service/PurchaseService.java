@@ -12,4 +12,6 @@ public interface PurchaseService {
 
     // 구매 아이템 삭제
     List<PurchaseItemListDTO> remove(Long puino);
+
+
 }

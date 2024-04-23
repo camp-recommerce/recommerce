@@ -94,4 +94,5 @@ public class Product {
     public void clearList() {
         this.imageList.clear();
     }
+
 }

@@ -54,14 +54,24 @@ export const sendEmail = async (email) => {
 export const updateAddress = async (
   email,
   address,
-  addressDetail,
-  postcode
+  postcode,
+  addressDetail
 ) => {
   const res = await jwtAxios.put(`${host}/address/${email}`, null, {
     params: {
       newAddress: address,
       newPostcode: postcode,
       addressDetail: addressDetail,
+    },
+  });
+  return res.data;
+};
+
+// 사용자의 공개 프로필 조회
+export const getPublicProfileByEmail = async (email) => {
+  const res = await axios.get(`${host}/public-profile/by-email`, {
+    params: {
+      email: email,
     },
   });
   return res.data;

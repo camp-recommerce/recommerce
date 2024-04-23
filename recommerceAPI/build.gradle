@@ -42,7 +42,7 @@ dependencies {
 
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
+	testImplementation 'org.mockito:mockito-core'
 
 	implementation 'net.coobird:thumbnailator:0.4.20'
 
@@ -52,6 +52,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
 }
 
 tasks.named('test') {
