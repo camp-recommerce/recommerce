@@ -133,6 +133,22 @@ const A_AddComponent = () => {
                 type="file"
                 multiple={true}
                 onChange={handleImagePreview}
+=======
+          <div
+            className="max-w-md flex items-end justify-center"
+            style={{
+              border: "1px solid #CCCCCC",
+              width: 550,
+              height: 550,
+              marginBottom: 10,
+            }}
+          >
+            {imagePreviewUrl ? (
+              <img
+                src={imagePreviewUrl}
+                className="addImage"
+                alt={auction.apName}
+>>>>>>> Stashed changes
               />
             </div>
           </div>

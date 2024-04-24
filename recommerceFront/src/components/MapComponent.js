@@ -14,6 +14,7 @@ const MapComponent = ({
   const [roadAddress, setRoadAddress] = useState("");
   const [currentPosition, setCurrentPosition] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState(""); // 주소를 저장할 상태 추가
 
   useEffect(() => {
     const initializeMap = (lat, lng) => {
@@ -117,6 +118,7 @@ const MapComponent = ({
           const roadAddressText = result[0].road_address // 도로명 주소 가져오고, 도로명 주소 없는 곳에만 지번 주소 가져옴
             ? result[0].road_address.address_name
             : result[0].address.address_name;
+          setSelectedAddress(roadAddressText);
           const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
           const addressInfo = result[0].address; // 지번 주소 정보 객체
           const addressLine = `${addressInfo.region_1depth_name} ${addressInfo.region_2depth_name} ${addressInfo.region_3depth_name}`;
@@ -138,19 +140,6 @@ const MapComponent = ({
 
   return (
     <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
-      <div ref={mapContainer} className="w-full h-[350px] relative">
-        {!readOnly && (
-          <button
-            onClick={moveToCurrentPosition}
-            className="absolute bottom-[15px] right-[15px] z-10 w-[40px] h-[40px] border-[0.3px] border-[#2822224f] rounded-[50px] bg-white flex justify-center items-center"
-          >
-            <img
-              src={process.env.PUBLIC_URL + "/images/gps.svg"}
-              className="w-[20px] h-[20px] z-20"
-            />
-          </button>
-        )}
-      </div>
       {!readOnly && (
         <div className="m-4 w-full flex justify-start items-center">
           <form onSubmit={handleSearch} className="flex w-1/2">
@@ -168,8 +157,22 @@ const MapComponent = ({
               검색
             </button>
           </form>
+          <p>{selectedAddress}</p>
         </div>
       )}
+      <div ref={mapContainer} className="w-full h-[350px] relative">
+        {!readOnly && (
+          <button
+            onClick={moveToCurrentPosition}
+            className="absolute bottom-[15px] right-[15px] z-10 w-[40px] h-[40px] border-[0.3px] border-[#2822224f] rounded-[50px] bg-white flex justify-center items-center"
+          >
+            <img
+              src={process.env.PUBLIC_URL + "/images/gps.svg"}
+              className="w-[20px] h-[20px] z-20"
+            />
+          </button>
+        )}
+      </div>
     </div>
   );
 };

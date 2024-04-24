@@ -42,17 +42,7 @@ const P_InfiniteComponent = () => {
   };
 
   const handleSearchButtonClick = () => {
-    setLoading(true);
-    const categoryQuery = pcategory === "ALL" ? "" : pcategory;
-    getList({ page: 1, size, pname, pcategory: categoryQuery }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
-    setPName(pnameInput); // 입력 창의 값을 변수에 저장
-    getList({ page: 1, size, pname: pnameInput, pcategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
+    setPName(pnameInput); // 검색 버튼 클릭 시 pname 상태 업데이트
   };
 
   const handleKeyPress = (e) => {
@@ -89,30 +79,35 @@ const P_InfiniteComponent = () => {
   };
 
   useEffect(() => {
-    setLoading(true);
-    getList({ page, size, pname, pcategory })
-      .then((data) => {
-        console.log(data); // 여기에서 데이터 구조 확인
-        if (data && data.data) {
-          // 데이터 유효성 검사
-          setServerData({
-            dtoList: data.data,
-            currentPage: data.currentPage,
-            totalPages: data.totalPages,
-            totalItems: data.totalItems,
-            hasMore: data.hasMore,
-          });
-        } else {
-          // 데이터가 없거나 예상 구조와 다른 경우 처리
-          console.error("No data or unexpected data structure:", data);
-        }
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching initial product data:", error);
-        setLoading(false);
-      });
-  }, [page, size, pname, pcategory]);
+    const fetchData = () => {
+      setLoading(true);
+      const categoryQuery = pcategory === "전체" || !pcategory ? "" : pcategory;
+      const nameQuery = pname ? pname : "";
+
+      getList({ page: 1, size, pname: nameQuery, pcategory: categoryQuery })
+        .then((data) => {
+          if (data && data.data) {
+            setServerData({
+              dtoList: data.data,
+              currentPage: data.currentPage,
+              totalPages: data.totalPages,
+              totalItems: data.totalItems,
+              hasMore: data.hasMore,
+            });
+          } else {
+            setServerData((prev) => ({ ...prev, hasMore: false })); // 데이터 없음 처리
+          }
+          setLoading(false);
+        })
+        .catch((error) => {
+          console.error("Error fetching product data:", error);
+          setLoading(false);
+          setServerData((prev) => ({ ...prev, hasMore: false })); // 에러 발생 시 처리
+        });
+    };
+
+    fetchData();
+  }, [page, size, pname, pcategory]); // 의존성 배열에 pname과 pcategory 추가
 
   return (
     <>

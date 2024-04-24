@@ -261,7 +261,6 @@ const P_AddComponent = () => {
                   onChange={handleChangeProduct}
                 />
               </div>
-              <p>{selectedAddress}</p>
               <MapComponent onLocationSelect={handleLocationSelect} />
             </div>
           </div>
