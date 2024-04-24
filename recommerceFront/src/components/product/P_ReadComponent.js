@@ -24,7 +24,7 @@ const initState = {
   pdesc: "",
   lat: "",
   lng: "",
-  files: [],
+  fileName: [],
   loading: false,
   result: null,
   imagePreviewUrl: "",
@@ -59,8 +59,8 @@ const P_ReadComponent = () => {
     }
   }, [pno]);
 
-  const handleOpenImg = (imgFile) => {
-    setSelectedImgPath(`${host}/product/view/${imgFile}`);
+  const handleOpenImg = (fileName) => {
+    setSelectedImgPath(`${host}/product/view/${fileName}`);
     setOpenImg(true);
   };
 
@@ -87,8 +87,7 @@ const P_ReadComponent = () => {
       <div className="shopRead_img">
         <img
           alt="product"
-          // src={`${host}/api/products/view/${product.uploadFileNames}`}
-          src="/winter.jpg"
+          src={`${host}/product/view/${product.fileName}`}
           onClick={handleOpenImg}
         />
       </div>
