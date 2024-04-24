@@ -29,25 +29,25 @@ const ProfileComponent = ({ userEmail }) => {
   }, [userEmail]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>로딩 중...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div>에러: {error}</div>;
   }
 
   if (!profile) {
-    return <div>No data available.</div>; // 데이터가 비어 있는 경우(응답, 요청은 되나 데이터가 없음)
+    return <div>데이터가 비어 있습니다.</div>; // 데이터가 비어 있는 경우(응답, 요청은 되나 데이터가 없음)
   }
 
   return (
     <div>
       <h1>User Profile</h1>
-      <p>Email: {profile.email}</p>
-      <p>Top Purchase Category: {profile.topPurchaseCategory}</p>
-      <p>Top Sale Category: {profile.topSaleCategory}</p>
-      <p>Average Price: {profile.averagePrice}</p>
-      <p>Top Selling Location: {profile.topSellingLocation}</p>
+      <p>{profile.email} 님</p>
+      <p>가장 많이 구매한 항목: {profile.topPurchaseCategory}</p>
+      <p>가장 많이 판매한 항목: {profile.topSaleCategory}</p>
+      <p>평균 판매 가격: {profile.averagePrice}</p>
+      <p>주요 거래 장소: {profile.topSellingLocation}</p>
     </div>
   );
 };

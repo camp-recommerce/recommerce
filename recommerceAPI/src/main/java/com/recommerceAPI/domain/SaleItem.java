@@ -2,6 +2,9 @@ package com.recommerceAPI.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 @Entity
 @AllArgsConstructor
@@ -16,6 +19,7 @@ import lombok.*;
                 @Index(columnList = "product_pno, sale_sno", name = "idx_saleitem_pno_sale")
         }
 )
+@EntityListeners(SaleItem.SaleItemListener.class)
 public class SaleItem {
 
     @Id
@@ -37,4 +41,31 @@ public class SaleItem {
     private String addressLine; // 제품판매장소 동 정보
 
     private String fileName; // 상품 이미지 파일 경로 또는 URL
+
+    @ManyToOne
+    @JoinColumn(name = "user_email")
+    private User user;
+
+    // Listener 내부 클래스
+    public static class SaleItemListener {
+
+        @Autowired
+        private ApplicationEventPublisher eventPublisher;
+
+        @PostPersist
+        public void afterSail(SaleItem saleItem) {
+            eventPublisher.publishEvent(new SaleItemAddedEvent(saleItem));
+        }
+    }
+
+    // Event 내부 클래스
+    public static class SaleItemAddedEvent extends ApplicationEvent {
+        public SaleItemAddedEvent(SaleItem source) {
+            super(source);
+        }
+
+        public SaleItem getSaleItem() {
+            return (SaleItem) getSource();
+        }
+    }
 }

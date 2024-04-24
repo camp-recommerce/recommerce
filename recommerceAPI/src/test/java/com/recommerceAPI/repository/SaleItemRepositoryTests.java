@@ -39,7 +39,7 @@ public class SaleItemRepositoryTests {
         int[] prices = {10000, 20000, 30000, 40000};
         String[] addresses = {"종로", "을지로", "명동", "홍대"};
 
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 50; i++) {
             Product product = Product.builder()
                     .pname("상품 " + i)
                     .pcategory(categories[i % categories.length])

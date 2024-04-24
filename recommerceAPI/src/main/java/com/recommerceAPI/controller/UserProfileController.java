@@ -21,10 +21,10 @@ public class UserProfileController {
 
     @GetMapping("/profile/{email}")
     public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable String email) {
-        try {
-            UserProfileDTO profile = userProfileService.getUserProfile(email);
+        UserProfileDTO profile = userProfileService.getUserProfileByEmail(email);
+        if (profile != null) {
             return ResponseEntity.ok(profile);
-        } catch (Exception e) {
+        } else {
             return ResponseEntity.notFound().build();
         }
     }

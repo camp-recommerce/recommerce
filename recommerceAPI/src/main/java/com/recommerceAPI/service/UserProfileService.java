@@ -1,58 +1,67 @@
 package com.recommerceAPI.service;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.recommerceAPI.domain.QSaleItem;
-import com.recommerceAPI.domain.QPurchaseItem;
+import com.recommerceAPI.domain.*;
 import com.recommerceAPI.dto.UserProfileDTO;
+import com.recommerceAPI.repository.UserProfileRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserProfileService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private UserProfileRepository userProfileRepository;
 
-    public UserProfileDTO getUserProfile(String email) {
-        JPAQueryFactory queryFactory = new JPAQueryFactory(entityManager);
-        QSaleItem saleItem = QSaleItem.saleItem;
-        QPurchaseItem purchaseItem = QPurchaseItem.purchaseItem;
+    @Transactional(readOnly = true)
+    public UserProfileDTO getUserProfileByEmail(String email) {
+        UserProfile userProfile = userProfileRepository.findById(email).orElse(null);
+        if (userProfile != null) {
+            return new UserProfileDTO(
+                    userProfile.getEmail(),
+                    userProfile.getTopPurchaseCategory(),
+                    userProfile.getTopSaleCategory(),
+                    userProfile.getAveragePrice(),
+                    userProfile.getTopSellingLocation()
+            );
+        }
+        return null; // 또는 적절한 예외 처리
+    }
 
-        // 판매된 상품 카테고리 중 가장 많은 것을 찾음
-        String topSellingCategory = queryFactory
-                .select(saleItem.product.pcategory)
-                .from(saleItem)
-                .where(saleItem.sale.seller.email.eq(email))
-                .groupBy(saleItem.product.pcategory)
-                .orderBy(saleItem.product.pcategory.count().desc())
-                .fetchFirst();
+    @Transactional
+    @EventListener
+    public void handleSaleItemAddedEvent(SaleItem.SaleItemAddedEvent event) {
+        SaleItem saleItem = event.getSaleItem();
+        User user = saleItem.getUser();
+        UserProfile userProfile = userProfileRepository.findByUser(user);
 
-        // 구매한 상품 카테고리 중 가장 많은 것을 찾음
-        String topPurchaseCategory = queryFactory
-                .select(purchaseItem.product.pcategory)
-                .from(purchaseItem)
-                .where(purchaseItem.purchase.buyer.email.eq(email))
-                .groupBy(purchaseItem.product.pcategory)
-                .orderBy(purchaseItem.product.pcategory.count().desc())
-                .fetchFirst();
+        if (userProfile != null) {
+            // 업데이트 로직 추가
+            userProfile.setTopSaleCategory(saleItem.getPcategory());
+            userProfile.setAveragePrice((double) saleItem.getPrice());
+            userProfile.setTopSellingLocation(saleItem.getAddressLine());
 
-        // 평균 판매 가격 계산
-        Double averagePrice = queryFactory
-                .select(saleItem.price.avg())
-                .from(saleItem)
-                .where(saleItem.sale.seller.email.eq(email))
-                .fetchOne();
+            userProfileRepository.save(userProfile);
+        }
+    }
 
-        // 가장 많이 판매된 장소
-        String topSellingLocation = queryFactory
-                .select(saleItem.addressLine)
-                .from(saleItem)
-                .where(saleItem.sale.seller.email.eq(email))
-                .groupBy(saleItem.addressLine)
-                .orderBy(saleItem.addressLine.count().desc())
-                .fetchFirst();
+    @Transactional
+    @EventListener
+    public void handlePurchaseItemAddedEvent(PurchaseItem.PurchaseItemAddedEvent event) {
+        PurchaseItem purchaseItem = event.getPurchaseItem();
+        User user = purchaseItem.getUser();
+        UserProfile userProfile = userProfileRepository.findByUser(user);
 
-        return new UserProfileDTO(email, topPurchaseCategory, topSellingCategory, averagePrice, topSellingLocation);
+        if (userProfile != null) {
+            // 구매 정보 업데이트 로직
+            userProfile.setTopPurchaseCategory(purchaseItem.getProduct().getPcategory());
+
+            userProfileRepository.save(userProfile);
+        }
     }
 }

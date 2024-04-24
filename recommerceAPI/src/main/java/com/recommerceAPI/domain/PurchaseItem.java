@@ -3,6 +3,9 @@ package com.recommerceAPI.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEvent;
+import org.springframework.context.ApplicationEventPublisher;
 
 
 @Entity
@@ -33,7 +36,32 @@ public class PurchaseItem {
 
     private String fileName; // 수정: 상품 이미지 파일 경로 또는 URL
 
+    @ManyToOne
+    @JoinColumn(name = "user_email")
+    private User user;
 
+    // Listener 내부 클래스
+    public static class PurchaseItemListener {
+
+        @Autowired
+        private ApplicationEventPublisher eventPublisher;
+
+        @PostPersist
+        public void afterPurchase(PurchaseItem purchaseItem) {
+            eventPublisher.publishEvent(new PurchaseItem.PurchaseItemAddedEvent(purchaseItem));
+        }
+    }
+
+    // Event 내부 클래스
+    public static class PurchaseItemAddedEvent extends ApplicationEvent {
+        public PurchaseItemAddedEvent(PurchaseItem source) {
+            super(source);
+        }
+
+        public PurchaseItem getPurchaseItem() {
+            return (PurchaseItem) getSource();
+        }
+    }
 }
 
 
