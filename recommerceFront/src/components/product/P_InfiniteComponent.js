@@ -2,9 +2,11 @@ import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
-import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/ListPage.scss";
 import MapComponent from "../MapComponent";
+import { API_SERVER_HOST } from "../../api/userApi";
+
+const host = API_SERVER_HOST;
 
 const P_InfiniteComponent = () => {
   const { page, size, moveReadPage } = useCustomProductPage();
@@ -23,10 +25,16 @@ const P_InfiniteComponent = () => {
   const [pcategory, setPCategory] = useState(""); // pcategory 상태 추가
   const [isMapModalOpen, setMapModalOpen] = useState(false);
 
+  const toggleMapModal = (e) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
+    setMapModalOpen(!isMapModalOpen);
+  };
+
   const handleCategoryClick = (category) => {
     // "전체"를 선택한 경우
     if (category === "전체") {
       setPCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setPNameInput(""); // 입력값도 초기화합니다.
       setPName(""); // 입력값도 초기화합니다.
     } else {
       setPCategory(category);
@@ -35,44 +43,6 @@ const P_InfiniteComponent = () => {
 
   const handleSearchInputChange = (e) => {
     setPNameInput(e.target.value);
-  };
-
-  const handleSearchButtonClick = () => {
-    setPName(pnameInput); // 검색 버튼 클릭 시 pname 상태 업데이트
-    setMapModalOpen(false);
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearchButtonClick();
-    }
-  };
-
-  const fetchMoreData = () => {
-    if (serverData.hasMore && !loading) {
-      setLoading(true);
-      const nextPage = serverData.currentPage + 1;
-      getList({ page: nextPage, size, pname, pcategory })
-        .then((data) => {
-          if (data && data.data.length > 0) {
-            setServerData((prev) => ({
-              ...prev,
-              dtoList: prev.dtoList.concat(data.data),
-              currentPage: nextPage, // 현재 페이지 업데이트
-              totalPages: data.totalPages,
-              totalItems: data.totalItems,
-              hasMore: data.hasMore,
-            }));
-          } else {
-            setServerData((prev) => ({ ...prev, hasMore: false })); // 데이터가 없으면 hasMore를 false로 설정
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching more product data:", error);
-          setLoading(false);
-        });
-    }
   };
 
   useEffect(() => {
@@ -106,9 +76,43 @@ const P_InfiniteComponent = () => {
     fetchData();
   }, [page, size, pname, pcategory]); // 의존성 배열에 pname과 pcategory 추가
 
-  const toggleMapModal = (e) => {
-    e.stopPropagation(); // 이벤트 버블링 방지
-    setMapModalOpen(!isMapModalOpen);
+  const fetchMoreData = () => {
+    if (serverData.currentPage >= serverData.totalPages) {
+      setServerData((prev) => ({ ...prev, hasMore: false }));
+      return;
+    }
+
+    const nextPage = serverData.currentPage + 1;
+
+    getList({ page: nextPage, size, pname: pname, pcategory: pcategory })
+      .then((data) => {
+        if (data && data.data) {
+          setServerData((prev) => ({
+            dtoList: prev.dtoList.concat(data.data),
+            currentPage: data.currentPage,
+            totalPages: data.totalPages,
+            totalItems: data.totalItems,
+            hasMore: data.hasMore,
+          }));
+        } else {
+          setServerData((prev) => ({ ...prev, hasMore: false }));
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching more product data:", error);
+        setServerData((prev) => ({ ...prev, hasMore: false }));
+      });
+  };
+
+  const handleSearchButtonClick = () => {
+    setPName(pnameInput); // 검색 버튼 클릭 시 pname 상태 업데이트
+    setMapModalOpen(false);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      handleSearchButtonClick();
+    }
   };
 
   // 모달 컨테이너 내부 클릭 이벤트 핸들러
@@ -122,7 +126,6 @@ const P_InfiniteComponent = () => {
 
   return (
     <>
-      {loading ? <LoadingModal /> : <></>}
       <div className="searchBox">
         <div className="inputBox">
           <input
@@ -143,6 +146,7 @@ const P_InfiniteComponent = () => {
             <img
               src={process.env.PUBLIC_URL + "/images/map.svg"}
               className="w-[25px] h-[25px]"
+              alt="searchLocate"
             />
             {isMapModalOpen && (
               <div className="modal" onClick={handleModalClick}>
@@ -159,7 +163,7 @@ const P_InfiniteComponent = () => {
                   />
                 </div>
               </div>
-            )}{" "}
+            )}
           </button>
         </div>
         <div className="categoryBox">
@@ -183,7 +187,6 @@ const P_InfiniteComponent = () => {
         className="infiniteBox"
         dataLength={serverData.dtoList.length}
         next={fetchMoreData}
-        pageStart={0}
         hasMore={serverData.hasMore}
         endMessage={<p>You are all set!</p>}
       >
@@ -195,6 +198,12 @@ const P_InfiniteComponent = () => {
                 className="shopList_wrap"
                 onClick={() => moveReadPage(product.pno)}
               >
+                <div className="shopList_uploadImage text-sm mb-1 text-center">
+                  <img
+                    alt={product.pname}
+                    src={`${host}/product/view/s_${product.uploadFileNames}`}
+                  />
+                </div>
                 <div className="shopList_pname text-sm mb-1 text-center">
                   {product.pname}
                 </div>
