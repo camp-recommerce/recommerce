@@ -116,9 +116,16 @@ const A_AddComponent = () => {
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
         <div>물품 등록</div>
         <div className="grid grid-cols-2 gap-10">
-<<<<<<< Updated upstream
           <div className="flex justify-center items-center">
-            <div className="max-w-md">
+            <div
+              className="max-w-md flex items-end justify-center"
+              style={{
+                border: "1px solid #CCCCCC",
+                width: 550,
+                height: 550,
+                marginBottom: 10,
+              }}
+            >
               {imagePreviewUrl ? (
                 <img
                   src={imagePreviewUrl}
@@ -134,22 +141,6 @@ const A_AddComponent = () => {
                 type="file"
                 multiple={true}
                 onChange={handleImagePreview}
-=======
-          <div
-            className="max-w-md flex items-end justify-center"
-            style={{
-              border: "1px solid #CCCCCC",
-              width: 550,
-              height: 550,
-              marginBottom: 10,
-            }}
-          >
-            {imagePreviewUrl ? (
-              <img
-                src={imagePreviewUrl}
-                className="addImage"
-                alt={auction.apName}
->>>>>>> Stashed changes
               />
             </div>
           </div>
