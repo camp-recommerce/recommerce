@@ -14,6 +14,7 @@ const MapComponent = ({
   const [roadAddress, setRoadAddress] = useState("");
   const [currentPosition, setCurrentPosition] = useState(null);
   const [keyword, setKeyword] = useState("");
+  const [selectedAddress, setSelectedAddress] = useState(""); // 주소를 저장할 상태 추가
 
   useEffect(() => {
     const initializeMap = (lat, lng) => {
@@ -117,6 +118,7 @@ const MapComponent = ({
           const roadAddressText = result[0].road_address // 도로명 주소 가져오고, 도로명 주소 없는 곳에만 지번 주소 가져옴
             ? result[0].road_address.address_name
             : result[0].address.address_name;
+          setSelectedAddress(roadAddressText);
           const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
           const addressInfo = result[0].address; // 지번 주소 정보 객체
           const addressLine = `${addressInfo.region_1depth_name} ${addressInfo.region_2depth_name} ${addressInfo.region_3depth_name}`;
@@ -138,6 +140,30 @@ const MapComponent = ({
 
   return (
     <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
+      {!readOnly && (
+        <div className="my-4 w-full flex justify-start items-center">
+          <form onSubmit={handleSearch} className="flex w-1/2">
+            <input
+              type="text"
+              value={keyword}
+              onChange={(e) => setKeyword(e.target.value)}
+              placeholder={
+                isModal
+                  ? "원하는 지역을 검색해주세요."
+                  : "동명(읍, 면)으로 검색 (ex. 서초동)"
+              }
+              className="text-sm border rounded shadow py-2 px-4 min-w-[228px]"
+            />
+            <button
+              type="submit"
+              className="ml-2 bg-[#282222] hover:bg-[#6f6e6e] text-white font-bold py-2 px-4 rounded whitespace-nowrap"
+            >
+              검색
+            </button>
+          </form>
+          <p>{selectedAddress}</p>
+        </div>
+      )}
       <div ref={mapContainer} className="w-full h-[350px] relative">
         {!readOnly && (
           <button
@@ -151,25 +177,6 @@ const MapComponent = ({
           </button>
         )}
       </div>
-      {!readOnly && (
-        <div className="m-4 w-full flex justify-start items-center">
-          <form onSubmit={handleSearch} className="flex w-1/2">
-            <input
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
-              className="text-sm border rounded shadow py-2 px-4"
-            />
-            <button
-              type="submit"
-              className="ml-2 bg-[#282222] hover:bg-[#6f6e6e] text-white font-bold py-2 px-4 rounded whitespace-nowrap"
-            >
-              검색
-            </button>
-          </form>
-        </div>
-      )}
     </div>
   );
 };

@@ -295,7 +295,6 @@ const P_ModifyComponent = () => {
                   onChange={handleChangeProduct}
                 />
               </div>
-              <p>{selectedAddress}</p>
               <MapComponent
                 initialPosition={location}
                 onLocationSelect={handleLocationSelect}

@@ -147,7 +147,7 @@ const A_AddComponent = () => {
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
         <div className="grid grid-cols-2 gap-10">
           <div
-            className=" max-w-md"
+            className=" max-w-md flex items-end justify-center"
             style={{
               border: "1px solid #CCCCCC",
               width: 550,

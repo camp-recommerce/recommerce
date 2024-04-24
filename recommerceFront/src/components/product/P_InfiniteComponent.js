@@ -25,7 +25,8 @@ const P_InfiniteComponent = () => {
   const [pcategory, setPCategory] = useState(""); // pcategory 상태 추가
   const [isMapModalOpen, setMapModalOpen] = useState(false);
 
-  const toggleMapModal = () => {
+  const toggleMapModal = (e) => {
+    e.stopPropagation(); // 이벤트 버블링 방지
     setMapModalOpen(!isMapModalOpen);
   };
 
@@ -50,7 +51,7 @@ const P_InfiniteComponent = () => {
       const categoryQuery = pcategory === "전체" || !pcategory ? "" : pcategory;
       const nameQuery = pname ? pname : "";
 
-      getList({ page, size, pname: nameQuery, pcategory: categoryQuery })
+      getList({ page: 1, size, pname: nameQuery, pcategory: categoryQuery })
         .then((data) => {
           if (data && data.data) {
             setServerData({
@@ -105,12 +106,22 @@ const P_InfiniteComponent = () => {
 
   const handleSearchButtonClick = () => {
     setPName(pnameInput); // 검색 버튼 클릭 시 pname 상태 업데이트
+    setMapModalOpen(false);
   };
 
   const handleKeyPress = (e) => {
     if (e.key === "Enter") {
-      handleSearchButtonClick(); // 엔터 키 입력 시 검색 실행
+      handleSearchButtonClick();
     }
+  };
+
+  // 모달 컨테이너 내부 클릭 이벤트 핸들러
+  const handleModalClick = (e) => {
+    e.stopPropagation(); // 모달 내부에서의 이벤트 버블링 방지
+  };
+
+  const handleDistrictSelect = (district) => {
+    setPNameInput(district); // 검색 입력란에 동 정보 설정
   };
 
   return (
@@ -131,23 +142,29 @@ const P_InfiniteComponent = () => {
           >
             검색
           </button>
-          <button className="btn_search" onClick={toggleMapModal}>
+          <button className="btn_search relative" onClick={toggleMapModal}>
             <img
               src={process.env.PUBLIC_URL + "/images/map.svg"}
               className="w-[25px] h-[25px]"
               alt="searchLocate"
             />
-          </button>
-          {isMapModalOpen && (
-            <div className="modal">
-              <div className="modal-content">
-                <span className="close" onClick={toggleMapModal}>
-                  &times;
-                </span>
-                <MapComponent readOnly={false} />
+            {isMapModalOpen && (
+              <div className="modal" onClick={handleModalClick}>
+                <div className="modal-content">
+                  <span className="close text-black" onClick={toggleMapModal}>
+                    <img
+                      src={process.env.PUBLIC_URL + "/images/close.svg"}
+                      className="w-[25px] h-[35px] z-20"
+                    />
+                  </span>
+                  <MapComponent
+                    isModal={true}
+                    onDistrictSelect={handleDistrictSelect}
+                  />
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </button>
         </div>
         <div className="categoryBox">
           {categories.map((category) => (
