@@ -97,6 +97,15 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
+    @Override
+    public boolean validateCurrentPassword(String email, String currentPassword) {
+        return false;
+    }
+
+    @Override
+    public boolean validatePasswordForDeletion(String email, String deletionPassword) {
+        return false;
+    }
 
 
     @Override
