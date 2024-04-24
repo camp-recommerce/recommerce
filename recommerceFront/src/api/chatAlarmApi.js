@@ -15,3 +15,8 @@ export const getAlarms = async () => {
 
   return res.data;
 };
+
+export const readAlarms = async (alarmIds) => {
+  const res = await jwtAxios.post(`${host}/read`, alarmIds);
+  return res.data;
+};

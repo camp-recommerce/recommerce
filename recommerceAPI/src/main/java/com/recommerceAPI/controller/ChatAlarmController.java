@@ -31,4 +31,8 @@ public class ChatAlarmController {
         log.info("---------email: "+email);
         return chatAlarmService.getAlarmList(email);
     }
+    @PostMapping("/read")
+    public void updateAlarmsToRead(@RequestBody List<Long> alarmIds) {
+        chatAlarmService.updateMultipleChatAlarmsToRead(alarmIds);
+    }
 }

@@ -9,7 +9,7 @@ export const getList = async (pageParam) => {
   const { page, size, pname, pcategory } = pageParam;
 
   try {
-    const res = await jwtAxios.get(`${host}`, {
+    const res = await axios.get(`${host}`, {
       params: { page, size, pname, pcategory },
     });
     return res.data;
