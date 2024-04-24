@@ -1,4 +1,3 @@
-import axios from "axios";
 import jwtAxios from "../util/jwtUtil"; // JWT를 사용한 axios 인스턴스
 import { API_SERVER_HOST } from "./userApi";
 
