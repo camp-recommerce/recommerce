@@ -104,13 +104,16 @@ const P_ModifyComponent = () => {
     deleteOne(product).then((data) => {
       setResult("Deleted");
       setLoading(false);
-      navigate("/");
     });
   };
 
   const closeAlertModal = () => {
+    if (result === "Deleted") {
+      navigate("/");
+    } else {
+      moveBeforeReadPage(pno);
+    }
     setResult(null);
-    moveBeforeReadPage(pno);
   };
 
   const handleOpenImg = (imgFile) => {

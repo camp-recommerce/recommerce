@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { ClipLoader } from "react-spinners";
 import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import LoadingModal from "../modal/LoadingModal";
@@ -152,7 +151,6 @@ const P_InfiniteComponent = () => {
         next={fetchMoreData}
         pageStart={0}
         hasMore={serverData.hasMore}
-        loader={<ClipLoader color={"#123abc"} loading={true} size={100} />}
         endMessage={<p>You are all set!</p>}
       >
         <div className="shopList_container">
