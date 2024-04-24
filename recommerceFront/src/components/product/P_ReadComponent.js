@@ -107,19 +107,25 @@ const P_ReadComponent = () => {
             <label>
               <strong>상품이름 :</strong>
             </label>
-            <div className="shopRead_pname">{product.pname}</div>
+            <div key={product.pno} className="shopRead_pname">
+              {product.pname}
+            </div>
           </div>
           <div className="shopRead_box">
             <label>
               <strong>가격 :</strong>
             </label>
+            <div key={product.price} className="shopRead_price">
+              {product.price}
+            </div>
           </div>
           <div className="shopRead_box">
-            <div className="shopRead_price">{product.userEmail}</div>
+            <label>
+              <strong>판매자 :</strong>
+            </label>
+            <div className="shopRead_seller">{product.userEmail}</div>
           </div>
-          <div className="shopRead_box">
-            <div className="shopRead_price">{product.price}</div>
-          </div>
+
           <div className="shopRead_box">
             <label>
               <strong>상품상태 :</strong>
@@ -132,27 +138,29 @@ const P_ReadComponent = () => {
             </label>
             <div className="shopRead_pdesc">{product.pdesc}</div>
           </div>
-          <div className="shopRead_box_location">
-            <div className="shopRead_plocat">
-              <div className="flex">
-                <label>
-                  <strong>거래장소 :</strong>
-                </label>
-                <p>{product.plocat}</p>
+          <div className="shopRead_box">
+            <div className="shopRead_box_location">
+              <div className="shopRead_plocat">
+                <div className="flex">
+                  <label>
+                    <strong>거래장소 :</strong>
+                  </label>
+                  <p>{product.plocat}</p>
+                </div>
+                <MapComponent
+                  initialPosition={{ lat: product.lat, lng: product.lng }}
+                  readOnly={true}
+                />
               </div>
-              <MapComponent
-                initialPosition={{ lat: product.lat, lng: product.lng }}
-                readOnly={true}
-              />
             </div>
           </div>
-          <div className="btn_modify">
-            {loginState.email === product.userEmail && (
+          {loginState.email === product.userEmail && (
+            <div className="btn_modify">
               <button onClick={() => moveModifyPage(product.pno)}>
                 수정하기
               </button>
-            )}
-          </div>
+            </div>
+          )}
           <button
             className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
             onClick={() => {
@@ -167,11 +175,11 @@ const P_ReadComponent = () => {
           >
             찜
           </button>
-          <div className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
-            {loginState.email === product.userEmail && (
+          {loginState.email === product.userEmail && (
+            <div className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
               <button>판매완료</button>
-            )}
-          </div>
+            </div>
+          )}
           <div>
             {isChatModalOpen && (
               <Chat

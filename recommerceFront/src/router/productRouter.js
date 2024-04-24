@@ -1,5 +1,4 @@
 import React, { Suspense, lazy } from "react";
-import { Navigate } from "react-router-dom";
 
 const Loading = <div>Loading...</div>;
 const ImageSlice = lazy(() => import("../pages/MainPage"));

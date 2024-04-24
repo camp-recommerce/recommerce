@@ -18,37 +18,42 @@
 
   .shopRead_details {
     display: flex;
-    margin-top: 100px;
-    height: 100%;
-    width: 50%;
+    height: 90%; /* 전체 높이를 조금 줄임 */
+    width: 70%; /* 너비를 조금 늘림 */
 
     .shopRead_area {
       display: flex;
-      height: 100%;
       flex-direction: column;
-      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap; /* 내용이 많아지면 다음 줄로 넘어갈 수 있게 함 */
+      width: 100%;
 
       .shopRead_box {
         display: flex;
         width: 100%;
-        height: 40px;
+        min-height: 30px; /* 최소 높이 설정 */
       }
       .shopRead_box_location {
         display: flex;
-        height: 350px;
+        height: 400px;
+        width: 100%; /* 위치가 조정된 요소 */
+        margin-top: 20px; /* 상단 여백 추가 */
       }
 
-      .btn_modify {
+      .btn_modify,
+      .btn_chat,
+      .btn_cart {
         display: flex;
-        margin-top: 80px;
-        width: 20%;
+        width: 30%; /* 버튼 너비를 고정값으로 변경 */
+        height: 50px;
         color: white;
-        background-color: red;
+
         padding: 10px;
         border-radius: 10px;
         align-items: center;
         justify-content: center;
-        margin-bottom: 20px;
+        margin-top: 10px; /* 버튼 간격 조정 */
+        cursor: pointer; /* 클릭 가능함을 나타내는 커서 스타일 */
       }
     }
   }

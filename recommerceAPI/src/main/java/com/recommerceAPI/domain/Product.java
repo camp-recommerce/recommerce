@@ -75,7 +75,7 @@ public class Product {
     public void changeLng(double lng) {this.lng = lng;}
 
     public void changeState(String state){this.pstate = state;}
-    public void  changeUserEmail(String userEmail){
+    public void changeUserEmail(String userEmail){
         this.userEmail = userEmail;
     };
 

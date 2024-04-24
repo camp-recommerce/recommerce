@@ -4,6 +4,9 @@ import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ListPage.scss";
 import MapComponent from "../MapComponent";
+import { API_SERVER_HOST } from "../../api/userApi";
+
+const host = API_SERVER_HOST;
 
 const P_InfiniteComponent = () => {
   const { page, size, moveReadPage } = useCustomProductPage();
@@ -178,6 +181,12 @@ const P_InfiniteComponent = () => {
                 className="shopList_wrap"
                 onClick={() => moveReadPage(product.pno)}
               >
+                <div className="shopList_uploadImage text-sm mb-1 text-center">
+                  <img
+                    alt={product.pname}
+                    src={`${host}/product/view/s_${product.uploadFileNames}`}
+                  />
+                </div>
                 <div className="shopList_pname text-sm mb-1 text-center">
                   {product.pname}
                 </div>

@@ -70,6 +70,12 @@
       flex: 1 0 25%;
       margin: 10px 0;
       min-width: 200px;
+
+      .shopList_uploadImage {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 }
