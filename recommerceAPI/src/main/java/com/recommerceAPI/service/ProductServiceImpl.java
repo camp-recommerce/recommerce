@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
 
 
     @Override
-    public ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory) {
+    public ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine) {
         log.info("getList..............");
 
         // 페이지 요청을 처리하기 위한 Pageable 객체 생성, pno 기준 내림차순 정렬
@@ -49,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
                 Sort.by("pno").descending());
 
         // Repository에서 데이터를 가져옴
-        Page<Object[]> result = productRepository.selectList(pname, pcategory, pageable);
+        Page<Object[]> result = productRepository.selectList(pname, pcategory, addressLine, pageable);
 
         // 결과를 ProductDTO 리스트로 변환
         List<ProductDTO> dtoList = result.getContent().stream().map(arr -> {
@@ -63,6 +63,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getPrice(),
                 product.getPstate(),
                 product.getPlocat(),
+                product.getAddressLine(),
                 product.getLat(),
                 product.getLng(),
                 product.getPdesc(),
@@ -109,6 +110,7 @@ public class ProductServiceImpl implements ProductService {
                 .pname(productDTO.getPname())
                 .pcategory(productDTO.getPcategory())
                 .plocat(productDTO.getPlocat())
+                .addressLine(productDTO.getAddressLine())
                 .lat(productDTO.getLat())
                 .lng(productDTO.getLng())
                 .pstate(productDTO.getPstate())
@@ -153,6 +155,7 @@ public class ProductServiceImpl implements ProductService {
                 .price(product.getPrice())
                 .pstate(product.getPstate())
                 .plocat(product.getPlocat())
+                .addressLine(product.getAddressLine())
                 .lat(product.getLat())
                 .lng(product.getLng())
                 .pdesc(product.getPdesc())
@@ -184,6 +187,7 @@ public class ProductServiceImpl implements ProductService {
         product.changePrice(productDTO.getPrice());
         product.changeState(productDTO.getPstate());
         product.changeLocat(productDTO.getPlocat());
+        product.changeAddressLine(productDTO.getAddressLine());
         product.changeLat(productDTO.getLat());
         product.changeLng(productDTO.getLng());
         product.changeDesc(productDTO.getPdesc());

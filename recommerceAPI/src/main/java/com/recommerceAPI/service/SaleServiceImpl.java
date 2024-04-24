@@ -8,6 +8,7 @@ import com.recommerceAPI.repository.SaleRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class SaleServiceImpl implements SaleService {
     private final SaleItemRepository saleItemRepository;
     private final SaleRepository saleRepository;
     private final ModelMapper modelMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     /**
      * 주어진 사용자의 이메일을 기반으로 판매 아이템 목록을 조회합니다.

@@ -26,8 +26,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
     @Query("select p, pi from Product p left join p.imageList pi where " +
            "(:pname is null or p.pname like %:pname%) and " +
            "(:pcategory is null or p.pcategory like %:pcategory%) and " +
+           "(:addressLine is null or p.addressLine like %:addressLine%) and " +
            "p.delFlag = false")
-    Page<Object[]> selectList(@Param("pname") String pname, @Param("pcategory") String pcategory, Pageable pageable);
+    Page<Object[]> selectList(@Param("pname") String pname, @Param("pcategory") String pcategory,
+                              @Param("addressLine") String addressLine, Pageable pageable);
 
 
     Product findByPname(String pname);

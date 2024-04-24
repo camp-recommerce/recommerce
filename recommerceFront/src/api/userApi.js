@@ -77,3 +77,8 @@ export const getPublicProfileByEmail = async (email) => {
   return res.data;
 };
 
+// 특정 사용자 분석 정보 가져오기
+export const getUserProfile = async (email) => {
+  const res = await axios.get(`${host}/profile/${email}`, {});
+  return res.data;
+};

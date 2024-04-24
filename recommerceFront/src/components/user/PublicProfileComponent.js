@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { readUser } from "../../api/userApi";
 import { fetchSaleItems } from "../../api/salesApi";
+import ProfileComponent from "./ProfileComponent";
 
 const PublicProfileComponent = () => {
   const { email } = useParams();
@@ -75,6 +76,9 @@ const PublicProfileComponent = () => {
       ) : (
         <div>판매중인 상품이 없습니다.</div>
       )}
+      <div>
+        <ProfileComponent />
+      </div>
     </div>
   );
 };

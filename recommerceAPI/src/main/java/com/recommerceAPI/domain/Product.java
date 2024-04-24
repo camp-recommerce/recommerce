@@ -27,6 +27,8 @@ public class Product {
     private String pstate; // 제품상태
 
     private String plocat; // 제품판매장소
+
+    private String addressLine; // 제품판매장소 동 정보
     
     private double lat; // 제품판매장소 위도
     
@@ -68,6 +70,8 @@ public class Product {
     public void changeLocat(String locat){
         this.plocat = locat;
     }
+
+    public void changeAddressLine(String addressLine) {this.addressLine = addressLine;}
 
     public void changeLat(double lat) {this.lat = lat;}
 

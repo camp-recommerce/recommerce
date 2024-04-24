@@ -130,6 +130,9 @@ const MyPageComponent = () => {
             <p>닉네임: {userData.nickname}</p>
             <p>P.H: {userData.phone}</p>
             <p>생년월일: {userData.birth}</p>
+            <Link to={`../profile/${email}`}>
+              <button style={styles.button}>프로필 보기</button>
+            </Link>
           </div>
         )}
 

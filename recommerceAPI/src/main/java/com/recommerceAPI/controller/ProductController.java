@@ -32,11 +32,11 @@ public class ProductController {
 
     //상품 목록
     @GetMapping("/")
-    public ProductPageResponseDTO getProductList(PageRequestDTO pageRequestDTO, String pname, String pcategory){
+    public ProductPageResponseDTO getProductList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine){
     
             log.info("list----------------------"+ pageRequestDTO);
     
-            return productService.getList(pageRequestDTO, pname, pcategory);
+            return productService.getList(pageRequestDTO, pname, pcategory, addressLine);
         }
 
 

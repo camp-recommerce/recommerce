@@ -1,7 +1,13 @@
 /*global kakao*/
 import React, { useEffect, useRef, useState } from "react";
 
-const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
+const MapComponent = ({
+  initialPosition,
+  onLocationSelect,
+  readOnly,
+  isModal,
+  onDistrictSelect,
+}) => {
   const mapContainer = useRef(null);
   const [map, setMap] = useState(null);
   const [address, setAddress] = useState("");
@@ -25,14 +31,13 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
       initializedMap.setDraggable(!readOnly);
 
       // 마커 이미지의 URL, 크기 및 옵션 설정
-      const markerImage = new kakao.maps.MarkerImage(
-        process.env.PUBLIC_URL + "/images/location.svg",
-        new kakao.maps.Size(30, 30),
-        { offset: new kakao.maps.Point(15, 30) }
-      );
       const marker = new kakao.maps.Marker({
         position: new kakao.maps.LatLng(lat, lng),
-        image: markerImage,
+        image: new kakao.maps.MarkerImage(
+          process.env.PUBLIC_URL + "/images/location.svg",
+          new kakao.maps.Size(30, 30),
+          { offset: new kakao.maps.Point(15, 30) }
+        ),
       });
       marker.setMap(initializedMap);
 
@@ -47,11 +52,6 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
       kakao.maps.event.addListener(initializedMap, "dragend", () => {
         updateAddress(initializedMap.getCenter());
       });
-
-      // 사용자의 현재 위치를 초기 위치로 설정
-      if (onLocationSelect) {
-        updateAddress(initializedMap.getCenter());
-      }
     };
 
     if (initialPosition) {
@@ -114,17 +114,21 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
       location.getLat(),
       function (result, status) {
         if (status === kakao.maps.services.Status.OK) {
-          const roadAddressText = result[0].road_address
+          const roadAddressText = result[0].road_address // 도로명 주소 가져오고, 도로명 주소 없는 곳에만 지번 주소 가져옴
             ? result[0].road_address.address_name
             : result[0].address.address_name;
-          const addressText = result[0].address
-            ? result[0].address.address_name
-            : "지번 주소가 없습니다.";
-          if (!readOnly && onLocationSelect) {
+          const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
+          const addressInfo = result[0].address; // 지번 주소 정보 객체
+          const addressLine = `${addressInfo.region_1depth_name} ${addressInfo.region_2depth_name} ${addressInfo.region_3depth_name}`;
+          const district = addressInfo.region_3depth_name; // 동 정보만 추출
+          if (isModal && onDistrictSelect) {
+            onDistrictSelect(district); // 모달 사용 시에만 동 정보 전달
+          } else if (!readOnly && onLocationSelect) {
             onLocationSelect({
               address: roadAddressText,
               lat: location.getLat(),
               lng: location.getLng(),
+              addressLine: addressLine,
             });
           }
         }
@@ -154,7 +158,7 @@ const MapComponent = ({ initialPosition, onLocationSelect, readOnly }) => {
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              placeholder="상세 주소 입력"
+              placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
               className="text-sm border rounded shadow py-2 px-4"
             />
             <button
