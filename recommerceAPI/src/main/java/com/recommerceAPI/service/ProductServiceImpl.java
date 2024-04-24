@@ -36,9 +36,6 @@ public class ProductServiceImpl implements ProductService {
 
     private final ModelMapper modelMapper;
 
-
-
-
     @Override
     public ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine) {
         log.info("getList..............");
@@ -69,6 +66,7 @@ public class ProductServiceImpl implements ProductService {
                 product.getLng(),
                 product.getPdesc(),
                 product.isDelFlag(),
+                product.getUserEmail(),
                 null, // 파일 리스트는 조건에 따라 설정
                 null  // 업로드 파일 이름 리스트 초기화
             );
@@ -117,6 +115,7 @@ public class ProductServiceImpl implements ProductService {
                 .pstate(productDTO.getPstate())
                 .pdesc(productDTO.getPdesc())
                 .price(productDTO.getPrice())
+                .userEmail(productDTO.getUserEmail())
                 .build();
 
         //업로드 처리가 끝난 파일들의 이름 리스트
@@ -165,6 +164,7 @@ public class ProductServiceImpl implements ProductService {
                 .lat(product.getLat())
                 .lng(product.getLng())
                 .pdesc(product.getPdesc())
+                .userEmail(product.getUserEmail())
                 .build();
 
         List<ProductImage> imageList = product.getImageList();
@@ -197,6 +197,7 @@ public class ProductServiceImpl implements ProductService {
         product.changeLat(productDTO.getLat());
         product.changeLng(productDTO.getLng());
         product.changeDesc(productDTO.getPdesc());
+        product.changeUserEmail(productDTO.getUserEmail());
 
         //3. upload File -- clear first
         product.clearList();
