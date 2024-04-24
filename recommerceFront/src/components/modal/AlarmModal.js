@@ -3,6 +3,7 @@ import useCustomChatModal from "../../hooks/useCustomChatModal";
 import Chat from "../product/chat/chatcomponents/Chat";
 import useCustomLogin from "../../hooks/useCustomLoginPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
+import { readAlarms } from "../../api/chatAlarmApi";
 
 const AlarmModal = ({ closeModal, email }) => {
   const { openChatModal, isChatModalOpen, socket } = useCustomChatModal(); // closeChatModal 함수 불러오기
@@ -16,6 +17,24 @@ const AlarmModal = ({ closeModal, email }) => {
     if (e.target.classList.contains("modal-overlay")) {
       closeModal();
     }
+  };
+
+  const handleReadAlarms = async (senderEmail) => {
+    // roomId에 해당하는 알림들을 가져옵니다.
+    const alarmsInRoom = groupedAlarms[senderEmail];
+    console.log(groupedAlarms);
+
+    // 만약 roomId에 해당하는 알림이 없다면 처리 중단
+    if (!alarmsInRoom) {
+      console.log("No alarms found for the provided roomId.");
+      return;
+    }
+    // 해당 roomId에 해당하는 알림들의 id 배열을 추출합니다.
+    const alarmIds = alarmsInRoom.map((alarm) => alarm.id);
+
+    // 추출된 알람들의 id 배열을 전달하여 알람 상태를 업데이트합니다.
+    await readAlarms(alarmIds);
+    console.log("Alarms marked as read.");
   };
 
   useEffect(() => {
@@ -45,6 +64,7 @@ const AlarmModal = ({ closeModal, email }) => {
             onClick={() => {
               const roomId = groupedAlarms[senderEmail][0].roomId;
               openChatModal(roomId);
+              handleReadAlarms(senderEmail);
             }}
           >
             채팅하기

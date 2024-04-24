@@ -11,4 +11,5 @@ import java.util.List;
 public interface ChatAlarmService {
     List<ChatAlarmDTO> saveModChatAlarm(ChatAlarmDTO chatAlarmDTO);
     List<ChatAlarmDTO> getAlarmList(String email);
+    List<ChatAlarmDTO> updateMultipleChatAlarmsToRead(List<Long> alarmIds);
 }

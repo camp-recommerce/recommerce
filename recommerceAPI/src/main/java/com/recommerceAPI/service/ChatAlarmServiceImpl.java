@@ -71,6 +71,23 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public List<ChatAlarmDTO> updateMultipleChatAlarmsToRead(List<Long> alarmIds) {
+        // 알람 ID 목록으로 알람들을 조회합니다.
+        List<ChatAlarm> alarms = chatAlarmRepository.findAllById(alarmIds);
+
+        // 조회된 알람들의 readCheck 필드를 모두 true로 업데이트합니다.
+        alarms.forEach(alarm -> alarm.setReadCheck(true));
+
+        // 업데이트된 알람들을 저장합니다.
+        chatAlarmRepository.saveAll(alarms);
+
+        // 업데이트된 알람 목록을 조회하여 반환합니다.
+        return getAlarmList(alarms.get(0).getUser().getEmail()); // 예시로 첫 번째 알람의 사용자 이메일을 사용합니다.
+    }
+
+
+
 
 }
 

@@ -14,6 +14,7 @@ function FixedMenu() {
   const [isClosed, setIsClosed] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달창 상태 변수 추가
+  const unreadAlarmCount = alarmList.filter((alarm) => !alarm.readCheck).length;
 
   const handleClose = () => {
     setIsClosed(true);
@@ -87,7 +88,7 @@ function FixedMenu() {
             onClick={() => openModal()} // 모달창 열기
             style={{ height: 50 }}
           >
-            채팅 알람({alarmList.length})
+            채팅 알람({unreadAlarmCount})
           </button>
           <button
             className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
