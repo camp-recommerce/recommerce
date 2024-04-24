@@ -29,6 +29,8 @@ public class ProductDTO {
 
     private boolean delFlag; // 삭제 플래그
 
+    private String userEmail;
+
     @Builder.Default
     private List<MultipartFile> files = new ArrayList<>(); // 업로드된 파일 리스트
 

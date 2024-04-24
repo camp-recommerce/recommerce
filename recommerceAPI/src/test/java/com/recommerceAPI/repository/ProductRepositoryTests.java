@@ -26,7 +26,7 @@ public class ProductRepositoryTests {
   @Test
   public void testInsert() {
 
-      for (int i = 0; i < 100; i++) {
+      for (int i = 5; i < 100; i++) {
 
           Product product = Product.builder()
                   .pname("상품"+i)
@@ -38,8 +38,8 @@ public class ProductRepositoryTests {
                   .build();
 
 //          //2개의 이미지 파일 추가
-//          product.addImageString("IMAGE1.jpg");
-//          product.addImageString("IMAGE2.jpg");
+         product.addImageString("IMAGE1.jpg");
+        product.addImageString("IMAGE2.jpg");
 
           productRepository.save(product);
 

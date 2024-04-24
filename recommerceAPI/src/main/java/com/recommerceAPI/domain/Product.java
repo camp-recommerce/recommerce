@@ -36,10 +36,7 @@ public class Product {
 
     private boolean delFlag;
 
-
-    @ManyToOne
-    @JoinColumn(name = "user_email")  // 외래 키 이름 설정
-    private User user; // Product와 User의 관계
+    private String userEmail; // Product와 User의 관계
     public void changeDel(boolean delFlag) {
         this.delFlag = delFlag;
     }
@@ -74,6 +71,9 @@ public class Product {
     public void changeLng(double lng) {this.lng = lng;}
 
     public void changeState(String state){this.pstate = state;}
+    public void  changeUserEmail(String userEmail){
+        this.userEmail = userEmail;
+    };
 
 
     public void addImage(ProductImage image) {

@@ -27,9 +27,7 @@ public class User {
     private String address; // 사용자 주소
     private String addressDetail; // 추가된 상세 주소 필드
 
-    //product와 연결
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private List<Product> products = new ArrayList<>();
+
 
     @ElementCollection(fetch = FetchType.LAZY) // userRoleList를 별도의 컬렉션으로 관리하며 지연 로딩을 사용
     @Builder.Default // Lombok 빌더의 기본값으로, userRoleList를 비어 있는 ArrayList로 초기화

@@ -5,6 +5,7 @@ import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import MapComponent from "../MapComponent";
+import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 
 const initState = {
   pname: "",
@@ -16,6 +17,7 @@ const initState = {
   lng: "",
   pdesc: "",
   files: [],
+  userEmail: "",
 };
 
 const P_AddComponent = () => {
@@ -26,6 +28,7 @@ const P_AddComponent = () => {
   const { moveToPath } = useCustomProductPage();
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
+  const { loginState } = useCustomLoginPage();
 
   const uploadRef = useRef();
 
@@ -86,6 +89,7 @@ const P_AddComponent = () => {
     formData.append("lat", location.lat); // 하위 MapComponent에서 콜백 함수로 위도 전달
     formData.append("lng", location.lng); // 하위 MapComponent에서 콜백 함수로 경도 전달
     formData.append("pdesc", product.pdesc);
+    formData.append("userEmail", loginState.email);
 
     console.log(formData);
 
