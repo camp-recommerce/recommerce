@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Message } from "./Message";
+import { A_Message } from "../../../auction/chat/A_Message";
 import { v4 as uuidv4 } from "uuid";
 import useCustomChatAlarm from "../../../../hooks/useCustomChatAlarm";
 
@@ -106,7 +106,7 @@ function Chat({ socket, username, closeModal, room }) {
         >
           {messageList.map((messageContent) => {
             return (
-              <Message
+              <A_Message
                 messageContent={messageContent}
                 author={username}
                 key={uuidv4()}

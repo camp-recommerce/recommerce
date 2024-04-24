@@ -27,6 +27,7 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
     @Override
     public List<ChatAlarmDTO> saveModChatAlarm(ChatAlarmDTO chatAlarmDTO) {
         String email = chatAlarmDTO.getUserEmail();
+        String senderEmail = chatAlarmDTO.getSenderEmail();
         boolean isRead = chatAlarmDTO.isReadCheck(); // 알림을 읽었는지 여부
 
         Optional<User> result = userRepository.findByEmail(email);
@@ -42,27 +43,27 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
                 chatAlarm.setMessage(chatAlarmDTO.getMessage()); // 필요한 경우 다른 필드도 업데이트
                 chatAlarmRepository.save(chatAlarm);
 
-                return getAlarmList(email);
+                return getAlarmList(senderEmail);
             } else {
                 // 읽힌 알림이 없으면 새 알림 생성
                 ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
                 chatAlarm.setUser(user);
                 chatAlarmRepository.save(chatAlarm);
-                return getAlarmList(email);
+                return getAlarmList(senderEmail);
             }
         } else {
             // 읽히지 않은 알림이므로 새 알림 생성
             ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
             chatAlarm.setUser(user);
             chatAlarmRepository.save(chatAlarm);
-            return getAlarmList(email);
+            return getAlarmList(senderEmail);
         }
     }
     
     @Override
     public List<ChatAlarmDTO> getAlarmList(String email){
         // 사용자 이메일에 해당하는 모든 채팅 알람을 조회합니다.
-        List<ChatAlarm> chatAlarms = chatAlarmRepository.getUnreadChatAlarmsByUserEmail(email);
+        List<ChatAlarm> chatAlarms = chatAlarmRepository.findAllByUserEmail(email);
 
         // ChatAlarm을 ChatAlarmDTO로 변환하여 리스트로 반환합니다.
         return chatAlarms.stream()
