@@ -81,7 +81,7 @@ function Chat({ socket, username, closeModal, room }) {
       ></div> */}
       <div
         className="bg-white rounded-lg p-8 relative"
-        style={{ width: "700px", height: "700px" }}
+        style={{ width: "700px", height: "700px", border: "2px solid #CCCCCC" }}
         onClick={handleModalClick}
       >
         <div className="flex justify-between items-center mb-4">
