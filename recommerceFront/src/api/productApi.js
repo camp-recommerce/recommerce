@@ -1,5 +1,6 @@
 import axios from "axios";
 import { API_SERVER_HOST } from "./userApi";
+import jwtAxios from "../util/jwtUtil";
 
 const host = `${API_SERVER_HOST}`;
 
@@ -8,7 +9,7 @@ export const getList = async (pageParam) => {
   const { page, size, pname, pcategory } = pageParam;
 
   try {
-    const res = await axios.get(`${host}`, {
+    const res = await jwtAxios.get(`${host}`, {
       params: { page, size, pname, pcategory },
     });
     return res.data;
@@ -20,7 +21,7 @@ export const getList = async (pageParam) => {
 
 //상품 상세페이지
 export const getOne = async (pno) => {
-  const res = await axios.get(`${host}/product/read/${pno}`);
+  const res = await jwtAxios.get(`${host}/product/read/${pno}`);
 
   return res.data;
 };

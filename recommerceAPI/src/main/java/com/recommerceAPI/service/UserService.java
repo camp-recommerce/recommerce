@@ -35,8 +35,12 @@ public interface UserService {
     // @throws Exception 처리 중 발생할 수 있는 예외
     User updateAddress(String email, String newAddress, String newPostcode, String addressDetail) throws Exception;
 
-    // 채팅 알림 설정을 업데이트하는 메서드 선언
-    void updateChatAlarms(String email, ChatAlarmDTO chatAlarmDTO);
+
+    boolean validateCurrentPassword(String email, String currentPassword);
+
+    boolean validatePasswordForDeletion(String email, String deletionPassword);
+
+
 
     //비밀번호찾기 전송
     String resetPassword(String email)throws EmailNotExistException;

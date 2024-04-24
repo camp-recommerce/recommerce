@@ -76,3 +76,4 @@ export const getPublicProfileByEmail = async (email) => {
   });
   return res.data;
 };
+

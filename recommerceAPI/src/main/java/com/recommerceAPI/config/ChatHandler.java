@@ -18,6 +18,7 @@ import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Principal;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,6 +38,7 @@ public class ChatHandler extends TextWebSocketHandler {
 
     @Override
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
+
         sessions.add(session);
         log.info("{} connect", session.getId());
         URI uri = session.getUri();
@@ -59,6 +61,8 @@ public class ChatHandler extends TextWebSocketHandler {
         String time = " ";
         ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION, time);
         sendMessageToRoom(room, notificationDTO, session);
+
+
     }
 
     private String extractRoomFromUri(URI uri) {

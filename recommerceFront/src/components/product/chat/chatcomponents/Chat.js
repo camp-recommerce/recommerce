@@ -1,27 +1,50 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Message } from "./Message";
+import { A_Message } from "../../../auction/chat/A_Message";
 import { v4 as uuidv4 } from "uuid";
+import useCustomChatAlarm from "../../../../hooks/useCustomChatAlarm";
 
-function Chat({ socket, username, closeModal }) {
+function Chat({ socket, username, closeModal, room }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
+  const { sendAlarm } = useCustomChatAlarm();
+
+  const [email1, email2] = room.split("-");
 
   const messageBottomRef = useRef(null);
+  // 현재 로그인한 사용자의 이메일이 수신자일 때는 다른 이메일을 수신자로 설정
+  const receiverEmail = email1 === username ? email2 : email1;
 
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     if (currentMsg !== "") {
       const messageData = {
-        room: username,
+        room: room,
         author: username,
         message: currentMsg,
         time:
+          new Date(Date.now()).getMonth() +
+          1 +
+          "." +
+          new Date(Date.now()).getDate() +
+          ", " +
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
         messageType: "MESSAGE",
       };
+
+      const alarm = {
+        // 수신인, 방번호가 구매자-판매자 형식이라 loginState 에서 이메일 뽑아오고
+        // loginState.email 이랑 맞지 않는 쪽을 수신자로 설정
+        userEmail: receiverEmail,
+        // 발신인, loginState.email, 로그인한 나
+        senderEmail: username,
+        roomId: room,
+        createdAt: messageData.time,
+        message: currentMsg,
+      };
       socket.send(JSON.stringify(messageData));
+      sendAlarm(alarm);
       setMessageList((list) => [...list, messageData]);
       inputRef.current.value = "";
     }
@@ -48,13 +71,14 @@ function Chat({ socket, username, closeModal }) {
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center"
+      className="fixed top-0 left-0 w-full h-full flex justify-center items-center mt-5"
+      style={{ zIndex: 800 }}
       onClick={handleOutsideClick}
     >
-      <div
+      {/* <div
         className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"
         onClick={handleOutsideClick}
-      ></div>
+      ></div> */}
       <div
         className="bg-white rounded-lg p-8 relative"
         style={{ width: "700px", height: "700px" }}
@@ -82,7 +106,7 @@ function Chat({ socket, username, closeModal }) {
         >
           {messageList.map((messageContent) => {
             return (
-              <Message
+              <A_Message
                 messageContent={messageContent}
                 author={username}
                 key={uuidv4()}

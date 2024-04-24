@@ -98,9 +98,7 @@ public class WishlistServiceImpl implements WishlistService {
         }else {
             wishlist = result.get();
         }
-
         return wishlist;
-
     }
 
     @Override

@@ -30,11 +30,11 @@ const P_CartComponent = () => {
     return total;
   };
 
-  const handleItemSelect = (cino) => {
-    if (selectedItems.includes(cino)) {
-      setSelectedItems(selectedItems.filter((item) => item !== cino));
+  const handleItemSelect = (wino) => {
+    if (selectedItems.includes(wino)) {
+      setSelectedItems(selectedItems.filter((item) => item !== wino));
     } else {
-      setSelectedItems([...selectedItems, cino]);
+      setSelectedItems([...selectedItems, wino]);
     }
   };
 
@@ -42,7 +42,8 @@ const P_CartComponent = () => {
     if (isLogin) {
       refreshCart();
     }
-  }, [isLogin]);
+  }, [isLogin]); // 로그인 상태가 변경될 때만 refreshCart를 호출
+
 
   useEffect(() => {
     const total = calculateTotalAmount();

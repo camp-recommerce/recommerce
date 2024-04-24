@@ -40,7 +40,7 @@ const P_ReadComponent = () => {
   const { loginState } = useCustomLoginPage();
   const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
-    useCustomChatModal(loginState.email);
+    useCustomChatModal();
 
   useEffect(() => {
     if (pno) {
@@ -74,7 +74,8 @@ const P_ReadComponent = () => {
       // 상품을 찾지 못한 경우에 대한 조건 추가
       window.alert("이미 추가된 상품입니다.");
     } else {
-      changeCart({ email: loginState.email, pno: 1, qty: 1 });
+      changeCart({ email: loginState.email, pno: pno, qty: 1 });
+      window.alert("찜 했습니다!");
       refreshCart();
     }
   };
@@ -134,7 +135,9 @@ const P_ReadComponent = () => {
           </div>
           <button
             className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-            onClick={() => openChatModal()}
+            onClick={() => {
+              openChatModal(loginState.email + "-user0@aaa.com");
+            }}
           >
             경매 채팅
           </button>
@@ -147,6 +150,8 @@ const P_ReadComponent = () => {
           <div>
             {isChatModalOpen && (
               <Chat
+                // user0@aaa.com 을 임시 판매자로 설정, 나중엔 product.seller 뭐 이렇게될듯
+                room={loginState.email + "-user0@aaa.com"}
                 username={loginState.email}
                 socket={socket}
                 closeModal={closeChatModal}
