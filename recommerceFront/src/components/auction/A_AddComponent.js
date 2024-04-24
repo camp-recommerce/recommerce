@@ -130,36 +130,32 @@ const A_AddComponent = () => {
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
         <div className="grid grid-cols-2 gap-10">
           <div
-            className="flex justify-center items-center"
-            style={{ minHeight: "500px" }}
+            className=" max-w-md"
+            style={{
+              border: "1px solid #CCCCCC",
+              width: 550,
+              height: 550,
+              marginBottom: 10,
+            }}
           >
-            <div
-              className=" max-w-md"
-              style={{
-                border: "1px solid #CCCCCC",
-                width: 550,
-                height: 550,
-                marginBottom: 10,
-              }}
-            >
-              {imagePreviewUrl ? (
-                <img
-                  src={imagePreviewUrl}
-                  className="addImage"
-                  alt={auction.apName}
-                />
-              ) : (
-                <label htmlFor="uploadImage"></label>
-              )}
-              <input
-                ref={uploadRef}
-                id="uploadImage"
-                type="file"
-                multiple={true}
-                onChange={handleImagePreview}
+            {imagePreviewUrl ? (
+              <img
+                src={imagePreviewUrl}
+                className="addImage"
+                alt={auction.apName}
               />
-            </div>
+            ) : (
+              <label htmlFor="uploadImage"></label>
+            )}
+            <input
+              ref={uploadRef}
+              id="uploadImage"
+              type="file"
+              multiple={true}
+              onChange={handleImagePreview}
+            />
           </div>
+
           <div>
             <div className="max-w-md" style={{ Height: "500px" }}>
               <div className="flex items-center justify-between mb-4">
