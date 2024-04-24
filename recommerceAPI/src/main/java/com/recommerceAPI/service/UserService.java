@@ -35,12 +35,8 @@ public interface UserService {
     // @throws Exception 처리 중 발생할 수 있는 예외
     User updateAddress(String email, String newAddress, String newPostcode, String addressDetail) throws Exception;
 
-
-    boolean validateCurrentPassword(String email, String currentPassword);
-
-    boolean validatePasswordForDeletion(String email, String deletionPassword);
-
-
+    // 비밀번호 변경 메서드
+    void changePassword(String email, String newPassword);
 
     //비밀번호찾기 전송
     String resetPassword(String email)throws EmailNotExistException;

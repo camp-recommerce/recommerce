@@ -35,6 +35,7 @@ public class ProductRepositoryTests {
                   .pcategory("기타")
                   .price(100*i)
                   .pdesc("상품설명 " + i)
+
                   .build();
 
 //          //2개의 이미지 파일 추가

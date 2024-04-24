@@ -6,13 +6,14 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Data
 @Entity // 이 클래스를 JPA 엔티티로 선언
 @Setter // Lombok을 사용하여 모든 필드에 대한 setter 메서드 자동 생성
 @Getter // Lombok을 사용하여 모든 필드에 대한 getter 메서드 자동 생성
 @Builder // Lombok의 빌더 패턴을 사용하여 객체 생성을 쉽게 만듦
 @AllArgsConstructor // 모든 필드 값을 매개변수로 받는 생성자를 자동으로 생성
 @NoArgsConstructor // 매개변수가 없는 기본 생성자를 자동으로 생성
-@ToString(exclude = "userRoleList") // toString 메서드 자동 생성. userRoleList는 제외
+@ToString(exclude = {"userRoleList", "userImage"}) // toString 메서드 자동 생성. userRoleList는 제외
 public class User {
 
     @Id // 기본 키를 나타냄. 여기서는 email이 기본 키임
@@ -27,6 +28,9 @@ public class User {
     private String address; // 사용자 주소
     private String addressDetail; // 추가된 상세 주소 필드
 
+    // 유저 이미지를 위한 필드 추가
+    @Lob // 대용량 데이터를 지정하는 어노테이션
+    private byte[] userImage;
     //product와 연결
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Product> products = new ArrayList<>();
@@ -65,6 +69,15 @@ public class User {
         this.averageRating = newRating;
     }
 
+    // 유저 이미지 설정 메서드
+    public void setUserImage(byte[] userImage) {
+        this.userImage = userImage;
+    }
+
+    // 유저 이미지 반환 메서드
+    public byte[] getUserImage() {
+        return userImage;
+    }
 
 
 
