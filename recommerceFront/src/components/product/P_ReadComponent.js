@@ -105,9 +105,9 @@ const P_ReadComponent = () => {
         <div className="shopRead_area">
           <div className="shopRead_box">
             <label>
-              <strong>상품이름 :</strong>
+              <strong>상품이름 :{product.pname}</strong>
             </label>
-            <div className="shopRead_pname">{product.pname}</div>
+            <div className="shopRead_pname">{}</div>
           </div>
           <div className="shopRead_box">
             <label>

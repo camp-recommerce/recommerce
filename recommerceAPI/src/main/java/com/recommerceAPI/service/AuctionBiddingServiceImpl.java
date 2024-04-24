@@ -67,8 +67,8 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         return auctionBiddingRepository.save(auctionBidding);
     }
     @Override
-    public List<AuctionBiddingDTO> findAuctionBiddingByEmailAndAuctionApno(String email, Long apno) {
-        List<AuctionBidding>  auctionBiddingList =  auctionBiddingRepository.findByBidderEmailAndAuctionApno(email, apno);
+    public List<AuctionBiddingDTO> findAuctionBiddingByEmail(String email) {
+        List<AuctionBidding>  auctionBiddingList =  auctionBiddingRepository.findByBidderEmail(email);
 
         // 옥션 바이딩 정보를 AuctionBiddingDTO로 변환하여 리스트에 추가
         List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();

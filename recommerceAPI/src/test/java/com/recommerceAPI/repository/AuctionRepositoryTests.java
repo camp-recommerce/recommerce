@@ -27,7 +27,7 @@ public class AuctionRepositoryTests {
 
         LocalDate date = LocalDate.of(2024,12,31);
 
-        for (int i = 5; i <= 10; i++) {
+        for (int i = 1; i <= 10; i++) {
             LocalTime startTime = LocalTime.of(11 + i,0);
             LocalTime closingTime = LocalTime.of(12 + i,59);
 

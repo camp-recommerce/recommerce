@@ -117,7 +117,7 @@ const MyPageComponent = () => {
           style={styles.button}
           onClick={() => setActiveMenu("purchases")}
         >
-          구매목록
+          내 경매
         </button>
         <button style={styles.button} onClick={() => setActiveMenu("sales")}>
           판매목록

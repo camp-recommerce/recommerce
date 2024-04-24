@@ -20,10 +20,10 @@ public class AuctionBidController {
     private final AuctionBiddingService auctionBiddingService;
     @GetMapping("/list")
     public List<AuctionBiddingDTO> getAuctionBiddingByEmailAndAuctionApno(
-            @RequestParam(required = false) String email,
-            @RequestParam(required = false) Long apno
+            @RequestParam(required = false) String email
+
     ) {
-        log.info("Fetching auction bidding list for email: {} and auction apno: {}", email, apno);
-        return auctionBiddingService.findAuctionBiddingByEmailAndAuctionApno(email, apno);
+        log.info("Fetching auction bidding list for email: {} and auction apno: {}", email);
+        return auctionBiddingService.findAuctionBiddingByEmail(email);
     }
 }

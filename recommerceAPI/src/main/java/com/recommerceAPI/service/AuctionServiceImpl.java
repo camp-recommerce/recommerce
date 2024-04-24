@@ -96,11 +96,45 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
+    public PageResponseDTO<AuctionDTO>findByApBuyer(PageRequestDTO pageRequestDTO,String apBuyer){
+
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage()-1,
+                pageRequestDTO.getSize(),
+                Sort.by("apno").descending());
+
+        Page<Object[]> result = auctionRepository.findByApBuyer(pageable,apBuyer);
+
+        List<AuctionDTO> dtoList = result.getContent().stream()
+                .map(arr -> {
+                    Auction auction = (Auction) arr[0];
+                    AuctionImage auctionImage = (AuctionImage) arr[1];
+                    AuctionDTO auctionDTO = modelMapper.map(auction, AuctionDTO.class);
+                    if (auctionImage != null) {
+                        auctionDTO.setUploadFileNames(Collections.singletonList(auctionImage.getFileName()));
+                    }
+                    return auctionDTO;
+                }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        PageResponseDTO<AuctionDTO> responseDTO = PageResponseDTO.<AuctionDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+
+        return responseDTO;
+
+
+    }
+    @Override
     public void remove(Long apno) {
         Auction auction = auctionRepository.findById(apno)
                 .orElseThrow(() -> new EntityNotFoundException("Auction not found with apno: " + apno));
         auction.setDeleted(true); // delFlag를 1로 설정
         auctionRepository.save(auction);
+
+
     }
 
     @Override
