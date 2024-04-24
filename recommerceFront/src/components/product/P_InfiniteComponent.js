@@ -4,6 +4,7 @@ import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/ListPage.scss";
+import MapComponent from "../MapComponent";
 
 const P_InfiniteComponent = () => {
   const { page, size, moveReadPage } = useCustomProductPage();
@@ -20,6 +21,11 @@ const P_InfiniteComponent = () => {
   const [pname, setPName] = useState(""); // pname 상태 추가
   const [pnameInput, setPNameInput] = useState("");
   const [pcategory, setPCategory] = useState(""); // pcategory 상태 추가
+  const [isMapModalOpen, setMapModalOpen] = useState(false);
+
+  const toggleMapModal = () => {
+    setMapModalOpen(!isMapModalOpen);
+  };
 
   const handleCategoryClick = (category) => {
     // "전체"를 선택한 경우
@@ -127,6 +133,22 @@ const P_InfiniteComponent = () => {
           >
             검색
           </button>
+          <button className="btn_search" onClick={toggleMapModal}>
+            <img
+              src={process.env.PUBLIC_URL + "/images/map.svg"}
+              className="w-[25px] h-[25px]"
+            />
+          </button>
+          {isMapModalOpen && (
+            <div className="modal">
+              <div className="modal-content">
+                <span className="close" onClick={toggleMapModal}>
+                  &times;
+                </span>
+                <MapComponent readOnly={false} />
+              </div>
+            </div>
+          )}
         </div>
         <div className="categoryBox">
           {categories.map((category) => (

@@ -33,35 +33,35 @@ public class UserProfileService {
         return null; // 또는 적절한 예외 처리
     }
 
-    @Transactional
-    @EventListener
-    public void handleSaleItemAddedEvent(SaleItem.SaleItemAddedEvent event) {
-        SaleItem saleItem = event.getSaleItem();
-        User user = saleItem.getUser();
-        UserProfile userProfile = userProfileRepository.findByUser(user);
-
-        if (userProfile != null) {
-            // 업데이트 로직 추가
-            userProfile.setTopSaleCategory(saleItem.getPcategory());
-            userProfile.setAveragePrice((double) saleItem.getPrice());
-            userProfile.setTopSellingLocation(saleItem.getAddressLine());
-
-            userProfileRepository.save(userProfile);
-        }
-    }
-
-    @Transactional
-    @EventListener
-    public void handlePurchaseItemAddedEvent(PurchaseItem.PurchaseItemAddedEvent event) {
-        PurchaseItem purchaseItem = event.getPurchaseItem();
-        User user = purchaseItem.getUser();
-        UserProfile userProfile = userProfileRepository.findByUser(user);
-
-        if (userProfile != null) {
-            // 구매 정보 업데이트 로직
-            userProfile.setTopPurchaseCategory(purchaseItem.getProduct().getPcategory());
-
-            userProfileRepository.save(userProfile);
-        }
-    }
+//    @Transactional
+//    @EventListener
+//    public void handleSaleItemAddedEvent(SaleItem.SaleItemAddedEvent event) {
+//        SaleItem saleItem = event.getSaleItem();
+//        User user = saleItem.getUser();
+//        UserProfile userProfile = userProfileRepository.findByUser(user);
+//
+//        if (userProfile != null) {
+//            // 업데이트 로직 추가
+//            userProfile.setTopSaleCategory(saleItem.getPcategory());
+//            userProfile.setAveragePrice((double) saleItem.getPrice());
+//            userProfile.setTopSellingLocation(saleItem.getAddressLine());
+//
+//            userProfileRepository.save(userProfile);
+//        }
+//    }
+//
+//    @Transactional
+//    @EventListener
+//    public void handlePurchaseItemAddedEvent(PurchaseItem.PurchaseItemAddedEvent event) {
+//        PurchaseItem purchaseItem = event.getPurchaseItem();
+//        User user = purchaseItem.getUser();
+//        UserProfile userProfile = userProfileRepository.findByUser(user);
+//
+//        if (userProfile != null) {
+//            // 구매 정보 업데이트 로직
+//            userProfile.setTopPurchaseCategory(purchaseItem.getProduct().getPcategory());
+//
+//            userProfileRepository.save(userProfile);
+//        }
+//    }
 }

@@ -12,7 +12,7 @@ public interface ProductService {
 
 
     //list
-    ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory);
+    ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine);
     //create
     Long register(ProductDTO productDTO);
     ProductDTO get(Long pno);

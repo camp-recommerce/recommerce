@@ -6,11 +6,11 @@ const host = `${API_SERVER_HOST}`;
 
 //상품 리스트 불러오기(메인페이지)
 export const getList = async (pageParam) => {
-  const { page, size, pname, pcategory } = pageParam;
+  const { page, size, pname, pcategory, addressLine } = pageParam;
 
   try {
     const res = await axios.get(`${host}`, {
-      params: { page, size, pname, pcategory },
+      params: { page, size, pname, pcategory, addressLine },
     });
     return res.data;
   } catch (error) {
