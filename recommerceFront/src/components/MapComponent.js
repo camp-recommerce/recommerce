@@ -141,14 +141,18 @@ const MapComponent = ({
   return (
     <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
       {!readOnly && (
-        <div className="m-4 w-full flex justify-start items-center">
+        <div className="my-4 w-full flex justify-start items-center">
           <form onSubmit={handleSearch} className="flex w-1/2">
             <input
               type="text"
               value={keyword}
               onChange={(e) => setKeyword(e.target.value)}
-              placeholder="동명(읍, 면)으로 검색 (ex. 서초동)"
-              className="text-sm border rounded shadow py-2 px-4"
+              placeholder={
+                isModal
+                  ? "원하는 지역을 검색해주세요."
+                  : "동명(읍, 면)으로 검색 (ex. 서초동)"
+              }
+              className="text-sm border rounded shadow py-2 px-4 min-w-[228px]"
             />
             <button
               type="submit"
