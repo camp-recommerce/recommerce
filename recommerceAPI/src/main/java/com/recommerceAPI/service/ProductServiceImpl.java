@@ -8,6 +8,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 
+import com.recommerceAPI.domain.AuctionImage;
 import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
 
@@ -140,10 +141,15 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = result.orElseThrow();
 
-        ProductDTO productDTO = entityToDTO(product);
+        List<String> fileNameList = product.getImageList().stream()
+                       .map(ProductImage::getFileName)
+                       .collect(Collectors.toList());
 
-        return productDTO;
+               ProductDTO dto = modelMapper.map(product, ProductDTO.class);
 
+               dto.setUploadFileNames(fileNameList);
+
+               return dto;
     }
 
     private ProductDTO entityToDTO(Product product){

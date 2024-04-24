@@ -17,11 +17,6 @@ public class ProductRepositoryTests {
 @Autowired
   ProductRepository productRepository;
 
-    @Mock
-    private PurchaseRepository purchaseRepository;
-
-    @InjectMocks
-    private ProductService productService;
 
   @Test
   public void testInsert() {

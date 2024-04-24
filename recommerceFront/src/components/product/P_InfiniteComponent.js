@@ -116,7 +116,6 @@ const P_InfiniteComponent = () => {
 
   return (
     <>
-      {loading ? <LoadingModal /> : <></>}
       <div className="searchBox">
         <div className="inputBox">
           <input
