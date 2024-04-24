@@ -1,6 +1,7 @@
 package com.recommerceAPI.repository;
 
 import com.recommerceAPI.domain.Product;
+import com.recommerceAPI.domain.Sale;
 import com.recommerceAPI.domain.SaleItem;
 import com.recommerceAPI.domain.User;
 import lombok.extern.log4j.Log4j2;
@@ -23,6 +24,9 @@ public class SaleItemRepositoryTests {
 
     @Autowired
     ProductRepository productRepository;
+
+    @Autowired
+    SaleRepository saleRepository;
 
     @Test
     public void testInsertSaleItems() {
@@ -55,6 +59,12 @@ public class SaleItemRepositoryTests {
                     .build();
 
             productRepository.save(product);
+
+            // Sale 객체 생성
+            Sale sale = Sale.builder()
+                    .seller(user) // 여기서 user는 판매자 정보를 담은 User 객체입니다.
+                    .build();
+            saleRepository.save(sale);
 
             SaleItem saleItem = SaleItem.builder()
                     .product(product)

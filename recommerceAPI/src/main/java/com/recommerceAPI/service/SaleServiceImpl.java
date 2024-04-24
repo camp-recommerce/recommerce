@@ -3,7 +3,6 @@ package com.recommerceAPI.service;
 import com.recommerceAPI.domain.SaleItem;
 import com.recommerceAPI.dto.SaleItemDTO;
 import com.recommerceAPI.dto.SaleItemListDTO;
-import com.recommerceAPI.events.SaleItemAddedEvent;
 import com.recommerceAPI.repository.SaleItemRepository;
 import com.recommerceAPI.repository.SaleRepository;
 import jakarta.transaction.Transactional;
@@ -11,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -71,12 +69,5 @@ public class SaleServiceImpl implements SaleService {
     private String getEmailBySino(Long sino) {
         SaleItem saleItem = saleItemRepository.findById(sino).orElse(null);
         return saleItem != null ? saleItem.getSale().getSeller().getEmail() : null;
-    }
-
-    @Transactional
-    public SaleItem saveSaleItem(SaleItem saleItem) {
-        SaleItem savedSaleItem = saleItemRepository.save(saleItem);
-        eventPublisher.publishEvent(new SaleItemAddedEvent(savedSaleItem));
-        return savedSaleItem;
     }
 }
