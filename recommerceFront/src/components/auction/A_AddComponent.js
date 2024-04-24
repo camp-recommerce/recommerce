@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { postOne } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { getInitialDateTime } from "../../util/formatTimeUtil";
@@ -39,6 +39,37 @@ const A_AddComponent = () => {
       setAuction({ ...auction, [name]: value });
     }
   };
+
+  const getInitialStartTime = () => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 2);
+    tomorrow.setHours(6, 0, 0, 0); // 오후9시
+
+    // ISO 8601 형식(yyyy-MM-ddTHH:mm:ss)으로 반환
+    return tomorrow.toISOString().slice(0, 16);
+  };
+
+  const getInitialClosingTime = () => {
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 3);
+    tomorrow.setHours(6, 0, 0, 0); // 오후 9시
+
+    // ISO 8601 형식(yyyy-MM-ddTHH:mm:ss)으로 반환
+    return tomorrow.toISOString().slice(0, 16);
+  };
+
+  useEffect(() => {
+    const initialStartTime = getInitialStartTime();
+    const initialClosingTime = getInitialClosingTime();
+
+    setAuction((prevAuction) => ({
+      ...prevAuction,
+      apStartTime: initialStartTime,
+      apClosingTime: initialClosingTime,
+    }));
+  }, []);
 
   const handleImagePreview = (e) => {
     e.preventDefault();
@@ -97,10 +128,20 @@ const A_AddComponent = () => {
     <>
       {loading ? <LoadingModal /> : <></>}
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
-        <div>물품 등록</div>
         <div className="grid grid-cols-2 gap-10">
-          <div className="flex justify-center items-center">
-            <div className="max-w-md">
+          <div
+            className="flex justify-center items-center"
+            style={{ minHeight: "500px" }}
+          >
+            <div
+              className=" max-w-md"
+              style={{
+                border: "1px solid #CCCCCC",
+                width: 550,
+                height: 550,
+                marginBottom: 10,
+              }}
+            >
               {imagePreviewUrl ? (
                 <img
                   src={imagePreviewUrl}
@@ -108,7 +149,7 @@ const A_AddComponent = () => {
                   alt={auction.apName}
                 />
               ) : (
-                <label htmlFor="uploadImage">파일 선택</label>
+                <label htmlFor="uploadImage"></label>
               )}
               <input
                 ref={uploadRef}
@@ -120,8 +161,7 @@ const A_AddComponent = () => {
             </div>
           </div>
           <div>
-            <div className="text-lg mb-4">물품 번호: {auction.apno}</div>
-            <div className="max-w-md">
+            <div className="max-w-md" style={{ Height: "500px" }}>
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">카테고리</div>
                 <div className="text-lg">
@@ -129,6 +169,7 @@ const A_AddComponent = () => {
                     name="apCategory"
                     value={auction.apCategory}
                     onChange={handleChangeAuction}
+                    style={{ border: "1px solid #CCCCCC" }}
                   >
                     {categories.map((category) => (
                       <option key={category} value={category}>
@@ -147,6 +188,14 @@ const A_AddComponent = () => {
                     type={"text"}
                     onChange={handleChangeAuction}
                     value={auction.apName}
+                    style={{
+                      border: "1px solid #CCCCCC",
+                      width: 250,
+                      height: 30,
+                      marginTop: 5,
+                      lineHeight: "30px", // textarea의 높이와 일치하도록 설정
+                      overflow: "hidden", // 스크롤 바 숨기기
+                    }}
                   ></textarea>
                 </div>
               </div>
@@ -158,6 +207,14 @@ const A_AddComponent = () => {
                   type={"text"}
                   onChange={handleChangeAuction}
                   value={auction.apDesc}
+                  style={{
+                    border: "1px solid #CCCCCC",
+                    width: 250,
+                    height: 100,
+                    marginTop: 5,
+                    lineHeight: "30px", // textarea의 높이와 일치하도록 설정
+                    // 스크롤 바 숨기기
+                  }}
                 ></textarea>
               </div>
               <div className="flex items-center justify-between mb-4">
@@ -169,6 +226,7 @@ const A_AddComponent = () => {
                     type={"text"}
                     value={formattedPrice}
                     onChange={handleChangeAuction}
+                    style={{ border: "1px solid #CCCCCC" }}
                   ></input>
                   원
                 </div>
@@ -182,6 +240,7 @@ const A_AddComponent = () => {
                     type={"text"}
                     value={formattedIncrement}
                     onChange={handleChangeAuction}
+                    style={{ border: "1px solid #CCCCCC" }}
                   ></input>
                   원
                 </div>

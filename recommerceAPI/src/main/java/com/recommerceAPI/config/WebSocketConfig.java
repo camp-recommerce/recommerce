@@ -28,5 +28,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
         // WebSocket 핸들러 등록
         registry.addHandler(chatHandler, "/api/chat")
                 .setAllowedOrigins("http://localhost:3000");
+
+
     }
 }
