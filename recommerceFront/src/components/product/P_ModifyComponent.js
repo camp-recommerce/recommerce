@@ -67,6 +67,10 @@ const P_ModifyComponent = () => {
     const files = uploadRef.current.files;
     const formData = new FormData();
 
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+    }
+
     // other data
     formData.append("pname", product.pname);
     formData.append("price", product.price);
@@ -74,6 +78,10 @@ const P_ModifyComponent = () => {
     formData.append("plocat", product.plocat);
     formData.append("pdesc", product.pdesc);
     formData.append("delFlag", product.delFlag);
+
+    for (let i = 0; i < product.uploadFileNames.length; i++) {
+      formData.append("uploadFileNames", product.uploadFileNames[i]);
+    }
 
     setLoading(true);
 
@@ -116,8 +124,8 @@ const P_ModifyComponent = () => {
     setResult(null);
   };
 
-  const handleOpenImg = (imgFile) => {
-    setSelectedImgPath(`${host}/product/view/${imgFile}`);
+  const handleOpenImg = (files) => {
+    setSelectedImgPath(`${host}/product/view/s_${files}`);
     setOpenImg(true);
   };
 
@@ -142,13 +150,12 @@ const P_ModifyComponent = () => {
         {/* 상품 이미지 영역 */}
         <div className="modify_imgArea">
           <div className="modify_imgRemove">
-            {product.uploadFileNames.map((imgFile, i) => (
+            {product.uploadFileNames.map((files, i) => (
               <div className="modify-box" key={i}>
                 <div className="imageContainer">
                   <img
                     alt={product.pname}
-                    // src={`${host}/api/products/view/s_${imgFile}`}
-                    src="/winter.jpg"
+                    src={`${host}/product/view/s_${files}`}
                     onClick={handleOpenImg}
                   />
                 </div>

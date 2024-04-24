@@ -49,6 +49,7 @@ const P_ReadComponent = () => {
         .then((data) => {
           setProduct(data);
           setLoading(false);
+          console.log(data);
         })
         .catch((error) => {
           console.error("Error fetching product:", error);
@@ -59,8 +60,8 @@ const P_ReadComponent = () => {
     }
   }, [pno]);
 
-  const handleOpenImg = (fileName) => {
-    setSelectedImgPath(`${host}/product/view/${fileName}`);
+  const handleOpenImg = (uploadFileNames) => {
+    setSelectedImgPath(`${host}/product/view/${uploadFileNames}`);
     setOpenImg(true);
   };
 
@@ -88,7 +89,7 @@ const P_ReadComponent = () => {
       <div className="shopRead_img">
         <img
           alt="product"
-          src={`${host}/product/view/${product.fileName}`}
+          src={`${host}/product/view/${product.uploadFileNames}`}
           onClick={handleOpenImg}
         />
       </div>
@@ -102,15 +103,27 @@ const P_ReadComponent = () => {
       <div className="shopRead_details">
         <div className="shopRead_area">
           <div className="shopRead_box">
+            <label>
+              <strong>상품이름 :</strong>
+            </label>
             <div className="shopRead_pname">{product.pname}</div>
           </div>
           <div className="shopRead_box">
+            <label>
+              <strong>가격 :</strong>
+            </label>
             <div className="shopRead_price">{product.price}</div>
           </div>
           <div className="shopRead_box">
+            <label>
+              <strong>상품상태 :</strong>
+            </label>
             <div className="shopRead_pstate">{product.pstate}</div>
           </div>
           <div className="shopRead_box">
+            <label>
+              <strong>상세설명 :</strong>
+            </label>
             <div className="shopRead_pdesc">{product.pdesc}</div>
           </div>
           <div className="shopRead_box_location">

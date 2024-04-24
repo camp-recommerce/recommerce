@@ -53,7 +53,7 @@ const ImageModal = ({ openImg, callbackFn, imagePath }) => {
           {/* 이미지를 표시하는 부분입니다. */}
           <img
             src={imagePath}
-            alt="review image"
+            alt="productImage"
             className="w-full h-full object-contain"
           />
         </div>

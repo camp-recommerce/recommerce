@@ -9,7 +9,7 @@ export const getList = async (pageParam) => {
   const { page, size, pname, pcategory } = pageParam;
 
   try {
-    const res = await jwtAxios.get(`${host}`, {
+    const res = await axios.get(`${host}`, {
       params: { page, size, pname, pcategory },
     });
     return res.data;
@@ -21,7 +21,7 @@ export const getList = async (pageParam) => {
 
 //상품 상세페이지
 export const getOne = async (pno) => {
-  const res = await jwtAxios.get(`${host}/product/read/${pno}`);
+  const res = await axios.get(`${host}/product/read/${pno}`);
 
   return res.data;
 };
