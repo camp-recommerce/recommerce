@@ -1,5 +1,7 @@
 package com.recommerceAPI.domain;
 
+import com.recommerceAPI.config.event.AuctionClosedEvent;
+import com.recommerceAPI.config.listener.AuctionEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,6 +11,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
+
 @Entity
 //@Table(name = "auction")
 @Getter
@@ -16,7 +19,10 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@EntityListeners(AuctionEntityListener.class) // 엔티티 리스너 등록
 public class Auction {
+
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -70,7 +76,9 @@ public class Auction {
 
     public void changeClosingTime(LocalDateTime closingTime) {this.apClosingTime = closingTime;}
 
-    public void changeStatus(AuctionStatus status) {this.apStatus = status;}
+    public void changeStatus(AuctionStatus status) {
+            this.apStatus = status;
+    }
 
     public void addImage(AuctionImage image) {
 

@@ -66,9 +66,11 @@ public class ProductServiceImpl implements ProductService {
                 product.getLng(),
                 product.getPdesc(),
                 product.isDelFlag(),
+                product.isSoldOut(),
                 product.getUserEmail(),
-                null, // 파일 리스트는 조건에 따라 설정
-                null  // 업로드 파일 이름 리스트 초기화
+
+             null, // 파일 리스트는 조건에 따라 설정
+             null  // 업로드 파일 이름 리스트 초기화
             );
 
             if (productImage != null) {

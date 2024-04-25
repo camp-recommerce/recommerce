@@ -21,12 +21,16 @@ public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, 
             "    GROUP BY ab2.auction.apno" +
             ")")
     List<AuctionBidding> findHighestBidByAuctionApno(@Param("email") String email);
-
-
-
-
-
-
     List<AuctionBidding> findByAuction(Auction auction);
     List<AuctionBidding> findByAuction_Apno(Long apno);
+    // 상품 번호로 경매 내역을 가져와서 그 중 각 이메일별로 가장큰 입찰 금액을 가진 내역들을 가져옴
+    @Query("SELECT ab FROM AuctionBidding ab " +
+            "WHERE ab.auction.apno = :apno " +
+            "AND (ab.bidder.email, ab.bidAmount) IN (" +
+            "    SELECT ab2.bidder.email, MAX(ab2.bidAmount) " +
+            "    FROM AuctionBidding ab2 " +
+            "    WHERE ab2.auction.apno = :apno " +
+            "    GROUP BY ab2.bidder.email" +
+            ")")
+    List<AuctionBidding> findHighestBidByAuctionApno(@Param("apno") Long apno);
 }
