@@ -5,16 +5,11 @@ import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import AlarmModal from "../modal/AlarmModal";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
-import { IoTriangleOutline } from "react-icons/io5";
-// <IoTriangleOutline />
+import { IoTriangle } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
-// <FaHeart />
-import { AiOutlineMessage } from "react-icons/ai";
-// <AiOutlineMessage />
+import { AiFillMessage } from "react-icons/ai";
 import { TbArrowBarDown } from "react-icons/tb";
-// <TbArrowBarDown />
 import { TbArrowBarUp } from "react-icons/tb";
-// <TbArrowBarUp />
 
 function FixedMenu() {
   const { isLogin, loginState } = useCustomLoginPage();
@@ -78,7 +73,7 @@ function FixedMenu() {
     >
       {isClosed ? (
         <button
-          className="btn-unfold w-full h-[25px] flex justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-sm border"
+          className="btn-unfold w-full h-[25px] flex justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-base"
           style={{ height: 25 }}
           onClick={handleOpen}
         >
@@ -87,27 +82,28 @@ function FixedMenu() {
       ) : (
         <>
           <button
-            className="btn-top w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-[#282222] text-[#E4E4E3] font-semibold text-sm border"
+            className="btn-top w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] text-[#E4E4E3] font-semibold text-sm"
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
-            <IoTriangleOutline /> <span>Top</span>
+            <IoTriangle />
+            <span>Top</span>
           </button>
           <button
-            className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-sm border mt-[10px]"
+            className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-sm mt-[10px]"
             onClick={moveShoppingBasket}
           >
             <FaHeart />({cartItems.length})
           </button>
           <button
-            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-[#282222] text-[#E4E4E3] font-semibold text-sm border mt-[10px]"
+            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] text-[#E4E4E3] font-semibold text-sm mt-[10px]"
             onClick={() => openModal()} // 모달창 열기
           >
-            <AiOutlineMessage />({unreadAlarmCount})
+            <AiFillMessage />({unreadAlarmCount})
           </button>
           <button
-            className="btn-fold w-full h-[25px] flex flex-col justify-center items-center bg-[#E4E4E3]  text-[#282222] font-semibold text-sm border mt-[10px]"
+            className="btn-fold w-full h-[25px] flex flex-col justify-center items-center bg-[#E4E4E3]  text-[#282222] font-semibold text-base mt-[10px]"
             onClick={handleClose}
           >
             <TbArrowBarUp />
