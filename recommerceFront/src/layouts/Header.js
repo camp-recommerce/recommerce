@@ -83,7 +83,7 @@ const Header = () => {
           <img
             src="https://cdn-icons-png.flaticon.com/512/5036/5036960.png"
             alt="Menu"
-            className="h-20 w-auto text-[#E4E4E3]"
+            className="h-20 w-auto"
           />
         </button>
         <ul class="dropdown-menu">
