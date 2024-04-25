@@ -5,7 +5,7 @@ const Header = () => {
   const { isLogin } = useCustomLoginPage();
   return (
     <div
-      className="header #282222 text-white flex justify-between items-center px-6 py-4 z-[9998]"
+      className="header #282222 text-white flex justify-between items-center px-6 py-4 z-[9990]"
       style={{ backgroundColor: "#282222", position: "sticky", top: 0 }}
     >
       <div className="logo">
@@ -78,11 +78,12 @@ const Header = () => {
           type="button"
           data-bs-toggle="dropdown"
           aria-expanded="false"
+          className="bg-[#282222]"
         >
           <img
             src="https://cdn-icons-png.flaticon.com/512/5036/5036960.png"
             alt="Menu"
-            className="h-20 w-auto"
+            className="h-20 w-auto text-[#E4E4E3]"
           />
         </button>
         <ul class="dropdown-menu">

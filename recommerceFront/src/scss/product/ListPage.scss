@@ -28,15 +28,15 @@
     }
     .btn_search {
       height: 100%;
-      color: white;
-      background-color: rgb(25, 5, 3);
+      color: #e4e4e3;
+      background-color: #282222;
       border-radius: 10px;
       padding: 15px;
       white-space: nowrap;
       margin-right: 15px;
     }
     .btn_search:hover {
-      background-color: rgb(81, 81, 81);
+      background-color: #515151;
     }
   }
   .categoryBox {
@@ -87,11 +87,11 @@
   left: 120px;
   transform: translate(-50%, -50%);
   width: 640px;
-  height: 480px;
+  height: 510px;
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 50;
+  z-index: 9996;
   border: 1px solid #cfcece;
   border-radius: 5px;
 }

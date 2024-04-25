@@ -176,13 +176,13 @@ const A_ReadComponent = () => {
                   )}
                 </div>
                 <button
-                  className="bg-black text-white px-6 py-2 rounded-md hover:bg-gray-800"
+                  className="bg-[#282222] hover:bg-[#515151] text-[#E4E4E3] px-6 py-2 rounded-md"
                   onClick={moveProductListPage}
                 >
                   목록
                 </button>
                 <button
-                  className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                  className="bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] px-6 py-2 rounded-md"
                   onClick={() => moveModifyPage(apno)}
                 >
                   수정
