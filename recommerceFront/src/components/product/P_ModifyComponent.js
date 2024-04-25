@@ -197,12 +197,18 @@ const P_ModifyComponent = () => {
                     imagePath={selectedImgPath}
                   />
                 )}
-                <button
+                {/* <button
                   className="imgRemoveBtn"
                   onClick={() => removeImages(files)}
                 >
                   삭제하기
-                </button>
+                </button> */}
+                <button
+                  type="button"
+                  onClick={() => removeImages(files)}
+                  class="btn-close"
+                  aria-label="Close"
+                ></button>
               </div>
             ))}
           </div>

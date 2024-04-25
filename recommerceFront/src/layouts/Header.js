@@ -68,9 +68,75 @@ const Header = () => {
       </div>
 
       <div>
-        <button className="menu-button lg:hidden">
-          <img src="/images/menubar.png" alt="Menu" className="h-20 w-auto" />
+        {/* <button >
+          
+        </button> */}
+      </div>
+      <div class="dropdown lg:hidden">
+        <button
+          class="btn btn-secondary dropdown-toggle"
+          type="button"
+          data-bs-toggle="dropdown"
+          aria-expanded="false"
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/5036/5036960.png"
+            alt="Menu"
+            className="h-20 w-auto"
+          />
         </button>
+        <ul class="dropdown-menu">
+          <li>
+            <a class="dropdown-item" href="http://localhost:3000/auction">
+              경매
+            </a>
+          </li>
+          <li>
+            <a
+              class="dropdown-item"
+              href="http://localhost:3000/product/register"
+            >
+              판매하기
+            </a>
+          </li>
+
+          {isLogin ? (
+            <>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="http://localhost:3000/user/mypage/:email"
+                >
+                  마이페이지
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="http://localhost:3000/user/logout"
+                >
+                  로그아웃
+                </a>
+              </li>
+            </>
+          ) : (
+            <>
+              <li>
+                <a
+                  class="dropdown-item"
+                  href="http://localhost:3000/user/login"
+                >
+                  로그인
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="http://localhost:3000/user/join">
+                  회원가입
+                </a>
+              </li>
+            </>
+          )}
+        </ul>
       </div>
     </div>
   );
