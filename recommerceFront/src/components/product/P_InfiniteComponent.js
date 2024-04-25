@@ -164,8 +164,11 @@ const P_InfiniteComponent = () => {
           >
             검색
           </button>
-          <button className="btn_search relative" onClick={toggleMapModal}>
-            <FaMapMarkedAlt size="26" color="#fff" />
+          <button
+            className="btn_search relative w-[54px] h-[54px]"
+            onClick={toggleMapModal}
+          >
+            <FaMapMarkedAlt size="24" color="#fff" />
             {isMapModalOpen && (
               <div className="modal" onClick={handleModalClick} ref={modalRef}>
                 <div className="modal-content">

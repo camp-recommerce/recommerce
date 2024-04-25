@@ -94,8 +94,7 @@ function A_Chat({
 
   return (
     <div
-      className="fixed top-0 left-0 w-full h-full flex justify-center items-center "
-      style={{ zIndex: 999 }}
+      className="fixed top-0 left-0 w-full h-full flex justify-center items-center z-[9999]"
       onClick={handleOutsideClick} // 모달 외부 클릭 시 모달 닫기
     >
       <div className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"></div>
