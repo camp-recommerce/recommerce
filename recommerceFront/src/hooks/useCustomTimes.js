@@ -10,7 +10,7 @@ const useCustomTimes = (apStartTime) => {
       const distance = endTime - now;
 
       if (distance < 0) {
-        setRemainingTime("경매 시작");
+        setRemainingTime("경매 대기중");
         return;
       }
 

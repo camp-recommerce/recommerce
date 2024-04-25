@@ -19,6 +19,20 @@ export const getList = async (pageParam) => {
   }
 };
 
+export const getMyList = async (pageParam) => {
+  const { page, size, apBuyer } = pageParam;
+
+  try {
+    const res = await jwtAxios.get(`${host}/bidlist`, {
+      params: { page, size, apBuyer },
+    });
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching auction list:", error);
+    throw error; // 오류를 호출자에게 전파
+  }
+};
+
 export const getOne = async (apno) => {
   const res = await axios.get(`${host}/${apno}`);
 

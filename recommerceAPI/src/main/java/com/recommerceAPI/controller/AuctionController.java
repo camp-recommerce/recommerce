@@ -41,7 +41,7 @@ public class AuctionController {
         return auctionService.getList(pageRequestDTO,apName,apCategory);
     }
 
-    @GetMapping("/bidList")
+    @GetMapping("/bidlist")
     public PageResponseDTO<AuctionDTO> bidList(PageRequestDTO pageRequestDTO, String apBuyer){
         return auctionService.findByApBuyer(pageRequestDTO,apBuyer);
     }
