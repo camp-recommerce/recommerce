@@ -70,7 +70,7 @@ function FixedMenu() {
     <div
       className={`w-[60px] ${
         isClosed ? "h-[25px]" : "h-[300px]"
-      }  z-[9999] flex flex-col justify-end fixed bottom-[50px] right-[25px]`}
+      }  z-[9993] flex flex-col justify-end fixed bottom-[50px] right-[10px]`}
     >
       {isClosed ? (
         <button
@@ -78,12 +78,18 @@ function FixedMenu() {
           style={{ height: 25 }}
           onClick={handleOpen}
         >
-          <TbArrowBarDown />
+          <TbArrowBarUp />
         </button>
       ) : (
         <>
           <button
-            className="btn-top w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] text-[#E4E4E3] font-semibold text-sm"
+            className="btn-fold w-full h-[25px] flex flex-col justify-center items-center bg-[#E4E4E3]  text-[#282222] font-semibold text-lg"
+            onClick={handleClose}
+          >
+            <TbArrowBarDown />
+          </button>
+          <button
+            className="btn-top w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] hover:bg-[#515151] hover:border-[#515151] text-[#E4E4E3] font-normal text-sm mt-[10px]"
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
@@ -92,30 +98,24 @@ function FixedMenu() {
             <span>Top</span>
           </button>
           <button
-            className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-xs mt-[10px]"
+            className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
             onClick={moveShoppingBasket}
           >
             <FaHeart className="text-lg" />({cartItems.length})
           </button>
           <button
-            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] text-[#E4E4E3] font-semibold text-xs mt-[10px]"
+            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] hover:bg-[#515151] hover:border-[#515151] text-[#E4E4E3] font-normal text-xs mt-[10px]"
             onClick={() => openModal()} // 모달창 열기
           >
             <AiFillMessage className="text-lg" />({unreadAlarmCount})
           </button>
-          {/* 챗봇 추가용
+          {/* 챗봇 추가용 */}
           <button
-            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] text-[#E4E4E3] font-semibold text-xs mt-[10px]"
+            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
             onClick={() => openModal()} // 모달창 열기
           >
             <RiRobot2Fill className="text-lg" />
             <span>챗봇</span>
-          </button> */}
-          <button
-            className="btn-fold w-full h-[25px] flex flex-col justify-center items-center bg-[#E4E4E3]  text-[#282222] font-semibold text-lg mt-[10px]"
-            onClick={handleClose}
-          >
-            <TbArrowBarUp />
           </button>
         </>
       )}

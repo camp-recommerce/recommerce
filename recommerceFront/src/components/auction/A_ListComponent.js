@@ -106,7 +106,7 @@ const A_ListComponent = () => {
     <>
       {loading ? <LoadingModal /> : <></>}
       <div
-        className="flex justify-center items-center flex-col"
+        className="flex justify-center items-center flex-col mt-[50px]"
         style={{ minHeight: "75vh" }}
       >
         <div
@@ -127,7 +127,7 @@ const A_ListComponent = () => {
             }}
           />
           <button
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-4 rounded h-10 ml-2"
+            className="bg-[#282222] hover:bg-[#515151] text-white font-bold py-1 px-4 rounded h-10 ml-2"
             onClick={handleSearchButtonClick} // 검색 버튼 클릭 시 검색 실행
           >
             검색
@@ -209,17 +209,20 @@ const A_ListComponent = () => {
             </div>
           ))}
         </div>
-        <div style={{ position: "relative" }}>
+        <div className="shopPaging_area w-full flex justify-center items-center mt-[30px]">
+          <PagingComponent
+            serverData={serverData}
+            movePage={moveProductListPage}
+          />
+        </div>
+        <div className="shopBtn_area w-full flex justify-end m-[30px] pr-[250px]">
           <div
-            className="shopList_addBtn bg-blue-500 hover:bg-blue-700 text-white font-bold"
+            className="shopList_addBtn bg-[#282222] hover:bg-[#515151] text-white font-bold"
             style={{
               width: "80px",
               height: "40px",
               lineHeight: "40px",
               textAlign: "center",
-              position: "absolute",
-              bottom: "0",
-              left: "850px",
               zIndex: "10",
               borderRadius: "5px" /* 모서리 둥글게 설정 */,
             }}
@@ -227,16 +230,6 @@ const A_ListComponent = () => {
           >
             상품 등록
           </div>
-        </div>
-
-        <div
-          className="flex justify-center items-center"
-          style={{ marginTop: "0px" }}
-        >
-          <PagingComponent
-            serverData={serverData}
-            movePage={moveProductListPage}
-          />
         </div>
       </div>
     </>

@@ -35,7 +35,7 @@ const MapComponent = ({
 
       // 마커 이미지의 URL, 크기 및 옵션 설정
       const marker = new kakao.maps.Marker({
-        position: new kakao.maps.LatLng(lat, lng),
+        position: initializedMap.getCenter(),
         image: new kakao.maps.MarkerImage(
           process.env.PUBLIC_URL + "/images/location.svg",
           new kakao.maps.Size(30, 30),
@@ -45,8 +45,9 @@ const MapComponent = ({
       marker.setMap(initializedMap);
 
       // 초기 메시지 말풍선 생성
+      let messageOverlay;
       if (!readOnly) {
-        const messageOverlay = new kakao.maps.CustomOverlay({
+        messageOverlay = new kakao.maps.CustomOverlay({
           content:
             '<div class="custom-balloon" style="position: absolute; width: 244px; background-color: #6f6e6e; color: #fff; padding: 7px; text-align: center; right: -122px; bottom: 45px;">' +
             '  <div class="content" style="font-size: 14px;">지도를 움직여 위치를 설정하세요</div>' +
@@ -58,7 +59,11 @@ const MapComponent = ({
 
         // 지도 중앙 이동 시 메시지 말풍선 제거
         kakao.maps.event.addListener(initializedMap, "center_changed", () => {
-          messageOverlay.setMap(null);
+          const center = initializedMap.getCenter();
+          marker.setPosition(center);
+          if (messageOverlay) {
+            messageOverlay.setMap(null);
+          }
         });
       }
 
@@ -154,7 +159,7 @@ const MapComponent = ({
   };
 
   return (
-    <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
+    <div className="map-wrap w-[600px] h-[350px]">
       {isModal && <div className="mt-4 font-bold">지도에서 위치 확인</div>}
       {!readOnly && (
         <div className="my-4 w-full flex justify-start items-center">
@@ -177,7 +182,7 @@ const MapComponent = ({
               검색
             </button>
           </form>
-          <p className="ml-2 text-base font-bold font-sans">
+          <p className="ml-8 text-base font-bold font-sans">
             {selectedAddress}
           </p>
         </div>
