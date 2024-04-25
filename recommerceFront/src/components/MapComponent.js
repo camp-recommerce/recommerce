@@ -1,5 +1,7 @@
 /*global kakao*/
 import React, { useEffect, useRef, useState } from "react";
+import { FaMapMarkerAlt } from "react-icons/fa";
+import { FaLocationCrosshairs } from "react-icons/fa6";
 
 const MapComponent = ({
   initialPosition,
@@ -42,17 +44,30 @@ const MapComponent = ({
       });
       marker.setMap(initializedMap);
 
-      // 지도 중앙 이동 시 마커 위치 업데이트
-      kakao.maps.event.addListener(initializedMap, "center_changed", () => {
-        const center = initializedMap.getCenter();
-        marker.setPosition(center);
-        setCurrentPosition(center);
-      });
+      // 초기 메시지 말풍선 생성
+      if (!readOnly) {
+        const messageOverlay = new kakao.maps.CustomOverlay({
+          content:
+            '<div class="custom-balloon" style="position: absolute; width: 244px; background-color: #6f6e6e; color: #fff; padding: 7px; text-align: center; right: -122px; bottom: 45px;">' +
+            '  <div class="content" style="font-size: 14px;">지도를 움직여 위치를 설정하세요</div>' +
+            '  <div class="triangle" style="position: absolute; width: 0; height: 0; border-left: 8px solid transparent; border-right: 8px solid transparent; border-top: 12px solid #6f6e6e; top: 35px; left: 50%; transform: translateX(-50%);"></div>' +
+            "</div>",
+          position: marker.getPosition(),
+        });
+        messageOverlay.setMap(initializedMap);
+
+        // 지도 중앙 이동 시 메시지 말풍선 제거
+        kakao.maps.event.addListener(initializedMap, "center_changed", () => {
+          messageOverlay.setMap(null);
+        });
+      }
 
       // 드래그 끝난 후 주소 업데이트
       kakao.maps.event.addListener(initializedMap, "dragend", () => {
         updateAddress(initializedMap.getCenter());
       });
+
+      updateAddress(new kakao.maps.LatLng(lat, lng));
     };
 
     if (initialPosition) {
@@ -140,6 +155,7 @@ const MapComponent = ({
 
   return (
     <div className="map-wrap" style={{ width: "600px", height: "350px" }}>
+      {isModal && <div className="mt-4 font-bold">지도에서 위치 확인</div>}
       {!readOnly && (
         <div className="my-4 w-full flex justify-start items-center">
           <form onSubmit={handleSearch} className="flex w-1/2">
@@ -161,7 +177,9 @@ const MapComponent = ({
               검색
             </button>
           </form>
-          <p>{selectedAddress}</p>
+          <p className="ml-2 text-base font-bold font-sans">
+            {selectedAddress}
+          </p>
         </div>
       )}
       <div ref={mapContainer} className="w-full h-[350px] relative">
@@ -170,10 +188,7 @@ const MapComponent = ({
             onClick={moveToCurrentPosition}
             className="absolute bottom-[15px] right-[15px] z-10 w-[40px] h-[40px] border-[0.3px] border-[#2822224f] rounded-[50px] bg-white flex justify-center items-center"
           >
-            <img
-              src={process.env.PUBLIC_URL + "/images/gps.svg"}
-              className="w-[20px] h-[20px] z-20"
-            />
+            <FaLocationCrosshairs size="20" color="#282222" />
           </button>
         )}
       </div>

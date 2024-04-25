@@ -82,15 +82,17 @@
 
 .modal {
   position: absolute;
-  top: 280px;
-  left: -270px;
+  top: 300px;
+  left: 120px;
   transform: translate(-50%, -50%);
   width: 640px;
-  height: 440px;
+  height: 480px;
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 50;
+  border: 1px solid #cfcece;
+  border-radius: 5px;
 }
 
 .modal-content {

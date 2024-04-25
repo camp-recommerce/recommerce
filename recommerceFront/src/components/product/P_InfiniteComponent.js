@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ListPage.scss";
 import MapComponent from "../MapComponent";
 import { API_SERVER_HOST } from "../../api/userApi";
+import { AiOutlineCloseSquare } from "react-icons/ai";
+import { FaMapMarkedAlt } from "react-icons/fa";
 
 const host = API_SERVER_HOST;
 
@@ -24,6 +26,7 @@ const P_InfiniteComponent = () => {
   const [pnameInput, setPNameInput] = useState("");
   const [pcategory, setPCategory] = useState(""); // pcategory 상태 추가
   const [isMapModalOpen, setMapModalOpen] = useState(false);
+  const modalRef = useRef();
 
   const toggleMapModal = (e) => {
     e.stopPropagation(); // 이벤트 버블링 방지
@@ -86,7 +89,7 @@ const P_InfiniteComponent = () => {
 
     getList({ page: nextPage, size, pname: pname, pcategory: pcategory })
       .then((data) => {
-        if (data && data.data) {
+        if (data && data.data.length > 0) {
           setServerData((prev) => ({
             dtoList: prev.dtoList.concat(data.data),
             currentPage: data.currentPage,
@@ -124,6 +127,19 @@ const P_InfiniteComponent = () => {
     setPNameInput(district); // 검색 입력란에 동 정보 설정
   };
 
+  const handleClickOutside = (event) => {
+    if (modalRef.current && !modalRef.current.contains(event.target)) {
+      setMapModalOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div className="searchBox">
@@ -143,19 +159,12 @@ const P_InfiniteComponent = () => {
             검색
           </button>
           <button className="btn_search relative" onClick={toggleMapModal}>
-            <img
-              src={process.env.PUBLIC_URL + "/images/map.svg"}
-              className="w-[25px] h-[25px]"
-              alt="searchLocate"
-            />
+            <FaMapMarkedAlt size="26" color="#fff" />
             {isMapModalOpen && (
-              <div className="modal" onClick={handleModalClick}>
+              <div className="modal" onClick={handleModalClick} ref={modalRef}>
                 <div className="modal-content">
                   <span className="close text-black" onClick={toggleMapModal}>
-                    <img
-                      src={process.env.PUBLIC_URL + "/images/close.svg"}
-                      className="w-[25px] h-[35px] z-20"
-                    />
+                    <AiOutlineCloseSquare size="26" color="#6f6e6e" />
                   </span>
                   <MapComponent
                     isModal={true}
@@ -184,11 +193,20 @@ const P_InfiniteComponent = () => {
         </div>
       </div>
       <InfiniteScroll
-        className="infiniteBox"
+        className="infiniteBox min-h-[300px]"
         dataLength={serverData.dtoList.length}
         next={fetchMoreData}
         hasMore={serverData.hasMore}
-        endMessage={<p>You are all set!</p>}
+        endMessage={
+          serverData.dtoList.length > 0 ? (
+            <p>You are all set!</p>
+          ) : (
+            <p className="h-[300px] text-center flex flex-col justify-center items-center">
+              <span>검색 결과가 없습니다.</span>
+              <span>검색 조건을 변경해보세요.</span>
+            </p>
+          )
+        }
       >
         <div className="shopList_container">
           {serverData.dtoList &&
