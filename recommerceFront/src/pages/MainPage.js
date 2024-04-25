@@ -40,7 +40,7 @@ function MainPage() {
   };
 
   const handleImageClick = () => {
-    navigate("/auction/list");
+    navigate("/auction/list?page=1&size=4");
   };
 
   return (

@@ -6,7 +6,8 @@ import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import { readAlarms } from "../../api/chatAlarmApi";
 
 const AlarmModal = ({ closeModal, email }) => {
-  const { openChatModal, isChatModalOpen, socket } = useCustomChatModal(); // closeChatModal 함수 불러오기
+  const { openChatModal, isChatModalOpen, socket, closeChatModal } =
+    useCustomChatModal(); // closeChatModal 함수 불러오기
   const { loginState } = useCustomLogin();
   const { alarmList: originalAlarmList, refreshAlarm } = useCustomChatAlarm(); // 기존의 alarmList
 
@@ -79,9 +80,7 @@ const AlarmModal = ({ closeModal, email }) => {
               room={groupedAlarms[senderEmail][0].roomId} // 해당 발신자의 roomId 사용
               username={loginState.email} // 발신자의 이메일 전달
               socket={socket}
-              closeModal={() => {
-                closeModal();
-              }}
+              closeModal={closeChatModal}
             />
           )}
         </div>

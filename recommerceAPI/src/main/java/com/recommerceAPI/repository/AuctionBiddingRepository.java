@@ -10,8 +10,21 @@ import java.util.List;
 
 public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, Long> {
 
-    @Query("SELECT ab FROM AuctionBidding ab WHERE ab.bidder.email = :email")
-    List<AuctionBidding> findByBidderEmail(@Param("email") String email);
+    // 입찰 내역중에서 auction.apno 별로 가장큰 입찰금액을 가진것만 반환하도록 하는 쿼리문
+    // 마이 페이지에서 내 입찰내역을 볼때 사용 합니다.
+    @Query("SELECT ab FROM AuctionBidding ab " +
+            "WHERE ab.bidder.email = :email " +
+            "AND (ab.auction.apno, ab.bidAmount) IN (" +
+            "    SELECT ab2.auction.apno, MAX(ab2.bidAmount) " +
+            "    FROM AuctionBidding ab2 " +
+            "    WHERE ab2.bidder.email = :email " +
+            "    GROUP BY ab2.auction.apno" +
+            ")")
+    List<AuctionBidding> findHighestBidByAuctionApno(@Param("email") String email);
+
+
+
+
 
 
     List<AuctionBidding> findByAuction(Auction auction);

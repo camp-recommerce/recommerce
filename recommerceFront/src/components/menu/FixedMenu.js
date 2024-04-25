@@ -81,15 +81,16 @@ function FixedMenu() {
             style={{ height: 50 }}
             onClick={moveShoppingBasket}
           >
-            장바구니({cartItems.length})
+            장바구니({isLogin ? cartItems.length : 0})
           </button>
           <button
             className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
             onClick={() => openModal()} // 모달창 열기
             style={{ height: 50 }}
           >
-            채팅 알람({unreadAlarmCount})
+            채팅 알람({isLogin ? unreadAlarmCount : 0})
           </button>
+
           <button
             className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
             onClick={handleClose}

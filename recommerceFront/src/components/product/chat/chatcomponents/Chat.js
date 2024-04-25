@@ -45,6 +45,7 @@ function Chat({ socket, username, closeModal, room }) {
       };
       socket.send(JSON.stringify(messageData));
       sendAlarm(alarm);
+      console.log(alarm);
       setMessageList((list) => [...list, messageData]);
       inputRef.current.value = "";
     }
