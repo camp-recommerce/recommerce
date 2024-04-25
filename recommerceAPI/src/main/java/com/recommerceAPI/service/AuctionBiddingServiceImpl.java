@@ -69,7 +69,7 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
     }
     @Override
     public List<AuctionBiddingDTO> findAuctionBiddingByEmail(String email) {
-        List<AuctionBidding> auctionBiddingList = auctionBiddingRepository.findByBidderEmail(email);
+        List<AuctionBidding> auctionBiddingList = auctionBiddingRepository.findHighestBidByAuctionApno(email);
 
         // 옥션 바이딩 정보를 AuctionBiddingDTO로 변환하여 리스트에 추가
         List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();
@@ -92,6 +92,8 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
                 auctionBiddingDTO.setApStatus(String.valueOf(auction.getApStatus()));
                 auctionBiddingDTO.setBidderEmail(auction.getApBuyer());
                 auctionBiddingDTO.setCurrentPrice(auction.getApCurrentPrice());
+                auctionBiddingDTO.setBidIncrement(auction.getApBidIncrement());
+                auctionBiddingDTO.setStartPrice(auction.getApStartPrice());
 
                 // Auction 객체에서 이미지 파일 이름들을 가져와서 DTO에 설정
                 List<String> uploadFileNames = new ArrayList<>();

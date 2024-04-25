@@ -4,9 +4,10 @@ const useCustomChatModal = () => {
   const [socket, setSocket] = useState(null);
   const [isChatModalOpen, setIsChatModalOpen] = useState(false);
   const [roomId, setRoomId] = useState(null); // roomId 상태 추가
+  const [chatInfo, setChatInfo] = useState(null); // 채팅 정보 상태 추가
 
-  const openChatModal = (roomId) => {
-    // roomId 매개변수 추가
+  const openChatModal = (roomId, chatInfo) => {
+    // roomId와 chatInfo 매개변수 추가
     const newSocket = new WebSocket(
       `ws:/localhost:8080/api/chat?room=${roomId}`
     );
@@ -15,6 +16,7 @@ const useCustomChatModal = () => {
       setSocket(newSocket);
       setIsChatModalOpen(true);
       setRoomId(roomId); // roomId 설정
+      setChatInfo(chatInfo); // 채팅 정보 설정
       console.log(isChatModalOpen);
     };
   };
@@ -25,10 +27,19 @@ const useCustomChatModal = () => {
       setSocket(null);
       setIsChatModalOpen(false);
       setRoomId(null); // roomId 초기화
+      setChatInfo(null); // 채팅 정보 초기화
+      console.log("WebSocket connection closed");
     }
   };
 
-  return { openChatModal, closeChatModal, isChatModalOpen, socket, roomId }; // roomId 반환
+  return {
+    openChatModal,
+    closeChatModal,
+    isChatModalOpen,
+    socket,
+    roomId,
+    chatInfo,
+  }; // chatInfo 추가
 };
 
 export default useCustomChatModal;

@@ -22,6 +22,8 @@ public class AuctionBiddingDTO {
     private String apName; // 상품 이름
     private String apStatus; // 경매 상태
     private int currentPrice; // 현재 입찰가
+    private int startPrice;
+    private int bidIncrement;
 
     @Builder.Default
     private List<String> uploadFileNames = new ArrayList<>();

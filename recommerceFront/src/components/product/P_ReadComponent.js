@@ -162,7 +162,7 @@ const P_ReadComponent = () => {
           <button
             className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
             onClick={() => {
-              openChatModal(loginState.email + product.userEmail);
+              openChatModal(loginState.email + "-" + product.userEmail);
             }}
           >
             1:1 채팅
@@ -182,7 +182,7 @@ const P_ReadComponent = () => {
             {isChatModalOpen && (
               <Chat
                 // user0@aaa.com 을 임시 판매자로 설정, 나중엔 product.seller 뭐 이렇게될듯
-                room={loginState.email + product.userEmail}
+                room={loginState.email + "-" + product.userEmail}
                 username={loginState.email}
                 socket={socket}
                 closeModal={closeChatModal}

@@ -9,6 +9,8 @@ import { getMyList } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { API_SERVER_HOST } from "../../api/userApi";
 import ImageModal from "../modal/ImageModal";
+import A_Chat from "../auction/chat/A_Chat";
+import useCustomChatModal from "../../hooks/useCustomChatModal";
 
 const host = API_SERVER_HOST;
 
@@ -23,7 +25,9 @@ const MyPageComponent = () => {
   const [bidlist, setBidList] = useState(null);
   const [openImg, setOpenImg] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
-  const navigate = useNavigate(); // useNavigate 훅 사용
+  const navigate = useNavigate();
+  const { openChatModal, closeChatModal, isChatModalOpen, socket, roomId } =
+    useCustomChatModal(); // useNavigate 훅 사용
   const closeImageModal = () => {
     setOpenImg(false);
   };
@@ -144,7 +148,7 @@ const MyPageComponent = () => {
           정보변경
         </button>
         <button style={styles.button} onClick={() => setActiveMenu("bid")}>
-          내 경매
+          경매 내역
         </button>
         <button style={styles.button} onClick={() => setActiveMenu("sales")}>
           판매목록
@@ -226,29 +230,20 @@ const MyPageComponent = () => {
             )}
           </div>
         )}
-
         {activeMenu === "bid" && (
           <div className="mt-5">
             <ul style={styles.list}>
-              <li style={styles.title}>입찰 중인 경매</li>
+              <li style={styles.title}>입찰한 경매</li>
               {bidlist && bidlist.length > 0 ? (
-                Object.values(
-                  bidlist.reduce((acc, item) => {
-                    if (
-                      !acc[item.auctionApno] ||
-                      acc[item.auctionApno].bidAmount < item.bidAmount
-                    ) {
-                      acc[item.auctionApno] = item;
-                    }
-                    return acc;
-                  }, {})
-                ).map((item) => {
+                bidlist.map((item) => {
                   // apStatus에 따라 표시할 상태 설정
                   let status;
                   if (item.apStatus === "ACTIVE") {
                     status = "경매중";
                   } else if (item.apStatus === "CLOSED") {
                     status = "경매 종료";
+                    // 경매 종료 상태인 경우 렌더링을 건너뜁니다.
+                    return null;
                   } else {
                     status = item.apStatus;
                   }
@@ -265,9 +260,8 @@ const MyPageComponent = () => {
                         />
                       </div>
                       <li style={styles.listItem}>
-                        경매 상태: {status}, 상품 이름: {item.apName}, 내
-                        입찰가: {item.bidAmount}원, 현재 입찰가:{" "}
-                        {item.currentPrice}
+                        상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원,
+                        현재 입찰가: {item.currentPrice}
                       </li>
                       <button
                         className="bg-black text-white font-bold mt-1 mb-2"
@@ -276,13 +270,34 @@ const MyPageComponent = () => {
                       >
                         페이지 이동
                       </button>
-                      {item.apStatus !== "CLOSED" && ( // 경매 종료 상태가 아닐 때만 입찰하기 버튼 렌더링
+                      {item.apStatus !== "CLOSED" && (
                         <button
                           className="bg-black text-white font-bold mt-1 ml-2 mb-2"
                           style={{ width: 130, height: 28, borderRadius: 5 }}
+                          onClick={() =>
+                            openChatModal(item.auctionApno, {
+                              startPrice: item.startPrice,
+                              bidIncrement: item.bidIncrement,
+                              imageSrc: item.uploadFileNames,
+                              currentPrice: item.currentPrice,
+                            })
+                          }
                         >
                           입찰 하기
                         </button>
+                      )}
+
+                      {roomId === item.auctionApno && (
+                        <A_Chat
+                          username={email}
+                          room={item.auctionApno}
+                          socket={socket}
+                          closeModal={closeChatModal}
+                          startPrice={item.startPrice}
+                          bidIncrement={item.bidIncrement}
+                          imageSrc={item.uploadFileNames}
+                          currentPrice={item.currentPrice}
+                        />
                       )}
                     </div>
                   );
