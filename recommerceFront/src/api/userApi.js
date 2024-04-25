@@ -83,23 +83,30 @@ export const getPublicProfileByEmail = async (email) => {
   return res.data;
 };
 
-// 사용자의 비밀번호 변경 API
-export const changePassword = async (email, pw, newPassword) => {
-  // 요청에 필요한 데이터를 설정합니다.
-  const data = {
-    email: email,
-    pw: pw,
+export const changePassword = async (email, currentPassword, newPassword) => {
+  // 요청 데이터를 JSON 형식으로 준비
+  const data = JSON.stringify({
+    currentPassword: currentPassword,
     newPassword: newPassword,
+  });
+
+  // 요청 헤더 설정
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
   };
 
   try {
-    // PUT 요청을 보냅니다.
-    const res = await jwtAxios.put(`${host}/password/${email}`, data);
-    // 요청이 성공하면 결과를 반환합니다.
-    return res.data;
+    // PUT 요청을 보내고 결과를 반환
+    const response = await jwtAxios.put(
+      `${host}/password/${email}`,
+      data,
+      config
+    );
+    return response.data;
   } catch (error) {
-    // 요청이 실패하면 오류를 처리합니다.
     console.error("Error changing password:", error);
-    throw new Error("비밀번호 변경 중 오류가 발생했습니다.");
+    throw error; // 오류 던지기를 수정하여 보다 상세한 정보 포함
   }
 };

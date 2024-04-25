@@ -1,5 +1,4 @@
-// PasswordChangeFormComponent.js
-import { useState } from "react";
+import React, { useState } from "react";
 import { changePassword } from "../../api/userApi";
 import AlertModal from "../modal/AlertModal";
 import * as Yup from "yup";
@@ -20,9 +19,10 @@ const validationSchema = Yup.object({
 
 const PasswordChangeFormComponent = () => {
   const [passwords, setPasswords] = useState({
-    pw: "",
+    currentPassword: "",
     newPassword: "",
-    confirmPassword: "",
+    confirmPassword: "", // 비밀번호 확인 필드 추가
+    email: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [result, setResult] = useState();
@@ -33,19 +33,25 @@ const PasswordChangeFormComponent = () => {
     setPasswords((prevPasswords) => ({ ...prevPasswords, [name]: value }));
   };
 
-  const handleClickChangePassword = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     try {
       await validationSchema.validate(passwords, { abortEarly: false });
+      // confirmPassword는 서버에 전송하지 않음
       await changePassword(
-        passwords.pw,
-        passwords.newPassword,
-        passwords.confirmPassword
+        passwords.email,
+        passwords.currentPassword,
+        passwords.newPassword
       );
       setResult(true);
-      navigate("/mypage");
+      navigate("/user/mypage/:email");
     } catch (error) {
       setResult(false);
-      setErrorMessage(error.errors[0] || "An unexpected error occurred.");
+      if (error instanceof Yup.ValidationError) {
+        setErrorMessage(error.inner.map((err) => err.message).join(", "));
+      } else {
+        setErrorMessage("An unexpected error occurred.");
+      }
     }
   };
 
@@ -60,17 +66,15 @@ const PasswordChangeFormComponent = () => {
         backgroundColor: "#f9f9f9",
       }}
     >
-      {result && (
+      {result === true && (
         <AlertModal
           title="비밀번호 변경"
           content="비밀번호가 성공적으로 변경되었습니다."
         />
       )}
+      {result === false && <AlertModal title="오류" content={errorMessage} />}
       <h2>비밀번호 변경</h2>
-      <div style={{ color: "red", textAlign: "center", marginBottom: "10px" }}>
-        {errorMessage && <div>{errorMessage}</div>}
-      </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <div style={{ marginBottom: "20px" }}>
           <label>현재 비밀번호</label>
           <input
@@ -80,9 +84,9 @@ const PasswordChangeFormComponent = () => {
               border: "1px solid #ddd",
               borderRadius: "4px",
             }}
-            name="pw"
+            name="currentPassword"
             type="password"
-            value={passwords.pw}
+            value={passwords.currentPassword}
             onChange={handleChange}
           />
         </div>
@@ -113,7 +117,7 @@ const PasswordChangeFormComponent = () => {
             name="confirmPassword"
             type="password"
             value={passwords.confirmPassword}
-            onChange={handleChange}
+            onChange={handleChange} // 비밀번호 확인 필드의 값이 변경될 때마다 상태 업데이트
           />
         </div>
         <div style={{ textAlign: "center" }}>
@@ -127,8 +131,7 @@ const PasswordChangeFormComponent = () => {
               cursor: "pointer",
               fontSize: "1rem",
             }}
-            onClick={handleClickChangePassword}
-            type="button"
+            type="submit"
           >
             변경하기
           </button>

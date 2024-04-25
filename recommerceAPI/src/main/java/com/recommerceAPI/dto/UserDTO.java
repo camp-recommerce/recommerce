@@ -17,6 +17,8 @@ public class UserDTO {
     // 사용자의 비밀번호를 저장합니다. 보안을 위해 저장되거나 전송될 때 적절히 암호화하는 것이 중요합니다.
     private String pw;
 
+    private String newPassword; // 사용자의 새 비밀번호
+
     // 사용자의 닉네임을 저장합니다. 사용자가 시스템 내에서 사용할 이름이나 별명입니다.
     private String nickname;
 
