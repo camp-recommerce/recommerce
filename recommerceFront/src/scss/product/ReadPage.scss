@@ -3,6 +3,7 @@
   width: 100%;
   height: 100vh;
   align-items: center;
+  justify-content: space-around;
 
   .shopRead_img {
     display: flex;
@@ -11,15 +12,15 @@
     width: 30%;
     height: 40%;
     img {
-      height: 100%;
-      width: 100%;
+      height: 50%;
+      width: 50%;
     }
   }
 
   .shopRead_details {
     display: flex;
-    height: 90%; /* 전체 높이를 조금 줄임 */
-    width: 70%; /* 너비를 조금 늘림 */
+    height: auto;
+    width: 50%;
 
     .shopRead_area {
       display: flex;
@@ -42,11 +43,11 @@
 
       .btn_modify,
       .btn_chat,
-      .btn_cart {
+      .btn_cart,
+      .btn_sell {
         display: flex;
-        width: 30%; /* 버튼 너비를 고정값으로 변경 */
+        width: 150px;
         height: 50px;
-        color: white;
 
         padding: 10px;
         border-radius: 10px;

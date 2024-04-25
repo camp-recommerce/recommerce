@@ -128,6 +128,16 @@ const P_ModifyComponent = () => {
     }
   };
 
+  //이미지 삭제처리
+  const removeImages = (imageName) => {
+    const resultFileNames = product.uploadFileNames.filter(
+      (fileName) => fileName !== imageName
+    );
+    product.uploadFileNames = resultFileNames;
+
+    setProduct({ ...product });
+  };
+
   const handleClickDelete = () => {
     setLoading(true);
     deleteOne(product).then((data) => {
@@ -187,6 +197,12 @@ const P_ModifyComponent = () => {
                     imagePath={selectedImgPath}
                   />
                 )}
+                <button
+                  className="imgRemoveBtn"
+                  onClick={() => removeImages(files)}
+                >
+                  삭제하기
+                </button>
               </div>
             ))}
           </div>
@@ -231,8 +247,7 @@ const P_ModifyComponent = () => {
             ></input>
           </div>
           <div className="modify-wrap">
-            <label>조건 선택 </label>
-            <br />
+            <div className="modify-info ">조건 선택 </div>
             <input
               type="radio"
               id="condition1"
@@ -242,7 +257,7 @@ const P_ModifyComponent = () => {
               onChange={handleChangeProduct}
             />
             <label htmlFor="condition1">최상</label>
-            <br />
+
             <input
               type="radio"
               id="condition2"
@@ -252,7 +267,7 @@ const P_ModifyComponent = () => {
               onChange={handleChangeProduct}
             />
             <label htmlFor="condition2">상</label>
-            <br />
+
             <input
               type="radio"
               id="condition3"
@@ -262,7 +277,6 @@ const P_ModifyComponent = () => {
               onChange={handleChangeProduct}
             />
             <label htmlFor="condition3">중</label>
-            <br />
             <input
               type="radio"
               id="condition4"
@@ -285,9 +299,9 @@ const P_ModifyComponent = () => {
             </textarea>
           </div>
           <div className="modify_area">
-            <div className="modify_wrap flex flex-col max-h-[150px]">
-              <div className="flex">
-                <label>거래장소</label>
+            <div className="modify_wrap ">
+              <div className="modify_area_text">
+                <div className="modify-info ">거래장소</div>
                 <input
                   name="plocat"
                   type="text"
@@ -301,7 +315,7 @@ const P_ModifyComponent = () => {
               />
             </div>
           </div>
-          <div className="modify-wrap r">
+          <div className="modify-wrap">
             <div className="modify-info">삭제 여부</div>
             <select
               name="delFlag"

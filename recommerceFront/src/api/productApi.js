@@ -30,7 +30,7 @@ export const getOne = async (pno) => {
 export const postOne = async (product) => {
   const header = { headers: { "Content-Type": "multipart/form-data" } };
 
-  const res = await axios.post(`${host}/product/register`, product, header);
+  const res = await jwtAxios.post(`${host}/product/register`, product, header);
 
   return res.data;
 };
@@ -39,14 +39,18 @@ export const postOne = async (product) => {
 export const putOne = async (pno, product) => {
   const header = { headers: { "Content-Type": "multipart/form-data" } };
 
-  const res = await axios.put(`${host}/product/modify/${pno}`, product, header);
+  const res = await jwtAxios.put(
+    `${host}/product/modify/${pno}`,
+    product,
+    header
+  );
 
   return res.data;
 };
 
 //상품 삭제하기
 export const deleteOne = async (product) => {
-  const res = await axios.delete(`${host}/product/delete/${product.pno}`, {
+  const res = await jwtAxios.delete(`${host}/product/delete/${product.pno}`, {
     data: product,
   });
 
