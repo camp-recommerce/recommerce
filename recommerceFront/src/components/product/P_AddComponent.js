@@ -45,7 +45,7 @@ const P_AddComponent = () => {
     });
   };
 
-  // // 이미지 등록 시 미리보기 생성
+  // 이미지 등록 시 미리보기 생성
   const handleImagePreview = (e) => {
     e.preventDefault();
 

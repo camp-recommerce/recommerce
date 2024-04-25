@@ -42,6 +42,14 @@ const P_InfiniteComponent = () => {
     } else {
       setPCategory(category);
     }
+    // 데이터 목록 초기화와 첫 페이지 설정
+    setServerData({
+      dtoList: [],
+      currentPage: 1,
+      totalItems: 0,
+      totalPages: 0,
+      hasMore: true,
+    });
   };
 
   const handleSearchInputChange = (e) => {
@@ -85,9 +93,7 @@ const P_InfiniteComponent = () => {
       return;
     }
 
-    const nextPage = serverData.currentPage + 1;
-
-    getList({ page: nextPage, size, pname: pname, pcategory: pcategory })
+    getList({ page: 1, size, pname: pname, pcategory: pcategory })
       .then((data) => {
         if (data && data.data.length > 0) {
           setServerData((prev) => ({

@@ -39,10 +39,12 @@ public class JWTCheckFilter extends OncePerRequestFilter {
          if ("/".equals(path)) {
              return true;
          }
+
+
         // 특정 경로에 대한 요청은 필터링하지 않도록 설정합니다.
 
         List<String> skipPaths = List.of("/api/user/", "review/view", "/confirm",
-                "/api/wishlist","/api/chat","/auction", "/product");
+                "/api/wishlist","/api/chat","/auction","/product/read" ,"/product/view");
 
 
         return skipPaths.stream().anyMatch(path::startsWith);

@@ -153,7 +153,7 @@ const P_ReadComponent = () => {
             </div>
           </div>
           {loginState.email === product.userEmail && (
-            <div className="btn_modify">
+            <div className="btn_modify  bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
               <button onClick={() => moveModifyPage(product.pno)}>
                 수정하기
               </button>
