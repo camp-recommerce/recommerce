@@ -93,7 +93,9 @@ const P_InfiniteComponent = () => {
       return;
     }
 
-    getList({ page: 1, size, pname: pname, pcategory: pcategory })
+    const nextPage = serverData.currentPage + 1; // 다음 페이지 번호 계산
+
+    getList({ page: nextPage, size, pname: pname, pcategory: pcategory })
       .then((data) => {
         if (data && data.data.length > 0) {
           setServerData((prev) => ({
@@ -164,8 +166,11 @@ const P_InfiniteComponent = () => {
           >
             검색
           </button>
-          <button className="btn_search relative" onClick={toggleMapModal}>
-            <FaMapMarkedAlt size="26" color="#fff" />
+          <button
+            className="btn_search relative w-[54px] h-[54px]"
+            onClick={toggleMapModal}
+          >
+            <FaMapMarkedAlt size="24" color="#fff" />
             {isMapModalOpen && (
               <div className="modal" onClick={handleModalClick} ref={modalRef}>
                 <div className="modal-content">

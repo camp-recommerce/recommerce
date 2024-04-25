@@ -36,7 +36,9 @@ public class Product {
 
     private String pdesc; // 제품설명
 
-    private boolean delFlag;
+    private boolean delFlag; // 삭제 여부
+    
+    private boolean soldOut; //판매완료 여부
 
     private String userEmail; // Product와 User의 관계
     public void changeDel(boolean delFlag) {

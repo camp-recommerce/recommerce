@@ -31,6 +31,8 @@ public class ProductDTO {
 
     private boolean delFlag; // 삭제 플래그
 
+    private boolean soldOut; // 판매완료
+
     private String userEmail;
 
     @Builder.Default
