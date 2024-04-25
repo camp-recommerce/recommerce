@@ -284,7 +284,7 @@ const A_AddComponent = () => {
               </div>
               <div className="flex space-x-4">
                 <button
-                  className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                  className="bg-[#282222] text-[#E4E4E3] px-6 py-2 rounded-md hover:bg-[#515151]"
                   onClick={handleClickAdd}
                 >
                   물품 등록
