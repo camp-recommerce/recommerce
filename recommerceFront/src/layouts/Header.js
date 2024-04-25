@@ -5,7 +5,7 @@ const Header = () => {
   const { isLogin } = useCustomLoginPage();
   return (
     <div
-      className="header #282222 text-white flex justify-between items-center px-6 py-4 z-[9999]"
+      className="header #282222 text-white flex justify-between items-center px-6 py-4 z-[9998]"
       style={{ backgroundColor: "#282222", position: "sticky", top: 0 }}
     >
       <div className="logo">

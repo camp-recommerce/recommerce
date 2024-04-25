@@ -5,6 +5,16 @@ import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import AlarmModal from "../modal/AlarmModal";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
+import { IoTriangleOutline } from "react-icons/io5";
+// <IoTriangleOutline />
+import { FaHeart } from "react-icons/fa";
+// <FaHeart />
+import { AiOutlineMessage } from "react-icons/ai";
+// <AiOutlineMessage />
+import { TbArrowBarDown } from "react-icons/tb";
+// <TbArrowBarDown />
+import { TbArrowBarUp } from "react-icons/tb";
+// <TbArrowBarUp />
 
 function FixedMenu() {
   const { isLogin, loginState } = useCustomLoginPage();
@@ -62,49 +72,45 @@ function FixedMenu() {
 
   return (
     <div
-      className={`w-90 ${
-        isClosed ? "h-25" : "h-200"
-      } bg-opacity-85 bg-white border border-opacity-50 z-10 flex flex-col fixed top-200 right-5 transition-all duration-700 ease-in-out mt-20`}
+      className={`w-[60px] ${
+        isClosed ? "h-[25px]" : "h-[300px]"
+      }  z-[9999] flex flex-col justify-end fixed bottom-[50px] right-[25px]`}
     >
       {isClosed ? (
         <button
-          className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
+          className="btn-unfold w-full h-[25px] flex justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-sm border"
           style={{ height: 25 }}
           onClick={handleOpen}
         >
-          열기
+          <TbArrowBarDown />
         </button>
       ) : (
         <>
           <button
-            className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
-            style={{ height: 50 }}
-            onClick={moveShoppingBasket}
-          >
-            장바구니({cartItems.length})
-          </button>
-          <button
-            className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
-            onClick={() => openModal()} // 모달창 열기
-            style={{ height: 50 }}
-          >
-            채팅 알람({unreadAlarmCount})
-          </button>
-          <button
-            className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
-            onClick={handleClose}
-            style={{ height: 25 }}
-          >
-            접기
-          </button>
-          <button
-            className="w-full  text-gray-800 font-semibold text-sm border-b border-opacity-30 btn-top"
-            style={{ height: 25 }}
+            className="btn-top w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-[#282222] text-[#E4E4E3] font-semibold text-sm border"
             onClick={() => {
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
           >
-            ▲ Top
+            <IoTriangleOutline /> <span>Top</span>
+          </button>
+          <button
+            className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] text-[#282222] font-semibold text-sm border mt-[10px]"
+            onClick={moveShoppingBasket}
+          >
+            <FaHeart />({cartItems.length})
+          </button>
+          <button
+            className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-[#282222] text-[#E4E4E3] font-semibold text-sm border mt-[10px]"
+            onClick={() => openModal()} // 모달창 열기
+          >
+            <AiOutlineMessage />({unreadAlarmCount})
+          </button>
+          <button
+            className="btn-fold w-full h-[25px] flex flex-col justify-center items-center bg-[#E4E4E3]  text-[#282222] font-semibold text-sm border mt-[10px]"
+            onClick={handleClose}
+          >
+            <TbArrowBarUp />
           </button>
         </>
       )}
