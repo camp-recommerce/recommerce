@@ -112,21 +112,6 @@ public class UserController {
         }
     }
 
-
-
-    // 계정 삭제 전 비밀번호 검증을 처리하는 엔드포인트
-    @GetMapping("/validate-deletion")
-    public ResponseEntity<?> validatePasswordForDeletion(@RequestParam String email, @RequestParam String deletionPassword) {
-        boolean isValid = userService.validatePasswordForDeletion(email, deletionPassword);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Password is valid for deletion"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password for deletion"));
-        }
-    }
-
-
-
     //이메일로 비밀번호 전송
     @PostMapping("/reset-pw")
     public ResponseEntity<String> resetPassword(@RequestParam("email") String email) {
@@ -136,5 +121,16 @@ public class UserController {
         } catch (UserService.EmailNotExistException ex) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
+    }
+
+    // PUT 메서드를 사용하여 사용자의 비밀번호를 변경합니다.
+    // @param email 사용자의 이메일 주소
+    // @param newPassword 새로운 비밀번호
+    @PutMapping("/password/{email}")
+    public ResponseEntity<String> changePassword(@PathVariable String email, @RequestParam String newPassword) {
+        // 비밀번호 변경을 UserService에 위임합니다.
+        userService.changePassword(email, newPassword);
+        // 변경 성공을 응답합니다.
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");
     }
 }

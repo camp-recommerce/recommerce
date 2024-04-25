@@ -10,6 +10,9 @@ const MyPage = lazy(() => import("../components/user/MyPageComponent"));
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const Address = lazy(() => import("../components/user/AddressComponent"));
+const PasswordChangeForm = lazy(() =>
+  import("../components/user/PasswordChangeFormComponent")
+);
 const PublicProfile = lazy(() =>
   import("../components/user/PublicProfileComponent")
 ); // 추가
@@ -93,6 +96,14 @@ const userRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <PublicProfile />
+        </Suspense>
+      ),
+    },
+    {
+      path: "password/:email", // 공개 프로필 페이지 라우트 추가
+      element: (
+        <Suspense fallback={Loading}>
+          <PasswordChangeForm />
         </Suspense>
       ),
     },

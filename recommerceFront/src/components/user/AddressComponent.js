@@ -3,11 +3,12 @@ import DaumPostcode from "react-daum-postcode";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateAddress } from "../../api/userApi";
 import AlertModal from "../modal/AlertModal"; // 모달 컴포넌트 import
+import { post } from "jquery";
 
 const AddressComponent = () => {
   const { email } = useParams();
   const [address, setAddress] = useState("");
-  const [zoneCode, setZoneCode] = useState("");
+  const [postcode, setPostcode] = useState("");
   const [addressDetail, setaddressDetail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [modalShow, setModalShow] = useState(false); // 모달 표시 상태
@@ -17,7 +18,7 @@ const AddressComponent = () => {
 
   const handleComplete = (data) => {
     setAddress(data.address);
-    setZoneCode(data.zonecode);
+    setPostcode(data.postcode);
   };
 
   const saveAddress = async () => {
@@ -28,7 +29,7 @@ const AddressComponent = () => {
 
     setIsLoading(true);
     try {
-      await updateAddress(email, address, addressDetail, zoneCode);
+      await updateAddress(email, address, addressDetail, postcode);
       setModalContent("주소가 성공적으로 업데이트 되었습니다."); // 성공 메시지 설정
       setModalShow(true); // 모달 표시
       setTimeout(() => {
@@ -85,7 +86,7 @@ const AddressComponent = () => {
       <h2>주소를 정확하게 입력해주세요. </h2>
       <DaumPostcode onComplete={handleComplete} />
       <div>
-        <b>우편번호:</b> {zoneCode}
+        <b>우편번호:</b> {postcode}
       </div>
       <div>
         <b>주소:</b> {address}

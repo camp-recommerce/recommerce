@@ -97,16 +97,6 @@ public class UserServiceImpl implements UserService {
         return userRepository.save(user);
     }
 
-    @Override
-    public boolean validateCurrentPassword(String email, String currentPassword) {
-        return false;
-    }
-
-    @Override
-    public boolean validatePasswordForDeletion(String email, String deletionPassword) {
-        return false;
-    }
-
 
     @Override
     public String resetPassword(String email){
@@ -146,4 +136,20 @@ public class UserServiceImpl implements UserService {
 
         return sb.toString();
     }
+
+    @Override
+    public void changePassword(String email, String newPassword) {
+        // 이메일을 사용하여 사용자 정보를 조회합니다.
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        // 사용자 정보가 존재하지 않으면 예외를 발생시킵니다.
+        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+
+        // 새로운 비밀번호를 인코딩하여 설정합니다.
+        String encodedPassword = passwordEncoder.encode(newPassword);
+        user.changePassword(encodedPassword);
+
+        // 변경된 비밀번호를 저장합니다.
+        userRepository.save(user);
+    }
+
 }

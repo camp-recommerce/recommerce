@@ -42,6 +42,12 @@ export const readUser = async (email) => {
   return res.data;
 };
 
+// 사용자 이미지 가져오기
+export const readUserImage = async (email) => {
+  const res = await axios.get(`${host}/image/${email}`);
+  return res.data;
+};
+
 // 비밀번호 재설정 이메일 전송
 export const sendEmail = async (email) => {
   const formData = new URLSearchParams();
@@ -54,14 +60,14 @@ export const sendEmail = async (email) => {
 export const updateAddress = async (
   email,
   address,
-  postcode,
-  addressDetail
+  addressDetail,
+  postcode
 ) => {
   const res = await jwtAxios.put(`${host}/address/${email}`, null, {
     params: {
       newAddress: address,
-      newPostcode: postcode,
       addressDetail: addressDetail,
+      newPostcode: postcode,
     },
   });
   return res.data;
@@ -81,4 +87,32 @@ export const getPublicProfileByEmail = async (email) => {
 export const getUserProfile = async (email) => {
   const res = await axios.get(`${host}/profile/${email}`, {});
   return res.data;
+};
+
+export const changePassword = async (email, currentPassword, newPassword) => {
+  // 요청 데이터를 JSON 형식으로 준비
+  const data = JSON.stringify({
+    currentPassword: currentPassword,
+    newPassword: newPassword,
+  });
+
+  // 요청 헤더 설정
+  const config = {
+    headers: {
+      "Content-Type": "application/json",
+    },
+  };
+
+  try {
+    // PUT 요청을 보내고 결과를 반환
+    const response = await jwtAxios.put(
+      `${host}/password/${email}`,
+      data,
+      config
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Error changing password:", error);
+    throw error; // 오류 던지기를 수정하여 보다 상세한 정보 포함
+  }
 };

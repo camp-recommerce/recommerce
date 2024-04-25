@@ -9,12 +9,6 @@ const validationSchema = Yup.object({
   email: Yup.string()
     .email("유효한 이메일을 입력하세요.")
     .required("이메일은 필수 항목입니다."),
-  pw: Yup.string()
-    .matches(
-      /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{5,}$/,
-      "비밀번호는 영문자, 숫자, 특수문자를 모두 포함하여 5자 이상이어야 합니다."
-    )
-    .required("비밀번호는 필수 항목입니다."),
   nickname: Yup.string().required("닉네임은 필수 항목입니다."),
   phone: Yup.string()
     .matches(/^\d{11}$/, "핸드폰 번호는 11자리여야 합니다.")
@@ -28,7 +22,6 @@ const ModifyComponent = () => {
   const loginInfo = useSelector((state) => state.loginSlice);
   const [user, setUser] = useState({
     email: "",
-    pw: "",
     nickname: "",
     phone: "",
     birth: "",
@@ -41,9 +34,7 @@ const ModifyComponent = () => {
     const fetchUserData = async () => {
       try {
         const userData = await readUser(loginInfo.email);
-        // 비밀번호를 제외하고 사용자 데이터를 설정합니다.
-        // 이렇게 하면 비밀번호 필드는 빈 값으로 유지됩니다.
-        setUser({ ...userData, pw: "" });
+        setUser(userData);
       } catch (error) {
         console.error("Error fetching user data:", error);
       }
@@ -114,6 +105,7 @@ const ModifyComponent = () => {
 
   return (
     <div style={styles.formWrap}>
+      {/* 수정 성공 알림 모달 */}
       {result && (
         <AlertModal
           title="회원정보 수정"
@@ -126,6 +118,7 @@ const ModifyComponent = () => {
         {errorMessage && <div>{errorMessage}</div>}
       </div>
       <form>
+        {/* Email 입력란 */}
         <div style={styles.formField}>
           <label>Email</label>
           <input
@@ -137,16 +130,7 @@ const ModifyComponent = () => {
             readOnly
           />
         </div>
-        <div style={styles.formField}>
-          <label>비밀번호</label>
-          <input
-            style={styles.input}
-            name="pw"
-            type="password"
-            value={user.pw}
-            onChange={handleChange}
-          />
-        </div>
+        {/* 닉네임 입력란 */}
         <div style={styles.formField}>
           <label>닉네임</label>
           <input
@@ -157,6 +141,7 @@ const ModifyComponent = () => {
             onChange={handleChange}
           />
         </div>
+        {/* 전화번호 입력란 */}
         <div style={styles.formField}>
           <label>P.H</label>
           <input
@@ -167,6 +152,7 @@ const ModifyComponent = () => {
             onChange={handleChange}
           />
         </div>
+        {/* 생년월일 입력란 */}
         <div style={styles.formField}>
           <label>생년월일</label>
           <input
@@ -177,6 +163,7 @@ const ModifyComponent = () => {
             onChange={handleChange}
           />
         </div>
+        {/* 수정하기 버튼 */}
         <button style={styles.button} onClick={handleClickModify} type="button">
           수정하기
         </button>
