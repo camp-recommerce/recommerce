@@ -13,7 +13,7 @@ public interface AuctionBiddingService {
     AuctionBidding saveAuctionBidding(ChatMessageDTO chatMessageDTO);
 
     // 이메일과 상품번호를 조합하여 옥션 바이딩 조회하는 메소드
-    List<AuctionBiddingDTO> findAuctionBiddingByEmailAndAuctionApno(String email, Long apno);
+    List<AuctionBiddingDTO> findAuctionBiddingByEmail(String email);
 
     void sendPreviousBidHistory(Long room, WebSocketSession session);
 

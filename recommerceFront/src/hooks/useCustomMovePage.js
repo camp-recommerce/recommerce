@@ -46,6 +46,14 @@ const useCustomMovePage = (pno) => {
     setRefresh(!refresh);
   };
 
+  const moveMyPageToAuctonRead = (num) => {
+    console.log(queryDefault);
+    navigate({
+      pathname: `../../auction/read/${num}`,
+      search: queryDefault,
+    });
+  };
+
   const moveReadPage = (num) => {
     console.log(queryDefault);
 
@@ -118,6 +126,7 @@ const useCustomMovePage = (pno) => {
     moveListPage,
     moveProductListPage,
     moveReviewQnaListPage,
+    moveMyPageToAuctonRead,
     page,
     size,
     reviewQnaPage,

@@ -41,6 +41,11 @@ public class AuctionController {
         return auctionService.getList(pageRequestDTO,apName,apCategory);
     }
 
+    @GetMapping("/bidlist")
+    public PageResponseDTO<AuctionDTO> bidList(PageRequestDTO pageRequestDTO, String apBuyer){
+        return auctionService.findByApBuyer(pageRequestDTO,apBuyer);
+    }
+
     @GetMapping("/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
 

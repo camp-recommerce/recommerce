@@ -55,7 +55,7 @@ public class SaleItemRepositoryTests {
                     .lng(127.0 + (0.001 * i))
                     .pdesc("상품 상세 " + i)
                     .delFlag(false)
-                    .user(user)
+//                    .user(user)
                     .build();
 
             productRepository.save(product);

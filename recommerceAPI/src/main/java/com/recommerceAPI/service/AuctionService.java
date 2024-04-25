@@ -14,4 +14,6 @@ public interface AuctionService {
 
     void remove(Long apno);
     PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO,String apName, String apCategory);
+
+    PageResponseDTO<AuctionDTO>findByApBuyer(PageRequestDTO pageRequestDTO,String apBuyer);
 }

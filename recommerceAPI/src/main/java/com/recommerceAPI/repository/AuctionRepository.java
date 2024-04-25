@@ -24,4 +24,9 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     List<Auction> findByApStartTimeBeforeAndApClosingTimeAfter(LocalDateTime currentTime, LocalDateTime currentTime1);
 
     List<Auction> findByApClosingTimeBefore(LocalDateTime currentTime);
+
+    @Query("SELECT a, ai FROM Auction a LEFT JOIN a.imageList ai WHERE " +
+            "(:apBuyer is null OR a.apBuyer = :apBuyer)")
+    Page<Object[]> findByApBuyer(Pageable pageablem ,@Param("apBuyer") String apBuyer);
+
 }

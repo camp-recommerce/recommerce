@@ -45,7 +45,7 @@ const A_ReadComponent = () => {
       window.scrollTo(0, 0);
       setLoading(false);
     });
-  }, [apno]);
+  }, [apno, isChatModalOpen]);
 
   const closeImageModal = () => {
     setOpenImg(false);
@@ -118,7 +118,10 @@ const A_ReadComponent = () => {
                   <>
                     <div className="font-bold text-lg">현재 입찰가</div>
                     <div className="text-lg">
-                      {formatNumber(auctionProduct.apCurrentPrice)}원
+                      {auctionProduct.apCurrentPrice !== 0
+                        ? formatNumber(auctionProduct.apCurrentPrice)
+                        : formatNumber(auctionProduct.apStartPrice)}
+                      원
                     </div>
                   </>
                 )}

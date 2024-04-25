@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
+import com.recommerceAPI.domain.AuctionImage;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -67,18 +68,47 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         return auctionBiddingRepository.save(auctionBidding);
     }
     @Override
-    public List<AuctionBiddingDTO> findAuctionBiddingByEmailAndAuctionApno(String email, Long apno) {
-        List<AuctionBidding>  auctionBiddingList =  auctionBiddingRepository.findByBidderEmailAndAuctionApno(email, apno);
+    public List<AuctionBiddingDTO> findAuctionBiddingByEmail(String email) {
+        List<AuctionBidding> auctionBiddingList = auctionBiddingRepository.findByBidderEmail(email);
 
         // 옥션 바이딩 정보를 AuctionBiddingDTO로 변환하여 리스트에 추가
         List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();
         for (AuctionBidding auctionBidding : auctionBiddingList) {
-            AuctionBiddingDTO auctionBiddingDTO = modelMapper.map(auctionBidding, AuctionBiddingDTO.class);
+            AuctionBiddingDTO auctionBiddingDTO = new AuctionBiddingDTO();
+
+            // 수동으로 매핑 설정
+            auctionBiddingDTO.setApno(auctionBidding.getApno());
+            auctionBiddingDTO.setBidAmount(auctionBidding.getBidAmount());
+            auctionBiddingDTO.setBidTime(auctionBidding.getBidTime());
+
+            // AuctionBidding 객체에서 Auction 객체 가져오기
+            Auction auction = auctionBidding.getAuction();
+
+            // Auction 객체가 null이 아닌 경우에만 추가 정보 설정
+            if (auction != null) {
+                // Auction 객체에서 필요한 정보들을 DTO에 설정
+                auctionBiddingDTO.setApName(auction.getApName());
+                auctionBiddingDTO.setAuctionApno(auction.getApno());
+                auctionBiddingDTO.setApStatus(String.valueOf(auction.getApStatus()));
+                auctionBiddingDTO.setBidderEmail(auction.getApBuyer());
+                auctionBiddingDTO.setCurrentPrice(auction.getApCurrentPrice());
+
+                // Auction 객체에서 이미지 파일 이름들을 가져와서 DTO에 설정
+                List<String> uploadFileNames = new ArrayList<>();
+                for (AuctionImage image : auction.getImageList()) {
+                    uploadFileNames.add(image.getFileName());
+                }
+                auctionBiddingDTO.setUploadFileNames(uploadFileNames);
+            }
+
+            // 리스트에 추가
             auctionBiddingDTOList.add(auctionBiddingDTO);
         }
 
         return auctionBiddingDTOList;
     }
+
+
 
     @Override
     public void sendPreviousBidHistory(Long room, WebSocketSession session) {

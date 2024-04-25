@@ -10,8 +10,9 @@ import java.util.List;
 
 public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, Long> {
 
-    @Query("SELECT ab FROM AuctionBidding ab WHERE (:email is null OR ab.bidder.email = :email) AND (:apno is null OR ab.auction.apno = :apno)")
-    List<AuctionBidding> findByBidderEmailAndAuctionApno(@Param("email") String email, @Param("apno") Long apno);
+    @Query("SELECT ab FROM AuctionBidding ab WHERE ab.bidder.email = :email")
+    List<AuctionBidding> findByBidderEmail(@Param("email") String email);
+
 
     List<AuctionBidding> findByAuction(Auction auction);
     List<AuctionBidding> findByAuction_Apno(Long apno);

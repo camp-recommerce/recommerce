@@ -67,7 +67,8 @@ function A_Chat({
     socket.send(JSON.stringify(messageData));
     setMessageList((list) => [...list, messageData]);
     inputRef.current.value = "";
-    setCurrentBid(parsedMsg); // 입찰 성공 시 현재 입찰가 업데이트
+    setCurrentBid(parsedMsg);
+    window.alert(`${currentMsg}원에 입찰 하셨습니다.`); // 입찰 성공 시 현재 입찰가 업데이트
   };
 
   useEffect(() => {
