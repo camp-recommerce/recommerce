@@ -7,8 +7,6 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-
-import com.recommerceAPI.domain.AuctionImage;
 import com.recommerceAPI.domain.Product;
 import com.recommerceAPI.domain.ProductImage;
 
@@ -55,20 +53,22 @@ public class ProductServiceImpl implements ProductService {
             ProductImage productImage = (ProductImage) arr[1];
 
             ProductDTO productDTO = new ProductDTO(
-                product.getPno(),
-                product.getPname(),
-                product.getPcategory(),
-                product.getPrice(),
-                product.getPstate(),
-                product.getPlocat(),
-                product.getAddressLine(),
-                product.getLat(),
-                product.getLng(),
-                product.getPdesc(),
-                product.isDelFlag(),
-                product.getUserEmail(),
-                null, // 파일 리스트는 조건에 따라 설정
-                null  // 업로드 파일 이름 리스트 초기화
+                    product.getPno(),
+                    product.getPname(),
+                    product.getPcategory(),
+                    product.getPrice(),
+                    product.getPstate(),
+                    product.getPlocat(),
+                    product.getAddressLine(),
+                    product.getLat(),
+                    product.getLng(),
+                    product.getPdesc(),
+                    product.isDelFlag(),
+                    product.isSoldOut(),
+                    product.getUserEmail(),
+
+                    null, // 파일 리스트는 조건에 따라 설정
+                    null  // 업로드 파일 이름 리스트 초기화
             );
 
             if (productImage != null) {
@@ -83,11 +83,11 @@ public class ProductServiceImpl implements ProductService {
 
         // 페이지 정보 및 데이터 리스트를 포함하는 DTO 객체 생성
         return new ProductPageResponseDTO<>(
-            dtoList,
-            pageRequestDTO.getPage(),
-            result.getTotalPages(),
-            totalCount,
-            result.hasNext()
+                dtoList,
+                pageRequestDTO.getPage(),
+                result.getTotalPages(),
+                totalCount,
+                result.hasNext()
         );
     }
 
@@ -141,14 +141,14 @@ public class ProductServiceImpl implements ProductService {
         Product product = result.orElseThrow();
 
         List<String> fileNameList = product.getImageList().stream()
-                       .map(ProductImage::getFileName)
-                       .collect(Collectors.toList());
+                .map(ProductImage::getFileName)
+                .collect(Collectors.toList());
 
-               ProductDTO dto = modelMapper.map(product, ProductDTO.class);
+        ProductDTO dto = modelMapper.map(product, ProductDTO.class);
 
-               dto.setUploadFileNames(fileNameList);
+        dto.setUploadFileNames(fileNameList);
 
-               return dto;
+        return dto;
     }
 
     private ProductDTO entityToDTO(Product product){
@@ -197,7 +197,7 @@ public class ProductServiceImpl implements ProductService {
         product.changeLat(productDTO.getLat());
         product.changeLng(productDTO.getLng());
         product.changeDesc(productDTO.getPdesc());
-        product.changeUserEmail(productDTO.getUserEmail());
+        product.changeSold(productDTO.isSoldOut());
 
         //3. upload File -- clear first
         product.clearList();
@@ -217,5 +217,33 @@ public class ProductServiceImpl implements ProductService {
         productRepository.updateToDelete(pno, true);
     }
 
+
+    //상품목록에서 유저이메일로 자기판매등록상품 조회, 판매중, 판매완료
+    //0425임형욱
+    @Override
+    public ProductPageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail, Boolean soldOut) {
+        log.info("Fetching product list for user {} with sold out status {}", userEmail, soldOut);
+
+        // 페이지 요청을 처리하기 위한 Pageable 객체 생성
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("pno").descending());
+
+        // Repository에서 데이터를 가져옴
+        Page<Product> result = productRepository.findByUserEmailAndSoldOutAndNotDeleted(userEmail, soldOut, pageable);
+
+        // 결과를 ProductDTO 리스트로 변환
+        List<ProductDTO> dtoList = result.getContent().stream().map(this::entityToDTO).collect(Collectors.toList());
+
+        // 전체 아이템 수와 페이지 정보를 포함하는 DTO 객체 생성
+        return new ProductPageResponseDTO<>(
+                dtoList,
+                pageRequestDTO.getPage(),
+                result.getTotalPages(),
+                result.getTotalElements(),
+                result.hasNext()
+        );
+    }
 
 }

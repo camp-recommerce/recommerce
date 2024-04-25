@@ -17,4 +17,12 @@ public class PageRequestDTO {
 
     @Builder.Default
     private int size = 8;
+
+    //0425임형욱
+    @Builder.Default
+    private String sortBy = "pno";  // 기본적으로 pno 필드를 기준으로 정렬합니다.
+
+    //0425임형욱
+    @Builder.Default
+    private boolean direction = false;  // 기본적으로 내림차순으로 정렬합니다. true면 오름차순.
 }

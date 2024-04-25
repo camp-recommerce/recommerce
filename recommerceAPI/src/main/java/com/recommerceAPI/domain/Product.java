@@ -101,4 +101,6 @@ public class Product {
         this.imageList.clear();
     }
 
+    public void changeSold(boolean soldOut) {
+    }
 }

@@ -32,5 +32,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
                               @Param("addressLine") String addressLine, Pageable pageable);
 
 
+    // 사용자 이메일과 판매 상태에 따른 제품 목록 조회 0425임형욱
+    @Query("select p from Product p where p.userEmail = :userEmail and p.soldOut = :soldOut and p.delFlag = false")
+    Page<Product> findByUserEmailAndSoldOutAndNotDeleted(
+            @Param("userEmail") String userEmail,
+            @Param("soldOut") boolean soldOut,
+            Pageable pageable
+    );
+
     Product findByPname(String pname);
 }

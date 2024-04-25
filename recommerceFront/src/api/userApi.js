@@ -42,12 +42,6 @@ export const readUser = async (email) => {
   return res.data;
 };
 
-// 사용자 이미지 가져오기
-export const readUserImage = async (email) => {
-  const res = await axios.get(`${host}/image/${email}`);
-  return res.data;
-};
-
 // 비밀번호 재설정 이메일 전송
 export const sendEmail = async (email) => {
   const formData = new URLSearchParams();
@@ -60,14 +54,14 @@ export const sendEmail = async (email) => {
 export const updateAddress = async (
   email,
   address,
-  addressDetail,
-  postcode
+  postcode,
+  addressDetail
 ) => {
   const res = await jwtAxios.put(`${host}/address/${email}`, null, {
     params: {
       newAddress: address,
-      addressDetail: addressDetail,
       newPostcode: postcode,
+      addressDetail: addressDetail,
     },
   });
   return res.data;
@@ -89,30 +83,37 @@ export const getUserProfile = async (email) => {
   return res.data;
 };
 
-export const changePassword = async (email, currentPassword, newPassword) => {
-  // 요청 데이터를 JSON 형식으로 준비
-  const data = JSON.stringify({
-    currentPassword: currentPassword,
-    newPassword: newPassword,
-  });
-
-  // 요청 헤더 설정
-  const config = {
-    headers: {
-      "Content-Type": "application/json",
-    },
-  };
-
+// 비밀번호 변경
+export const changePassword = async (email, newPassword) => {
   try {
-    // PUT 요청을 보내고 결과를 반환
-    const response = await jwtAxios.put(
-      `${host}/password/${email}`,
-      data,
-      config
+    const res = await axios.put(
+      `${API_SERVER_HOST}/api/user/password/${email}`,
+      null,
+      {
+        params: {
+          newPassword: newPassword,
+        },
+      }
     );
-    return response.data;
+    return res.data; // 응답 데이터를 반환합니다.
   } catch (error) {
-    console.error("Error changing password:", error);
-    throw error; // 오류 던지기를 수정하여 보다 상세한 정보 포함
+    console.error("비밀번호 변경 중 오류가 발생했습니다:", error);
+    return null; // 오류가 발생하면 null을 반환합니다.
+  }
+};
+
+// 사용자의 제품 목록 조회
+export const fetchProductsByUser = async (email, soldOut) => {
+  try {
+    const response = await axios.get(`${API_SERVER_HOST}/by-user`, {
+      params: {
+        userEmail: email,
+        soldOut: soldOut,
+      },
+    });
+    return response.data; // 제품 목록 반환
+  } catch (error) {
+    console.error("제품 목록 조회 중 오류가 발생했습니다:", error);
+    return null; // 오류 발생 시 null 반환
   }
 };

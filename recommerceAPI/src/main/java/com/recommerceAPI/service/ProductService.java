@@ -19,4 +19,7 @@ public interface ProductService {
     void modify(ProductDTO productDTO);
     void remove(Long pno);
 
+    // 사용자 이메일과 판매 상태 기반의 제품 목록 조회
+    //0425 임형욱
+    ProductPageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail, Boolean soldOut);
 }

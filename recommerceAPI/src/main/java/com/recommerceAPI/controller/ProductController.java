@@ -140,4 +140,29 @@ public class ProductController {
         fileUtil.deleteFiles(oldFileNames);
         return Map.of("RESULT", "SUCCESS");
     }
+
+    // 사용자 이메일과 판매 상태에 따른 제품 목록 조회
+    @GetMapping("/user/by-user")
+    public ResponseEntity<ProductPageResponseDTO<ProductDTO>> getProductsByUserAndStatus(
+            @RequestParam int page,
+            @RequestParam int size,
+            @RequestParam String sortBy,
+            @RequestParam boolean direction,
+            @RequestParam String userEmail,
+            @RequestParam(required = false) Boolean soldOut) {
+
+        log.info("Fetching products for user: {} with soldOut status: {}", userEmail, soldOut);
+
+        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+                .page(page)
+                .size(size)
+                .sortBy(sortBy)
+                .direction(direction)
+                .build();
+
+        ProductPageResponseDTO<ProductDTO> response = productService.getProductsByUserAndStatus(pageRequestDTO, userEmail, soldOut);
+
+        return ResponseEntity.ok(response);
+    }
+
 }

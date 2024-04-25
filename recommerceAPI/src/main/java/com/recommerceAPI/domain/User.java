@@ -13,7 +13,7 @@ import java.util.List;
 @Builder // Lombok의 빌더 패턴을 사용하여 객체 생성을 쉽게 만듦
 @AllArgsConstructor // 모든 필드 값을 매개변수로 받는 생성자를 자동으로 생성
 @NoArgsConstructor // 매개변수가 없는 기본 생성자를 자동으로 생성
-@ToString(exclude = {"userRoleList", "userImage"}) // toString 메서드 자동 생성. userRoleList는 제외
+@ToString(exclude = {"userRoleList"}) // toString 메서드 자동 생성. userRoleList는 제외
 public class User {
 
     @Id // 기본 키를 나타냄. 여기서는 email이 기본 키임
@@ -63,16 +63,6 @@ public class User {
     // 사용자의 평균 평점을 업데이트하는 메서드
     public void updateRating(double newRating) {
         this.averageRating = newRating;
-    }
-
-    // 유저 이미지 설정 메서드
-    public void setUserImage(byte[] userImage) {
-        this.userImage = userImage;
-    }
-
-    // 유저 이미지 반환 메서드
-    public byte[] getUserImage() {
-        return userImage;
     }
 
 

@@ -16,6 +16,9 @@ const PasswordChangeForm = lazy(() =>
 const PublicProfile = lazy(() =>
   import("../components/user/PublicProfileComponent")
 ); // 추가
+const UserProduct = lazy(() =>
+  import("../components/user/UserProductComponent")
+);
 
 const userRouter = () => {
   return [
@@ -104,6 +107,14 @@ const userRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <PasswordChangeForm />
+        </Suspense>
+      ),
+    },
+    {
+      path: "by-user", // 판매목록 , 판매중, 판매완료 추가
+      element: (
+        <Suspense fallback={Loading}>
+          <UserProduct />
         </Suspense>
       ),
     },

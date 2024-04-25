@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { readUser } from "../../api/userApi";
 import { fetchSaleItems } from "../../api/salesApi";
 import { fetchPurchaseItems } from "../../api/purchaseApi";
-<<<<<<< HEAD
 import { getBidList } from "../../api/auctionBidApi";
 import { getMyList } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
@@ -12,25 +11,23 @@ import { API_SERVER_HOST } from "../../api/userApi";
 import ImageModal from "../modal/ImageModal";
 import A_Chat from "../auction/chat/A_Chat";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
+import { useNavigate } from "react-router-dom";
 
 const host = API_SERVER_HOST;
-=======
-import { uploadUserImage } from "../../api/userimageApi"; // 유저 이미지 업로드 API 추가
->>>>>>> 0424_2임형욱
 
 const MyPageComponent = () => {
+  const navigate = useNavigate();
   const user = useSelector((state) => state.loginSlice);
   const [userData, setUserData] = useState(null);
   const [saleItems, setSaleItems] = useState([]);
   const [purchaseItems, setPurchaseItems] = useState([]);
   const [activeMenu, setActiveMenu] = useState("profile");
-<<<<<<< HEAD
+
   const { page, size, moveMyPageToAuctonRead } = useCustomMovePage();
   const [auction, setAuction] = useState(null);
   const [bidlist, setBidList] = useState(null);
   const [openImg, setOpenImg] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
-  const navigate = useNavigate();
   const { openChatModal, closeChatModal, isChatModalOpen, socket, roomId } =
     useCustomChatModal(); // useNavigate 훅 사용
   const closeImageModal = () => {
@@ -44,10 +41,8 @@ const MyPageComponent = () => {
     setSelectedImgPath(`${host}/auction/view/${imageName}`);
     setOpenImg(true);
   };
-=======
-  const [selectedImage, setSelectedImage] = useState(null);
-  const navigate = useNavigate();
->>>>>>> 0424_2임형욱
+
+  const [selectedImage, setSgeelectedIma] = useState(null);
 
   useEffect(() => {
     if (user && user.email) {
@@ -76,21 +71,9 @@ const MyPageComponent = () => {
     }
   }, [user]);
 
-  const uploadImage = async () => {
-    try {
-      if (selectedImage) {
-        const response = await uploadUserImage(selectedImage);
-        setUserData({ ...userData, images: response.imageUrl }); // 업데이트된 이미지 URL을 userData에 반영
-        alert("이미지 업로드가 완료되었습니다.");
-      } else {
-        alert("이미지를 선택해주세요.");
-      }
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      alert("이미지 업로드 중 오류가 발생했습니다.");
-    }
+  const goToSales = () => {
+    navigate("/user/by-user"); // UserProducts 컴포넌트의 경로로 이동
   };
-
   // Inline styles
   const styles = {
     myPageBundle: {
@@ -159,29 +142,6 @@ const MyPageComponent = () => {
   return (
     <div style={styles.myPageBundle}>
       <h1 style={styles.title}>마이페이지</h1>
-<<<<<<< HEAD
-      <div style={styles.menuButtons}>
-        <button style={styles.button} onClick={() => setActiveMenu("profile")}>
-          프로필
-        </button>
-        <button
-          style={styles.button}
-          onClick={() => handleAddressInfo("address")}
-        >
-          나의 주소
-        </button>
-        <button style={styles.button} onClick={() => setActiveMenu("settings")}>
-          정보변경
-        </button>
-        <button style={styles.button} onClick={() => setActiveMenu("bid")}>
-          경매 내역
-        </button>
-        <button style={styles.button} onClick={() => setActiveMenu("sales")}>
-          판매목록
-        </button>
-      </div>
-=======
->>>>>>> 0424_2임형욱
       <div style={styles.infoBundle}>
         {activeMenu === "profile" && userData && (
           <div style={styles.profileImageContainer}>
@@ -190,14 +150,6 @@ const MyPageComponent = () => {
               alt="User Profile"
               style={styles.profileImage}
             />
-            <input
-              type="file"
-              onChange={(e) => setSelectedImage(e.target.files[0])}
-              style={styles.fileInput}
-            />
-            <button style={styles.button} onClick={uploadImage}>
-              이미지
-            </button>
           </div>
         )}
 
@@ -207,7 +159,6 @@ const MyPageComponent = () => {
             <p>닉네임: {userData.nickname}</p>
             <p>휴대폰: {userData.phone}</p>
             <p>생년월일: {userData.birth}</p>
-<<<<<<< HEAD
             <Link to={`../profile/${email}`}>
               <button style={styles.button}>프로필 보기</button>
             </Link>
@@ -216,8 +167,6 @@ const MyPageComponent = () => {
 
         {activeMenu === "address" && userData && (
           <div style={styles.userInfo}>
-=======
->>>>>>> 0424_2임형욱
             <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
             <p>
               우편주소: {userData.postcode || "등록된 우편번호가 없습니다."}
@@ -386,7 +335,7 @@ const MyPageComponent = () => {
         <button style={styles.button} onClick={() => setActiveMenu("settings")}>
           정보변경
         </button>
-        <button style={styles.button} onClick={() => setActiveMenu("sales")}>
+        <button style={styles.button} onClick={goToSales}>
           판매목록
         </button>
       </div>
