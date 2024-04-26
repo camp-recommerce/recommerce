@@ -5,9 +5,11 @@ const ImageSlice = lazy(() => import("../pages/MainPage"));
 const ProductList = lazy(() =>
   import("../components/product/P_InfiniteComponent")
 );
-const ProductRead = lazy(() => import("../pages/product/P_ReadPage"));
-const ProductAdd = lazy(() => import("../pages/product/P_AddPage"));
-const ProductModify = lazy(() => import("../pages/product/P_ModifyPage"));
+const ProductRead = lazy(() => import("../components/product/P_ReadComponent"));
+const ProductAdd = lazy(() => import("../components/product/P_AddComponent"));
+const ProductModify = lazy(() =>
+  import("../components/product/P_ModifyComponent")
+);
 const P_CartComponent = lazy(() =>
   import("../components/product/cart/P_CartComponent")
 );
@@ -24,7 +26,7 @@ const productRouter = () => {
       ),
     },
     {
-      path: "/product/read/:pno",
+      path: "product/read/:pno",
       element: (
         <Suspense fallback={Loading}>
           <ProductRead />
@@ -32,7 +34,7 @@ const productRouter = () => {
       ),
     },
     {
-      path: "/product/register",
+      path: "product/register",
       element: (
         <Suspense fallback={Loading}>
           <ProductAdd />
@@ -40,7 +42,7 @@ const productRouter = () => {
       ),
     },
     {
-      path: "/product/modify/:pno",
+      path: "product/modify/:pno",
       element: (
         <Suspense fallback={Loading}>
           <ProductModify />

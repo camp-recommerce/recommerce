@@ -28,7 +28,8 @@ export const getOne = async (pno) => {
 
 //상품 등록페이지
 export const postOne = async (product) => {
-  const res = await jwtAxios.post(`${host}/product/register`, product);
+  const header = { headers: { "Content-Type": "multipart/form-data" } };
+  const res = await jwtAxios.post(`${host}/product/register`, product, header);
 
   return res.data;
 };

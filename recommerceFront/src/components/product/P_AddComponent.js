@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { postOne } from "../../api/productApi";
 import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
@@ -6,6 +6,8 @@ import "../../scss/product/AddPage.scss";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import MapComponent from "../MapComponent";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
+import useAuthStatus from "../../hooks/useAuthStatus";
+import { useNavigate } from "react-router-dom";
 
 const initState = {
   pname: "",
@@ -30,8 +32,17 @@ const P_AddComponent = () => {
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const { loginState } = useCustomLoginPage();
+  const isAuthenticated = useAuthStatus();
+  const navigate = useNavigate();
 
   const uploadRef = useRef();
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      alert("로그인이 필요한 페이지입니다.");
+      navigate("/user/login");
+    }
+  }, [isAuthenticated, navigate]);
 
   const handleChangeProduct = (e) => {
     let { name, value } = e.target;

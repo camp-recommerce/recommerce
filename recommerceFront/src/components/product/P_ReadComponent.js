@@ -12,7 +12,7 @@ import MapComponent from "../MapComponent";
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const host = API_SERVER_HOST;
 
@@ -42,6 +42,8 @@ const P_ReadComponent = () => {
   const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (pno) {
@@ -82,6 +84,11 @@ const P_ReadComponent = () => {
     }
   };
 
+  const handleCilkToList = () => {
+    navigate("/");
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="shopRead_group ">
       {loading ? <LoadingModal /> : <></>}
@@ -93,6 +100,9 @@ const P_ReadComponent = () => {
           src={`${host}/product/view/${product.uploadFileNames}`}
           onClick={handleOpenImg}
         />
+        <button className="goBack_btn" onClick={handleCilkToList}>
+          목록으로
+        </button>
       </div>
       {openImg && (
         <ImageModal
@@ -104,54 +114,48 @@ const P_ReadComponent = () => {
       <div className="shopRead_details">
         <div className="shopRead_area">
           <div className="shopRead_box">
-            <label>
-              <strong>상품이름 :{product.pname}</strong>
-            </label>
-            <div className="shopRead_pname">{}</div>
-          </div>
-          <div className="shopRead_box">
-            <label>
-              <strong>가격 :</strong>
-            </label>
-            <div key={product.price} className="shopRead_price">
-              {product.price}
+            <div className="item_info">
+              <strong>상품이름</strong>
             </div>
+            <p>{product.pname}</p>
           </div>
           <div className="shopRead_box">
-            <label>
-              <strong>판매자 :</strong>
-            </label>
-            <div className="shopRead_seller">{product.userEmail}</div>
+            <div className="item_info">
+              <strong>가격</strong>
+            </div>
+            <p key={product.price}>{product.price}</p>
+          </div>
+          <div className="shopRead_box">
+            <div className="item_info">
+              <strong>판매자</strong>
+            </div>
+            <p>{product.userEmail}</p>
           </div>
 
           <div className="shopRead_box">
-            <label>
-              <strong>상품상태 :</strong>
-            </label>
+            <div className="item_info">
+              <strong>상품상태</strong>
+            </div>
             <div className="shopRead_pstate">{product.pstate}</div>
           </div>
           <div className="shopRead_box">
-            <label>
-              <strong>상세설명 :</strong>
-            </label>
-            <div className="shopRead_pdesc">{product.pdesc}</div>
-          </div>
-          <div className="shopRead_box">
-            <div className="shopRead_box_location">
-              <div className="shopRead_plocat">
-                <div className="flex">
-                  <label>
-                    <strong>거래장소 :</strong>
-                  </label>
-                  <p>{product.plocat}</p>
-                </div>
-                <MapComponent
-                  initialPosition={{ lat: product.lat, lng: product.lng }}
-                  readOnly={true}
-                />
-              </div>
+            <div className="item_info">
+              <strong>상세설명</strong>
             </div>
+            <p>{product.pdesc}</p>
           </div>
+          <div className="shopRead_box_location">
+            <div className="item_info">
+              <strong>거래장소</strong>
+            </div>
+            <p>{product.plocat}</p>
+
+            <MapComponent
+              initialPosition={{ lat: product.lat, lng: product.lng }}
+              readOnly={true}
+            />
+          </div>
+
           {loginState.email === product.userEmail && (
             <div className="btn_modify  bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
               <button onClick={() => moveModifyPage(product.pno)}>
