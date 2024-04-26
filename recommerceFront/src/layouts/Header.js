@@ -1,13 +1,10 @@
 import React from "react";
 import useCustomLoginPage from "../hooks/useCustomLoginPage";
-import { useNavigate } from "react-router-dom";
+import useAuthRedirect from "../hooks/useAuthStatus";
 
 const Header = () => {
   const { isLogin } = useCustomLoginPage();
-  const navigate = useNavigate();
-  const handlenavigate = (path) => {
-    navigate(path);
-  };
+  const handleAuthRedirect = useAuthRedirect();
 
   return (
     <div
@@ -31,12 +28,14 @@ const Header = () => {
           >
             경매
           </a>
-          <a
-            href="http://localhost:3000/product/register"
+          <button
+            onClick={() =>
+              handleAuthRedirect("/product/register", "/user/login")
+            }
             className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
           >
             판매하기
-          </a>
+          </button>
         </div>
         <div className="center flex space-x-6">
           {isLogin ? (

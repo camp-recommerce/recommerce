@@ -321,7 +321,8 @@ const P_ModifyComponent = () => {
               />
             </div>
           </div>
-          <div className="modify-wrap">
+          {/* 관리자만 확인 가능 */}
+          {/* <div className="modify-wrap">
             <div className="modify-info">삭제 여부</div>
             <select
               name="delFlag"
@@ -332,7 +333,7 @@ const P_ModifyComponent = () => {
               <option value={false}>유효함</option>
               <option value={true}>삭제됨</option>
             </select>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* 버튼 영역 */}

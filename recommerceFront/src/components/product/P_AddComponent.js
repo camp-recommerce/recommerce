@@ -33,17 +33,8 @@ const P_AddComponent = () => {
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const { loginState } = useCustomLoginPage();
-  const isAuthenticated = useAuthStatus();
-  const navigate = useNavigate();
 
   const uploadRef = useRef();
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      alert("로그인이 필요한 페이지입니다.");
-      navigate("/user/login");
-    }
-  }, [isAuthenticated, navigate]);
 
   const handleChangeProduct = (e) => {
     let { name, value } = e.target;
@@ -175,7 +166,7 @@ const P_AddComponent = () => {
         <div className="add_textArea">
           <div className="add_area">
             <div className="add_wrap">
-              <label>제목</label>
+              <p>제목</p>
               <input
                 className=""
                 name="pname"
@@ -187,7 +178,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>카테고리</label>
+              <p>카테고리</p>
               <select
                 name="pcategory"
                 value={product.pcategory}
@@ -203,7 +194,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>판매 상태</label>
+              <p>판매 상태</p>
               <select
                 name="soldOut"
                 value={product.soldOut}
@@ -216,7 +207,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>상품 가격</label>
+              <p>상품 가격</p>
               <input
                 className=""
                 name="price"
@@ -228,7 +219,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>조건 선택 </label>
+              <p>조건 선택 </p>
               <br />
               <input
                 type="radio"
@@ -274,7 +265,7 @@ const P_AddComponent = () => {
           </div>
           <div className="add_area">
             <div className="add_wrap">
-              <label>상세설명</label>
+              <p>상세설명</p>
               <textarea
                 className=""
                 name="pdesc"
@@ -287,7 +278,7 @@ const P_AddComponent = () => {
           <div className="add_area">
             <div className="add_wrap flex flex-col max-h-[150px]">
               <div className="flex">
-                <label>거래장소</label>
+                <p>거래장소</p>
                 <input
                   name="plocat"
                   type="text"
