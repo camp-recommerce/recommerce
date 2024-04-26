@@ -25,7 +25,7 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final CustomFileUtil fileUtil;
 
-    @GetMapping("/{apno}")
+    @GetMapping("/read/{apno}")
     public AuctionDTO get(@PathVariable(name = "apno") Long apno) {
 
         AuctionDTO auctionDTO = auctionService.get(apno);
@@ -53,7 +53,7 @@ public class AuctionController {
     }
 
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    @PostMapping("/")
+    @PostMapping("/post")
     public Map<String, Long> register(AuctionDTO auctionDTO) {
         log.info("AuctionDTO: " + auctionDTO);
 
@@ -76,7 +76,7 @@ public class AuctionController {
     }
 
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    @PutMapping("/{apno}")
+    @PutMapping("/modify/{apno}")
     public Map<String, String> modify(@PathVariable(name="apno") Long apno,
                                       AuctionDTO auctionDTO) {
         auctionDTO.setApno(apno);
@@ -119,7 +119,7 @@ public class AuctionController {
     }
 
 //    @PreAuthorize("hasAnyRole('ADMIN')")
-    @DeleteMapping("/{apno}")
+    @DeleteMapping("/delete/{apno}")
     public Map<String, String> remove(@PathVariable(name="apno") Long apno) {
         log.info("Remove: " + apno);
         List<String> oldFileNames = auctionService.get(apno).getUploadFileNames();
