@@ -1,8 +1,14 @@
 import React from "react";
 import useCustomLoginPage from "../hooks/useCustomLoginPage";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const { isLogin } = useCustomLoginPage();
+  const navigate = useNavigate();
+  const handlenavigate = (path) => {
+    navigate(path);
+  };
+
   return (
     <div
       className="header #282222 text-white flex justify-between items-center px-6 py-4 z-[9990]"
