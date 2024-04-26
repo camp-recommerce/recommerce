@@ -231,26 +231,15 @@ const P_InfiniteComponent = () => {
                 <div className="shopList_uploadImage text-sm mb-1 text-center">
                   <img
                     alt={product.pname}
-                    src={`${host}/product/view/s_${product.uploadFileNames}`}
+                    src={`${host}/product/view/${product.uploadFileNames}`}
                   />
                 </div>
                 <div className="shopList_pname text-sm mb-1 text-center">
                   {product.pname}
                 </div>
-                <div className="shopList_pcategory text-sm mb-1 text-center">
-                  {product.pcategory}
-                </div>
+
                 <div className="shopList_price text-sm mb-1 text-center">
                   {product.price}원
-                </div>
-                <div className="shopList_pstate text-sm mb-1 text-center">
-                  {product.pstate}
-                </div>
-                <div className="shopList_plocat text-sm mb-1 text-center">
-                  {product.plocat}
-                </div>
-                <div className="shopList_pdesc text-sm mb-1 text-center">
-                  {product.pdesc}
                 </div>
               </div>
             ))}

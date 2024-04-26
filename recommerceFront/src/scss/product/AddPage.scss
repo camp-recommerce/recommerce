@@ -19,7 +19,7 @@
     }
 
     .add_imgArea {
-      background-color: #c4c4c4;
+      background-color: #e9e5e5;
       border-radius: 20px;
       display: flex;
       align-items: center;
@@ -55,8 +55,9 @@
           display: flex;
           gap: 25px;
 
-          label {
+          p {
             white-space: nowrap;
+            font-weight: bolder;
           }
 
           input[type="text"],

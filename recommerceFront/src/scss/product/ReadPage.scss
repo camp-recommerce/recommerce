@@ -56,18 +56,27 @@
         margin-top: 20px; /* 상단 여백 추가 */
       }
 
-      .btn_modify,
-      .btn_chat,
-      .btn_cart,
-      .btn_sell {
+      .btnBox {
         display: flex;
-        width: 130px;
-        height: 50px;
-        padding: 10px;
-        border-radius: 10px;
-        align-items: center;
-        justify-content: center;
-        margin-top: 5px; /* 버튼 간격 조정 */
+        margin-top: 15px;
+
+        .btnforSeller {
+          margin-right: 10px;
+        }
+
+        .btn_modify,
+        .btn_chat,
+        .btn_cart,
+        .btn_sell {
+          display: flex;
+          width: 130px;
+          height: 50px;
+          padding: 10px;
+          border-radius: 10px;
+          align-items: center;
+          justify-content: center;
+          margin-top: 5px; /* 버튼 간격 조정 */
+        }
       }
     }
   }

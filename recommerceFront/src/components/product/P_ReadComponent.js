@@ -155,43 +155,50 @@ const P_ReadComponent = () => {
               readOnly={true}
             />
           </div>
-
-          {loginState.email === product.userEmail && (
-            <div className="btn_modify  bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
-              <button onClick={() => moveModifyPage(product.pno)}>
-                수정하기
+          <div className="btnBox">
+            <div className="btnforSeller">
+              {loginState.email === product.userEmail && (
+                <button
+                  className="btn_modify  bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 "
+                  onClick={() => moveModifyPage(product.pno)}
+                >
+                  수정하기
+                </button>
+              )}
+              {loginState.email === product.userEmail && (
+                <button className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900">
+                  판매완료
+                </button>
+              )}
+            </div>
+            <div className="btnforAll">
+              <button
+                className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                onClick={() => {
+                  openChatModal(loginState.email + "-" + product.userEmail);
+                }}
+              >
+                1:1 채팅
+              </button>
+              <button
+                className="btn_cart bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 "
+                onClick={() => handleClickAddCart()}
+              >
+                찜
               </button>
             </div>
-          )}
-          <button
-            className="btn_chat bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-            onClick={() => {
-              openChatModal(loginState.email + "-" + product.userEmail);
-            }}
-          >
-            1:1 채팅
-          </button>
-          <button
-            className="btn_cart bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5"
-            onClick={() => handleClickAddCart()}
-          >
-            찜
-          </button>
-          {loginState.email === product.userEmail && (
-            <div className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900 mt-5">
-              <button>판매완료</button>
+
+            <div>
+              {isChatModalOpen && (
+                <Chat
+                  // user0@aaa.com 을 임시 판매자로 설정, 나중엔 product.seller 뭐 이렇게될듯
+                  room={loginState.email + "-" + product.userEmail}
+                  username={loginState.email}
+                  socket={socket}
+                  closeModal={closeChatModal}
+                />
+              )}
             </div>
-          )}
-          <div>
-            {isChatModalOpen && (
-              <Chat
-                // user0@aaa.com 을 임시 판매자로 설정, 나중엔 product.seller 뭐 이렇게될듯
-                room={loginState.email + "-" + product.userEmail}
-                username={loginState.email}
-                socket={socket}
-                closeModal={closeChatModal}
-              />
-            )}
           </div>
         </div>
       </div>

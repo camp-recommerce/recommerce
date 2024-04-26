@@ -9,9 +9,10 @@ import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.dto.ProductPageResponseDTO;
 import com.recommerceAPI.service.ProductService;
 import com.recommerceAPI.util.CustomFileUtil;
+import com.recommerceAPI.util.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.jaxb.SpringDataJaxb;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -163,5 +164,22 @@ public class ProductController {
 
         return ResponseEntity.ok(response);
     }
+
+    //상품판매 페이지에 들어가려면 로그인 필수 . 유효한 토큰값을 갖고 있는 상태인지 확인
+    @GetMapping("/check/validate_token")
+    public ResponseEntity<?> validateToken(HttpServletRequest request) {
+        String authHeader = request.getHeader("Authorization");
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            try {
+                JWTUtil.validateToken(token);
+                return ResponseEntity.ok().build(); // 토큰 유효
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid or expired token"); // 토큰 무효
+            }
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Authorization token found"); // 토큰 없음
+    }
+
 
 }
