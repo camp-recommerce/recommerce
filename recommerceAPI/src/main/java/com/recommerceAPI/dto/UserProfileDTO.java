@@ -1,13 +1,18 @@
 package com.recommerceAPI.dto;
 
+import lombok.Data;
+
+@Data
 public class UserProfileDTO {
-    private String email;
+    private Long upno; // UserProfile의 고유 ID
+    private String email; // 사용자 이메일
     private String topPurchaseCategory;
     private String topSaleCategory;
     private Double averagePrice;
     private String topSellingLocation;
 
-    public UserProfileDTO(String email, String topPurchaseCategory, String topSaleCategory, Double averagePrice, String topSellingLocation) {
+    public UserProfileDTO(Long upno, String email, String topPurchaseCategory, String topSaleCategory, Double averagePrice, String topSellingLocation) {
+        this.upno = upno;
         this.email = email;
         this.topPurchaseCategory = topPurchaseCategory;
         this.topSaleCategory = topSaleCategory;
@@ -15,24 +20,5 @@ public class UserProfileDTO {
         this.topSellingLocation = topSellingLocation;
     }
 
-    // Getters
-    public String getEmail() {
-        return email;
-    }
-
-    public String getTopPurchaseCategory() {
-        return topPurchaseCategory;
-    }
-
-    public String getTopSaleCategory() {
-        return topSaleCategory;
-    }
-
-    public Double getAveragePrice() {
-        return averagePrice;
-    }
-
-    public String getTopSellingLocation() {
-        return topSellingLocation;
-    }
+    // Getter와 Setter는 Lombok의 @Data 어노테이션에 의해 자동 생성됩니다.
 }
