@@ -22,7 +22,7 @@ public class UserProfileServiceImpl implements UserProfileService {
         if (userProfile != null) {
             return new UserProfileDTO(
                     userProfile.getUpno(), // UserProfile의 upno
-                    userProfile.getUserProfileUser().getEmail(), // 연결된 User의 email
+                    userProfile.getProfileUser().getEmail(), // 연결된 User의 email
                     userProfile.getTopPurchaseCategory(),
                     userProfile.getTopSaleCategory(),
                     userProfile.getAveragePrice(),

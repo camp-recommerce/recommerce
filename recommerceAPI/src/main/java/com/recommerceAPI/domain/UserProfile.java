@@ -8,10 +8,10 @@ import lombok.*;
 @AllArgsConstructor // 모든 필드 값을 인자로 받는 생성자를 자동 생성.
 @NoArgsConstructor // 기본 생성자를 자동 생성.
 @Getter // 모든 필드에 대한 getter 메서드를 자동 생성.
-@ToString(exclude = "userProfileUser") // 객체를 문자열로 표현하는 toString() 메서드 자동 생성. owner 필드는 제외.
+@ToString(exclude = "profileUser") // 객체를 문자열로 표현하는 toString() 메서드 자동 생성. owner 필드는 제외.
 @Table(
         name = "tbl_profile", // 이 엔티티가 매핑될 데이터베이스 테이블의 이름을 지정.
-        indexes = {@Index(name="idx_profile_email", columnList = "member_userProfileUser")} // member_owner 칼럼에 대한 인덱스 생성.
+        indexes = {@Index(name="idx_profile_email", columnList = "member_profileUser")} // member_owner 칼럼에 대한 인덱스 생성.
 )
 public class UserProfile {
 
@@ -20,8 +20,8 @@ public class UserProfile {
     private Long upno;
 
     @OneToOne
-    @JoinColumn(name = "member_userProfileUser")
-    private User userProfileUser;
+    @JoinColumn(name = "member_profileUser")
+    private User profileUser;
 
     private String topPurchaseCategory;
     private String topSaleCategory;
