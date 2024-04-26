@@ -106,7 +106,7 @@ const A_ListComponent = () => {
     <>
       {loading ? <LoadingModal /> : <></>}
       <div
-        className="flex justify-center items-center flex-col mt-[50px]"
+        className="flex justify-start items-center flex-col mt-[50px]"
         style={{ minHeight: "75vh" }}
       >
         <div
