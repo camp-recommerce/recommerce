@@ -19,6 +19,7 @@ const initState = {
   pdesc: "",
   files: [],
   userEmail: "",
+  soldOut: false,
 };
 
 const P_AddComponent = () => {
@@ -38,6 +39,10 @@ const P_AddComponent = () => {
     if (name === "price") {
       // 가격 콤마 표시 후 숫자만 반환
       value = value.replace(/[^\d]/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    } else if (name === "soldOut") {
+      // 셀렉트 박스에서는 문자열 "true" 또는 "false"가 전달되므로,
+      // 해당 값을 불리언 값으로 변환하여 상태에 설정합니다.
+      value = value === "true";
     }
     setProduct({
       ...product,
@@ -91,6 +96,7 @@ const P_AddComponent = () => {
     formData.append("lng", location.lng); // 하위 MapComponent에서 콜백 함수로 경도 전달
     formData.append("pdesc", product.pdesc);
     formData.append("userEmail", loginState.email);
+    formData.append("soldOut", product.soldOut.toString());
 
     console.log(formData);
 
@@ -181,6 +187,19 @@ const P_AddComponent = () => {
                     {category}
                   </option>
                 ))}
+              </select>
+            </div>
+          </div>
+          <div className="add_area">
+            <div className="add_wrap">
+              <label>판매 상태</label>
+              <select
+                name="soldOut"
+                value={product.soldOut}
+                onChange={handleChangeProduct}
+              >
+                <option value={false}>판매중</option>
+                <option value={true}>판매완료</option>
               </select>
             </div>
           </div>

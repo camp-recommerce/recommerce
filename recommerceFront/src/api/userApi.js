@@ -103,12 +103,30 @@ export const changePassword = async (email, newPassword) => {
 };
 
 // 사용자의 제품 목록 조회
-export const fetchProductsByUser = async (email, soldOut) => {
+export const fetchProductsByUserFromUserApi = async (
+  email,
+  soldOut,
+  page = 1,
+  size = 10,
+  sortBy = "pno",
+  direction = "DESC"
+) => {
   try {
-    const response = await axios.get(`${API_SERVER_HOST}/by-user`, {
+    // 사용자 정보 읽기 API를 호출하여 사용자 정보를 가져옵니다.
+    const userData = await readUser(email);
+
+    // 사용자 정보에서 필요한 데이터를 추출합니다.
+    // 예시: const userAddress = userData.address;
+
+    // 사용자 정보를 활용하여 제품 목록을 조회하는 API를 호출합니다.
+    const response = await axios.get(`${host}/user/by-user`, {
       params: {
         userEmail: email,
         soldOut: soldOut,
+        page: page,
+        size: size,
+        sortBy: sortBy,
+        direction: direction,
       },
     });
     return response.data; // 제품 목록 반환

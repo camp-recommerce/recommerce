@@ -38,6 +38,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine) {
         log.info("getList..............");
 
+        // 판매 상태를 숫자에서 문자열로 변경
+        Boolean soldOut = false;
+        String saleStatus = soldOut ? "판매 완료" : "판매 중";
+
         // 페이지 요청을 처리하기 위한 Pageable 객체 생성, pno 기준 내림차순 정렬
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
@@ -81,15 +85,17 @@ public class ProductServiceImpl implements ProductService {
         // 전체 아이템 수 계산
         long totalCount = result.getTotalElements();
 
-        // 페이지 정보 및 데이터 리스트를 포함하는 DTO 객체 생성
-        return new ProductPageResponseDTO<>(
+        // 전체 아이템 수와 페이지 정보를 포함하는 DTO 객체 생성
+        return new ProductPageResponseDTO<ProductDTO>(
                 dtoList,
                 pageRequestDTO.getPage(),
                 result.getTotalPages(),
-                totalCount,
-                result.hasNext()
+                result.getTotalElements(),
+                result.hasNext(),
+                saleStatus // 판매 상태 문자열을 추가하여 반환
         );
     }
+
 
 
     @Override
@@ -165,6 +171,7 @@ public class ProductServiceImpl implements ProductService {
                 .lng(product.getLng())
                 .pdesc(product.getPdesc())
                 .userEmail(product.getUserEmail())
+                .soldOut(product.isSoldOut())
                 .build();
 
         List<ProductImage> imageList = product.getImageList();
@@ -224,6 +231,10 @@ public class ProductServiceImpl implements ProductService {
     public ProductPageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail, Boolean soldOut) {
         log.info("Fetching product list for user {} with sold out status {}", userEmail, soldOut);
 
+        // 판매 상태를 숫자에서 문자열로 변경
+        Boolean soldStatus = soldOut != null ? soldOut : false;
+        String saleStatus = soldStatus ? "판매 완료" : "판매 중";
+
         // 페이지 요청을 처리하기 위한 Pageable 객체 생성
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
@@ -231,18 +242,19 @@ public class ProductServiceImpl implements ProductService {
                 Sort.by("pno").descending());
 
         // Repository에서 데이터를 가져옴
-        Page<Product> result = productRepository.findByUserEmailAndSoldOutAndNotDeleted(userEmail, soldOut, pageable);
+        Page<Product> result = productRepository.findByUserEmailAndSoldOutAndNotDeleted(userEmail, soldStatus, pageable);
 
         // 결과를 ProductDTO 리스트로 변환
         List<ProductDTO> dtoList = result.getContent().stream().map(this::entityToDTO).collect(Collectors.toList());
 
         // 전체 아이템 수와 페이지 정보를 포함하는 DTO 객체 생성
-        return new ProductPageResponseDTO<>(
+        return new ProductPageResponseDTO<ProductDTO>(
                 dtoList,
                 pageRequestDTO.getPage(),
                 result.getTotalPages(),
                 result.getTotalElements(),
-                result.hasNext()
+                result.hasNext(),
+                saleStatus // 판매 상태 문자열을 추가하여 반환
         );
     }
 

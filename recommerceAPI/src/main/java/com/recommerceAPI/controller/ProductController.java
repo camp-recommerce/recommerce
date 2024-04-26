@@ -43,16 +43,15 @@ public class ProductController {
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API
     @GetMapping(value ="/product/read/{pno}")
-    public ProductDTO getProduct(@PathVariable(name="pno") Long pno) {
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable(name="pno") Long pno) {
         log.info("getProduct: " + pno);
-
-        // 상품 서비스를 통해 상품 정보 조회
         ProductDTO productDTO = productService.get(pno);
-
-        // 조회된 상품 정보를 ResponseEntity에 담아 반환
-        // 상품 정보가 존재하지 않을 경우 NOT_FOUND 상태 코드를 반환할 수 있도록 처리
-        return productDTO;
+        if (productDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productDTO);
     }
+
 
 
     @GetMapping("/product/view/{fileName}")
