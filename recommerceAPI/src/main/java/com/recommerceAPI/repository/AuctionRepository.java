@@ -6,11 +6,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+@Transactional
 public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("select a, ai from Auction a left join a.imageList ai where " +
             "(:apName is null or a.apName like %:apName%) and " +
@@ -23,7 +24,8 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
 
     List<Auction> findByApStartTimeBeforeAndApClosingTimeAfter(LocalDateTime currentTime, LocalDateTime currentTime1);
 
-    List<Auction> findByApClosingTimeBefore(LocalDateTime currentTime);
+    @Query("SELECT a FROM Auction a WHERE a.apClosingTime < :currentTime AND a.apStatus = 'ACTIVE'")
+    List<Auction> findActiveAuctionsBeforeClosingTime(LocalDateTime currentTime);
 
     @Query("SELECT a, ai FROM Auction a LEFT JOIN a.imageList ai WHERE " +
             "(:apBuyer is null OR a.apBuyer = :apBuyer)")

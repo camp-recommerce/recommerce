@@ -57,45 +57,56 @@ const AlarmModal = ({ closeModal, email }) => {
   }, [isChatModalOpen, originalAlarmList]);
 
   const renderGroupedAlarms = () => {
-    return Object.keys(groupedAlarms).map((senderEmail, index) => (
-      <div key={index}>
-        <h3 className="text-lg font-semibold mt-6">
-          발신자: {senderEmail}{" "}
-          <button
-            className="text-blue-500 hover:underline"
-            onClick={() => {
-              const roomId = groupedAlarms[senderEmail][0].roomId;
-              console.log(roomId);
-              openChatModal(roomId);
-              console.log(isChatModalOpen);
-              handleReadAlarms(senderEmail);
-            }}
-          >
-            채팅하기
-          </button>
-        </h3>
-        <div>
-          {isChatModalOpen && (
-            <Chat
-              room={groupedAlarms[senderEmail][0].roomId} // 해당 발신자의 roomId 사용
-              username={loginState.email} // 발신자의 이메일 전달
-              socket={socket}
-              closeModal={closeChatModal}
-            />
-          )}
+    return Object.keys(groupedAlarms).map((senderEmail, index) => {
+      const unreadAlarms = groupedAlarms[senderEmail].filter(
+        (alarm) => !alarm.readCheck
+      );
+
+      // 읽지 않은 알림이 없는 경우 해당 섹션을 렌더링하지 않음
+      if (unreadAlarms.length === 0) {
+        return null;
+      }
+
+      return (
+        <div key={index}>
+          <h3 className="text-lg font-semibold mt-6">
+            발신자: {senderEmail}{" "}
+            <button
+              className="text-blue-500 hover:underline"
+              onClick={() => {
+                const roomId = groupedAlarms[senderEmail][0].roomId;
+                console.log(roomId);
+                openChatModal(roomId);
+                console.log(isChatModalOpen);
+                handleReadAlarms(senderEmail);
+              }}
+            >
+              확인하기
+            </button>
+          </h3>
+          <div>
+            {isChatModalOpen && (
+              <Chat
+                room={groupedAlarms[senderEmail][0].roomId} // 해당 발신자의 roomId 사용
+                username={loginState.email} // 발신자의 이메일 전달
+                socket={socket}
+                closeModal={closeChatModal}
+              />
+            )}
+          </div>
+          <div>
+            {groupedAlarms[senderEmail]
+              .filter((alarm) => !alarm.readCheck) // 읽지 않은 알람만 필터링
+              .map((alarm, subIndex) => (
+                <div key={subIndex} className="border-b border-gray-200 py-2">
+                  <p>시간: {alarm.createdAt}</p>
+                  <p>메시지: {alarm.message}</p>
+                </div>
+              ))}
+          </div>
         </div>
-        <div>
-          {groupedAlarms[senderEmail]
-            .filter((alarm) => !alarm.readCheck) // 읽지 않은 알람만 필터링
-            .map((alarm, subIndex) => (
-              <div key={subIndex} className="border-b border-gray-200 py-2">
-                <p>시간: {alarm.createdAt}</p>
-                <p>메시지: {alarm.message}</p>
-              </div>
-            ))}
-        </div>
-      </div>
-    ));
+      );
+    });
   };
 
   return (

@@ -85,8 +85,6 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
         // 업데이트된 알람 목록을 조회하여 반환합니다.
         return getAlarmList(alarms.get(0).getUser().getEmail()); // 예시로 첫 번째 알람의 사용자 이메일을 사용합니다.
     }
-
-
     @Override
     public void sendAuctionAlarm(ChatAlarmDTO chatAlarmDTO) {
 
@@ -102,6 +100,5 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
 
 
     }
-
 }
 

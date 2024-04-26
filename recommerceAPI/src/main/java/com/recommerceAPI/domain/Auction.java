@@ -1,7 +1,5 @@
 package com.recommerceAPI.domain;
 
-import com.recommerceAPI.config.event.AuctionClosedEvent;
-import com.recommerceAPI.config.listener.AuctionEntityListener;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,7 +17,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EntityListeners(AuctionEntityListener.class) // 엔티티 리스너 등록
+
 public class Auction {
 
 

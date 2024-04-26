@@ -1,5 +1,6 @@
 package com.recommerceAPI.service;
 
+import com.recommerceAPI.domain.ChatAlarm;
 import com.recommerceAPI.dto.ChatAlarmDTO;
 
 import java.util.List;

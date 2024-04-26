@@ -5,9 +5,10 @@ import com.recommerceAPI.domain.AuctionBidding;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
+@Transactional
 public interface AuctionBiddingRepository extends JpaRepository<AuctionBidding, Long> {
 
     // 입찰 내역중에서 auction.apno 별로 가장큰 입찰금액을 가진것만 반환하도록 하는 쿼리문
