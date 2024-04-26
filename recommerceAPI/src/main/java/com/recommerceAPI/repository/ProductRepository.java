@@ -1,5 +1,6 @@
 package com.recommerceAPI.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import com.recommerceAPI.domain.Product;
@@ -32,13 +33,13 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
                               @Param("addressLine") String addressLine, Pageable pageable);
 
 
-    // 사용자 이메일과 판매 상태에 따른 제품 목록 조회 0425임형욱
-    @Query("select p from Product p where p.userEmail = :userEmail and p.soldOut = :soldOut and p.delFlag = false")
-    Page<Product> findByUserEmailAndSoldOutAndNotDeleted(
-            @Param("userEmail") String userEmail,
-            @Param("soldOut") boolean soldOut,
-            Pageable pageable
-    );
 
-    Product findByPname(String pname);
+    //ProductRepository에 사용자 이메일과 판매 상태(soldOut)를 기준으로 제품을 조회하는 메소드를 추가합니다.
+    // 이 메소드는 판매 상태가 null일 경우 모든 상태의 제품을 반환하고,
+    // 특정 상태(판매 중 또는 판매 완료)가 지정되었을 때 해당 상태의 제품만 반환합니다.
+    @Query("SELECT p, pi FROM Product p LEFT JOIN p.imageList pi WHERE " +
+            "(:userEmail is null OR p.userEmail = :userEmail)")
+    Page<Object[]> findAllByUserEmailWithImages(@Param("userEmail") String userEmail, Pageable pageable);
+
+
 }

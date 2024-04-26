@@ -101,37 +101,3 @@ export const changePassword = async (email, newPassword) => {
     return null; // 오류가 발생하면 null을 반환합니다.
   }
 };
-
-// 사용자의 제품 목록 조회
-export const fetchProductsByUserFromUserApi = async (
-  email,
-  soldOut,
-  page = 1,
-  size = 10,
-  sortBy = "pno",
-  direction = "DESC"
-) => {
-  try {
-    // 사용자 정보 읽기 API를 호출하여 사용자 정보를 가져옵니다.
-    const userData = await readUser(email);
-
-    // 사용자 정보에서 필요한 데이터를 추출합니다.
-    // 예시: const userAddress = userData.address;
-
-    // 사용자 정보를 활용하여 제품 목록을 조회하는 API를 호출합니다.
-    const response = await axios.get(`${host}/user/by-user`, {
-      params: {
-        userEmail: email,
-        soldOut: soldOut,
-        page: page,
-        size: size,
-        sortBy: sortBy,
-        direction: direction,
-      },
-    });
-    return response.data; // 제품 목록 반환
-  } catch (error) {
-    console.error("제품 목록 조회 중 오류가 발생했습니다:", error);
-    return null; // 오류 발생 시 null 반환
-  }
-};

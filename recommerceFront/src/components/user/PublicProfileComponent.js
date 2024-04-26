@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { readUser } from "../../api/userApi";
-import { fetchSaleItems } from "../../api/salesApi";
+import { fetchProductsByUserFrom } from "../../api/productApi";
 import ProfileComponent from "./ProfileComponent";
 
 const PublicProfileComponent = () => {
@@ -27,16 +27,16 @@ const PublicProfileComponent = () => {
 
     const fetchUserSaleItems = async () => {
       try {
-        const items = await fetchSaleItems(email);
-        console.log("Sale items:", items); // 로그 추가
-        if (Array.isArray(items)) {
-          setSaleItems(items);
-        } else {
-          setSaleItems([]); // 반환된 데이터가 배열이 아니면 빈 배열을 설정
-        }
+        const data = await fetchProductsByUserFrom({
+          page: 1,
+          size: 10,
+          userEmail: email,
+        });
+        setSaleItems(data); // 제품 목록 설정
+        setIsLoading(false); // 로딩 상태 갱신
       } catch (error) {
-        console.error("Error fetching user sale items:", error);
-        setError("Failed to load sale items.");
+        console.error("Error fetching sale items:", error);
+        setIsLoading(false); // 로딩 상태 갱신
       }
     };
 
@@ -64,18 +64,19 @@ const PublicProfileComponent = () => {
         <div>No profile data available.</div>
       )}
 
-      {saleItems.length > 0 ? (
-        <div>
-          <h2>판매목록</h2>
-          <ul>
-            {saleItems.map((item) => (
-              <li key={item.id}>{item.name}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        <div>판매중인 상품이 없습니다.</div>
-      )}
+      <div>
+        <h2>판매목록</h2>
+        <ul>
+          {saleItems && saleItems.dtoList && saleItems.dtoList.length > 0 ? (
+            saleItems.dtoList.map((item) => (
+              <li key={item.pno}>{item.pname}</li>
+            ))
+          ) : (
+            <div>판매중인 상품이 없습니다.</div>
+          )}
+        </ul>
+      </div>
+
       <div>
         <ProfileComponent />
       </div>

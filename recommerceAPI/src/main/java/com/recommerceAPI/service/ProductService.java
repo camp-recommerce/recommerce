@@ -1,25 +1,29 @@
 package com.recommerceAPI.service;
 
-
 import com.recommerceAPI.dto.PageRequestDTO;
+import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.dto.ProductPageResponseDTO;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Transactional
 public interface ProductService {
 
-
-    //list
+    // 제품 목록 조회 (검색 필터 포함)
     ProductPageResponseDTO<ProductDTO> getList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine);
-    //create
+
+    // 제품 등록
     Long register(ProductDTO productDTO);
+
+    // 제품 상세 조회
     ProductDTO get(Long pno);
+
+    // 제품 정보 수정
     void modify(ProductDTO productDTO);
+
+    // 제품 삭제
     void remove(Long pno);
 
-    // 사용자 이메일과 판매 상태 기반의 제품 목록 조회
-    //0425 임형욱
-    ProductPageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail, Boolean soldOut);
+    //내 유저 상품
+    PageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail);
 }

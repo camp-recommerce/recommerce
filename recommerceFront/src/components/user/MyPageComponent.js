@@ -338,6 +338,9 @@ const MyPageComponent = () => {
         <button style={styles.button} onClick={goToSales}>
           판매목록
         </button>
+        <button style={styles.button} onClick={() => setActiveMenu("bid")}>
+          경매
+        </button>
       </div>
     </div>
   );

@@ -227,37 +227,41 @@ public class ProductServiceImpl implements ProductService {
     }
 
 
-    //상품목록에서 유저이메일로 자기판매등록상품 조회, 판매중, 판매완료
-    //0425임형욱
     @Override
-    public ProductPageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail, Boolean soldOut) {
-        log.info("Fetching product list for user {} with sold out status {}", userEmail, soldOut);
+    public PageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail) {
+        log.info("Fetching products for userEmail: {} with sale status: {}", userEmail);
 
-        // 판매 상태를 숫자에서 문자열로 변경
-        Boolean soldStatus = soldOut != null ? soldOut : false;
-        String saleStatus = soldStatus ? "판매 완료" : "판매 중";
-
-        // 페이지 요청을 처리하기 위한 Pageable 객체 생성
+        // 페이지 요청을 처리하기 위한 Pageable 객체 생성, pno 기준 내림차순 정렬
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
                 Sort.by("pno").descending());
 
-        // Repository에서 데이터를 가져옴
-        Page<Product> result = productRepository.findByUserEmailAndSoldOutAndNotDeleted(userEmail, soldStatus, pageable);
+        // Repository에서 사용자 이메일과 판매 상태에 따라 제품 데이터를 페이지 단위로 조회
+        Page<Object[]> page = productRepository.findAllByUserEmailWithImages(userEmail, pageable);
 
-        // 결과를 ProductDTO 리스트로 변환
-        List<ProductDTO> dtoList = result.getContent().stream().map(this::entityToDTO).collect(Collectors.toList());
+        // 페이지에 있는 제품 데이터를 ProductDTO 리스트로 변환
+        List<ProductDTO> products = page.getContent().stream()
+                .map(arr -> {
+                    Product product = (Product) arr[0];
+                    ProductImage productImage = (ProductImage) arr[1];
+                    ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+                    if(productImage!=null){
+                        productDTO.setUploadFileNames(Collections.singletonList(productImage.getFileName()));
+                    }
+                    return productDTO;
+                }).collect(Collectors.toList());
 
-        // 전체 아이템 수와 페이지 정보를 포함하는 DTO 객체 생성
-        return new ProductPageResponseDTO<ProductDTO>(
-                dtoList,
-                pageRequestDTO.getPage(),
-                result.getTotalPages(),
-                result.getTotalElements(),
-                result.hasNext(),
-                saleStatus // 판매 상태 문자열을 추가하여 반환
-        );
+        Long totalCount = page.getTotalElements();
+
+        PageResponseDTO<ProductDTO> responseDTO = PageResponseDTO.<ProductDTO>withAll()
+                .dtoList(products)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+
+        return responseDTO;
+
     }
 
 }
