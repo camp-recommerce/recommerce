@@ -10,7 +10,7 @@ import lombok.*;
 @Getter // 모든 필드에 대한 getter 메서드를 자동 생성.
 @ToString(exclude = "profileUser") // 객체를 문자열로 표현하는 toString() 메서드 자동 생성. owner 필드는 제외.
 @Table(
-        name = "tbl_profile", // 이 엔티티가 매핑될 데이터베이스 테이블의 이름을 지정.
+        name = "user_profile", // 이 엔티티가 매핑될 데이터베이스 테이블의 이름을 지정.
         indexes = {@Index(name="idx_profile_email", columnList = "member_profileUser")} // member_owner 칼럼에 대한 인덱스 생성.
 )
 public class UserProfile {
