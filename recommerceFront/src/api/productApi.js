@@ -49,24 +49,14 @@ export const deleteOne = async (product) => {
   return res.data;
 };
 
-// 사용자의 제품 목록 조회
-export const fetchProductsByUserFromProductApi = async (
-  email,
-  soldOut,
-  page = 1,
-  size = 10,
-  sortBy = "pno",
-  direction = "DESC"
-) => {
+export const fetchProductsByUserFrom = async (pageParam) => {
+  const { page, size, userEmail } = pageParam;
   try {
-    const response = await axios.get(`${host}/user/by-user`, {
+    const response = await jwtAxios.get(`${host}/user/by-user`, {
       params: {
-        userEmail: email,
-        soldOut: soldOut,
+        userEmail: userEmail,
         page: page,
         size: size,
-        sortBy: sortBy,
-        direction: direction,
       },
     });
     return response.data; // 제품 목록 반환

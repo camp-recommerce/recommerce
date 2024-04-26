@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import com.recommerceAPI.dto.PageRequestDTO;
+import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.dto.ProductDTO;
 import com.recommerceAPI.dto.ProductPageResponseDTO;
 import com.recommerceAPI.service.ProductService;
@@ -140,28 +141,15 @@ public class ProductController {
         return Map.of("RESULT", "SUCCESS");
     }
 
-    // 사용자 이메일과 판매 상태에 따른 제품 목록 조회
+
+    // 사용자 이메일과 판매 상태에 따른 제품 목록을 조회하는 메소드
     @GetMapping("/user/by-user")
-    public ResponseEntity<ProductPageResponseDTO<ProductDTO>> getProductsByUserAndStatus(
-            @RequestParam int page,
-            @RequestParam int size,
-            @RequestParam String sortBy,
-            @RequestParam boolean direction,
-            @RequestParam String userEmail,
-            @RequestParam(required = false) Boolean soldOut) {
+    public PageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO,
+             String userEmail
+            ) {
 
-        log.info("Fetching products for user: {} with soldOut status: {}", userEmail, soldOut);
+        PageResponseDTO<ProductDTO> response = productService.getProductsByUserAndStatus(pageRequestDTO, userEmail);
 
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(page)
-                .size(size)
-                .sortBy(sortBy)
-                .direction(direction)
-                .build();
-
-        ProductPageResponseDTO<ProductDTO> response = productService.getProductsByUserAndStatus(pageRequestDTO, userEmail, soldOut);
-
-        return ResponseEntity.ok(response);
+        return response;
     }
-
 }
