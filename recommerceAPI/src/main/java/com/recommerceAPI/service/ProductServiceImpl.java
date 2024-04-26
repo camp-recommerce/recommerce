@@ -57,6 +57,7 @@ public class ProductServiceImpl implements ProductService {
             ProductImage productImage = (ProductImage) arr[1];
 
             ProductDTO productDTO = new ProductDTO(
+                
                     product.getPno(),
                     product.getPname(),
                     product.getPcategory(),
@@ -73,6 +74,7 @@ public class ProductServiceImpl implements ProductService {
 
                     null, // 파일 리스트는 조건에 따라 설정
                     null  // 업로드 파일 이름 리스트 초기화
+
             );
 
             if (productImage != null) {

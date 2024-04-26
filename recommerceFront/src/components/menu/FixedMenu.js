@@ -101,13 +101,15 @@ function FixedMenu() {
             className="btn-wishlist w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
             onClick={moveShoppingBasket}
           >
-            <FaHeart className="text-lg" />({cartItems.length})
+            <FaHeart className="text-lg" />
+            {isLogin ? `(${cartItems.length})` : "(0)"}
           </button>
           <button
             className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#282222] border-2 border-[#282222] hover:bg-[#515151] hover:border-[#515151] text-[#E4E4E3] font-normal text-xs mt-[10px]"
             onClick={() => openModal()} // 모달창 열기
           >
-            <AiFillMessage className="text-lg" />({unreadAlarmCount})
+            <AiFillMessage className="text-lg" />
+            {isLogin ? `(${unreadAlarmCount})` : "(0)"}
           </button>
           {/* 챗봇 추가용 */}
           <button
