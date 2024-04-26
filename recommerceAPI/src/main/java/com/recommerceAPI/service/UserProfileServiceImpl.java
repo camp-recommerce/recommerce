@@ -18,7 +18,7 @@ public class UserProfileServiceImpl implements UserProfileService {
     @Override
     @Transactional(readOnly = true)
     public UserProfileDTO getUserProfileByEmail(String email) {
-        UserProfile userProfile = userProfileRepository.findByUserProfileUserEmail(email);
+        UserProfile userProfile = userProfileRepository.findByProfileUserEmail(email);
         if (userProfile != null) {
             return new UserProfileDTO(
                     userProfile.getUpno(), // UserProfile의 upno
