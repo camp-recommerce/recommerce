@@ -2,15 +2,14 @@ package com.recommerceAPI.service;
 
 import com.recommerceAPI.domain.ChatAlarm;
 import com.recommerceAPI.domain.User;
-import com.recommerceAPI.domain.Wishlist;
 import com.recommerceAPI.dto.ChatAlarmDTO;
-import com.recommerceAPI.dto.ChatAlarmListDTO;
 import com.recommerceAPI.repository.ChatAlarmRepository;
 import com.recommerceAPI.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 @RequiredArgsConstructor
+@Transactional
 public class ChatAlarmServiceImpl implements ChatAlarmService{
 
     private final ChatAlarmRepository chatAlarmRepository;
@@ -87,7 +87,21 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
     }
 
 
+    @Override
+    public void sendAuctionAlarm(ChatAlarmDTO chatAlarmDTO) {
 
+        String email = chatAlarmDTO.getUserEmail();
+        Optional<User> result = userRepository.findByEmail(email);
+        User user = result.orElseThrow();
+        log.info("============sendAuctionAlarm"+chatAlarmDTO);
+        ChatAlarm chatAlarm = modelMapper.map(chatAlarmDTO, ChatAlarm.class);
+        chatAlarm.setUser(user);
+        log.info("============sendAuctionAlarm"+chatAlarm);
+
+        chatAlarmRepository.save(chatAlarm);
+
+
+    }
 
 }
 

@@ -9,6 +9,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.event.TransactionPhase;
+import org.springframework.transaction.event.TransactionalEventListener;
 
 import java.time.LocalDateTime;
 import java.util.Comparator;
@@ -25,6 +29,7 @@ public class AuctionScheduler {
 
     // 3분마다 실행되는 스케줄링 작업
     @Scheduled(fixedRate = 1000 * 60)
+    @Transactional(isolation = Isolation.READ_COMMITTED)
     public void updateAuctionStatus() {
         LocalDateTime currentTime = LocalDateTime.now();
 
