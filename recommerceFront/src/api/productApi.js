@@ -48,3 +48,30 @@ export const deleteOne = async (product) => {
 
   return res.data;
 };
+
+// 사용자의 제품 목록 조회
+export const fetchProductsByUserFromProductApi = async (
+  email,
+  soldOut,
+  page = 1,
+  size = 10,
+  sortBy = "pno",
+  direction = "DESC"
+) => {
+  try {
+    const response = await axios.get(`${host}/user/by-user`, {
+      params: {
+        userEmail: email,
+        soldOut: soldOut,
+        page: page,
+        size: size,
+        sortBy: sortBy,
+        direction: direction,
+      },
+    });
+    return response.data; // 제품 목록 반환
+  } catch (error) {
+    console.error("제품 목록 조회 중 오류가 발생했습니다:", error);
+    return null; // 오류 발생 시 null 반환
+  }
+};

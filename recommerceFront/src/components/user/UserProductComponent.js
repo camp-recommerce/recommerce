@@ -1,27 +1,48 @@
 import React, { useState, useEffect } from "react";
-import { fetchProductsByUser } from "../../api/userApi"; // api 파일의 경로가 올바른지 확인하세요.
+import { fetchProductsByUserFromProductApi } from "../../api/productApi";
 
 const UserProductComponent = ({ email, soldOut }) => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const [size, setSize] = useState(10);
+  const [sortBy, setSortBy] = useState("pno");
+  const [direction, setDirection] = useState("DESC");
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const fetchedProducts = await fetchProductsByUser(email, soldOut);
-      if (fetchedProducts) {
-        setProducts(fetchedProducts);
-        setError(""); // 에러 메시지 초기화
-      } else {
-        setError("제품을 불러오는 데 실패했습니다.");
+      setLoading(true);
+      try {
+        const response = await fetchProductsByUserFromProductApi(
+          email,
+          soldOut,
+          page,
+          size,
+          sortBy,
+          direction
+        );
+        if (response && response.data && response.data.length > 0) {
+          setProducts(response.data);
+          setError("");
+        } else {
+          setError("제품을 불러오는 데 실패했습니다.");
+        }
+      } catch (err) {
+        console.error("제품 목록 조회 중 오류가 발생했습니다:", err);
+        setError("제품 목록을 불러올 수 없습니다.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchProducts();
-  }, [email, soldOut]);
+  }, [email, soldOut, page, size, sortBy, direction]);
 
   return (
     <div>
       <h1>제품 목록</h1>
+      {loading && <p>로딩 중...</p>}
       {error && <p className="error">{error}</p>}
       {products.length > 0 ? (
         <ul>
@@ -35,7 +56,7 @@ const UserProductComponent = ({ email, soldOut }) => {
           ))}
         </ul>
       ) : (
-        <p>등록된 제품이 없습니다.</p>
+        !loading && <p>등록된 제품이 없습니다.</p>
       )}
     </div>
   );
