@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom"; // Link 추가
 import { readUser } from "../../api/userApi";
 import { fetchProductsByUserFrom } from "../../api/productApi";
 import ProfileComponent from "./ProfileComponent";
@@ -15,7 +15,7 @@ const PublicProfileComponent = () => {
     const fetchProfile = async () => {
       try {
         const response = await readUser(email);
-        console.log("Profile data:", response); // 로그 추가
+        console.log("Profile data:", response);
         setProfile(response);
       } catch (error) {
         console.error("Error fetching public profile:", error);
@@ -32,11 +32,11 @@ const PublicProfileComponent = () => {
           size: 10,
           userEmail: email,
         });
-        setSaleItems(data); // 제품 목록 설정
-        setIsLoading(false); // 로딩 상태 갱신
+        setSaleItems(data);
+        setIsLoading(false);
       } catch (error) {
         console.error("Error fetching sale items:", error);
-        setIsLoading(false); // 로딩 상태 갱신
+        setIsLoading(false);
       }
     };
 
@@ -44,16 +44,27 @@ const PublicProfileComponent = () => {
     fetchUserSaleItems();
   }, [email]);
 
+  const profileStyle = {
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '20px',
+  };
+
+  const listItemStyle = {
+    fontSize: '18px',
+    marginBottom: '8px',
+  };
+
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div style={profileStyle}>Loading...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div style={profileStyle}>Error: {error}</div>;
   }
 
   return (
-    <div>
+    <div style={profileStyle}>
       {profile ? (
         <div>
           <h2>프로필</h2>
@@ -64,12 +75,22 @@ const PublicProfileComponent = () => {
         <div>No profile data available.</div>
       )}
 
-      <div>
+      <div style={{ marginBottom: '30px' }}>
         <h2>판매목록</h2>
-        <ul>
+        <ul style={{ listStyleType: 'none', padding: 0 }}>
           {saleItems && saleItems.dtoList && saleItems.dtoList.length > 0 ? (
             saleItems.dtoList.map((item) => (
-              <li key={item.pno}>{item.pname}</li>
+              <li key={item.pno} style={listItemStyle}>
+                {/* 링크 추가 */}
+                <Link to={`/product/read/${item.pno}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+                  <div>
+                    <strong>{item.pname}</strong> - {item.pcategory} - {item.price.toLocaleString()}원
+                  </div>
+                  <div>상태: {item.pstate}</div>
+                  <div>위치: {item.plocat}</div>
+                  <div>상세 설명: {item.pdesc}</div>
+                </Link>
+              </li>
             ))
           ) : (
             <div>판매중인 상품이 없습니다.</div>

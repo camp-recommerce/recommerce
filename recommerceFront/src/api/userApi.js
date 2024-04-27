@@ -86,7 +86,7 @@ export const getUserProfile = async (email) => {
 // 비밀번호 변경
 export const changePassword = async (email, newPassword) => {
   try {
-    const res = await axios.put(
+    const res = await jwtAxios.put(
       `${API_SERVER_HOST}/api/user/password/${email}`,
       null,
       {
