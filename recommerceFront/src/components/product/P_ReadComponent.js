@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { getOne } from "../../api/productApi";
+import { useEffect, useRef, useState } from "react";
+import {  getOne, soldOut } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
@@ -7,12 +7,12 @@ import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ReadPage.scss";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
-
 import MapComponent from "../MapComponent";
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useNavigate, useParams } from "react-router-dom";
+import AlertModal from "../modal/AlertModal";
 
 const host = API_SERVER_HOST;
 
@@ -37,13 +37,15 @@ const P_ReadComponent = () => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
-  const { moveModifyPage } = useCustomProductPage();
+  const { moveModifyPage,moveBeforeReadPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
   const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal();
 
+  const [result, setResult] = useState(null);
   const navigate = useNavigate();
+
 
   useEffect(() => {
     if (pno) {
@@ -72,6 +74,14 @@ const P_ReadComponent = () => {
     setOpenImg(false);
   };
 
+  const handleClickSoldOut = () => {
+    setLoading(true);
+    soldOut(product.pno).then((data) => {
+      setResult("soldOut");
+      setLoading(false);
+    });
+  };
+
   const handleClickAddCart = () => {
     const addedItem = cartItems.find((item) => item.pno === Number(pno)); // 명시적인 형변환
     if (addedItem !== undefined) {
@@ -89,10 +99,24 @@ const P_ReadComponent = () => {
     window.scrollTo(0, 0);
   };
 
+  const closeAlertModal = () => {
+    if (result === "soldOut") {
+      navigate("/");
+  };
+  }
   return (
     <div className="shopRead_group ">
       {loading ? <LoadingModal /> : <></>}
-
+      {result ? (
+        <AlertModal
+          title={`${result}`}
+          content={"정상적으로 처리되었습니다."} //결과 모달창
+          callbackFn={closeAlertModal}
+        />
+      ) : (
+        <></>
+      )}
+                               
       {/* 상품 영역 */}
       <div className="shopRead_img">
         <img
@@ -166,7 +190,8 @@ const P_ReadComponent = () => {
                 </button>
               )}
               {loginState.email === product.userEmail && (
-                <button className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900">
+                <button className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                onClick={handleClickSoldOut}>
                   판매완료
                 </button>
               )}

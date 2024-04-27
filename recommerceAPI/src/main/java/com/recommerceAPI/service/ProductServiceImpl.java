@@ -220,6 +220,16 @@ public class ProductServiceImpl implements ProductService {
         }
         productRepository.save(product);
     }
+    @Override
+    public void soldOut(Long pno){
+
+        Optional<Product> result = productRepository.findById(pno);
+
+        Product product = result.orElseThrow();
+        product.changeSold(true);
+
+        productRepository.save(product);
+    }
 
     @Override
     public void remove(Long pno) {

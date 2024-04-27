@@ -26,4 +26,6 @@ public interface ProductService {
 
     //내 유저 상품
     PageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO, String userEmail);
+    // 판매 완료 버튼 누를떄
+    void soldOut(Long pno);
 }

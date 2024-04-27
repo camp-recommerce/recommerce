@@ -102,5 +102,6 @@ public class Product {
     }
 
     public void changeSold(boolean soldOut) {
+        this.soldOut=soldOut;
     }
 }

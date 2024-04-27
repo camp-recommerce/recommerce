@@ -132,6 +132,15 @@ public class ProductController {
         return Map.of("RESULT", "SUCCESS");
     }
 
+    @PutMapping("product/soldOut/{pno}")
+    public Map<String, String> soldOUt(@PathVariable(name="pno")Long pno) {
+
+        productService.soldOut(pno);
+
+        return Map.of("RESULT", "SUCCESS");
+    }
+
+
 
     @DeleteMapping("product/delete/{pno}")
     public Map<String, String> remove(@PathVariable("pno") Long pno) {
