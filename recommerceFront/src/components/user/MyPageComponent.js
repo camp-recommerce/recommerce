@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { readUser } from "../../api/userApi";
+import { fetchSaleItems } from "../../api/salesApi";
 import { fetchPurchaseItems } from "../../api/purchaseApi";
 import { getBidList } from "../../api/auctionBidApi";
 import { getMyList } from "../../api/auctionApi";
@@ -41,7 +42,7 @@ const MyPageComponent = () => {
     setOpenImg(true);
   };
 
-
+  const [selectedImage, setSgeelectedIma] = useState(null);
 
   useEffect(() => {
     if (user && user.email) {
@@ -73,21 +74,21 @@ const MyPageComponent = () => {
   const goToSales = () => {
     navigate("/user/by-user"); // UserProducts 컴포넌트의 경로로 이동
   };
+  // Inline styles
   const styles = {
     myPageBundle: {
       padding: "20px",
-      margin: "40px auto",
+      margin: "20px auto",
       maxWidth: "800px",
-      backgroundColor: "#f9f9f9",
+      backgroundColor: "#fff",
       borderRadius: "8px",
-      boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
       fontFamily: "'Helvetica Neue', Helvetica, Arial, sans-serif",
     },
     menuButtons: {
       display: "flex",
       justifyContent: "space-between",
       marginTop: "20px",
-      marginBottom: "20px",
     },
     button: {
       padding: "10px 15px",
@@ -98,63 +99,45 @@ const MyPageComponent = () => {
       cursor: "pointer",
       fontSize: "16px",
       fontWeight: "bold",
-      transition: "background-color 0.3s ease",
-      ':hover': { // 가상 클래스는 인라인 스타일에서 지원하지 않으므로 다른 방법을 사용해야 함
-        backgroundColor: "#0056b3"
-      }
     },
     infoBundle: {
-      backgroundColor: "#fff",
-      padding: "20px",
-      border: "1px solid #ddd",
-      borderRadius: "8px",
+      backgroundColor: "#f9f9f9",
+      padding: "15px",
+      border: "1px solid #ccc",
+      borderRadius: "5px",
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
     },
     userInfo: {
-      marginBottom: "15px",
-      fontSize: "16px",
-      color: "#333",
+      marginBottom: "10px",
     },
     list: {
       listStyle: "none",
       paddingLeft: "0",
-      width: "100%",
     },
     listItem: {
-      padding: "10px 0",
-      borderBottom: "1px solid #eee",
-      ':last-child': {
-        borderBottom: "none"
-      }
+      padding: "5px 0",
     },
     title: {
       fontWeight: "bold",
       fontSize: "18px",
-      marginBottom: "15px",
-      color: "#333",
+      marginBottom: "10px",
     },
     profileImageContainer: {
       display: "flex",
       flexDirection: "column",
       alignItems: "center",
-      marginBottom: "15px",
     },
     profileImage: {
-      width: "120px",
-      height: "120px",
+      width: "100px",
+      height: "100px",
       borderRadius: "50%",
-      border: "3px solid #000",
-      padding: "3px",
-      boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
     },
     fileInput: {
-      marginTop: "15px",
+      marginTop: "10px",
     },
   };
-  
 
   return (
     <div style={styles.myPageBundle}>
