@@ -18,6 +18,7 @@ public class ChatMessageDTO {
     private String author; // 새로운 필드 추가
     private String time; // 시간 필드 추가
 
+
     public ChatMessageDTO(String room, String author, String message, MessageType messageType, String time) {
         this.room = room;
         this.author = author;

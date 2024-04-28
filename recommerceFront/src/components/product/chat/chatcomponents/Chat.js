@@ -3,18 +3,25 @@ import { A_Message } from "../../../auction/chat/A_Message";
 import { v4 as uuidv4 } from "uuid";
 import useCustomChatAlarm from "../../../../hooks/useCustomChatAlarm";
 
+
 function Chat({ socket, username, closeModal, room }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
   const { sendAlarm } = useCustomChatAlarm();
 
   const [email1, email2] = room.split("-");
-
   const messageBottomRef = useRef(null);
+
   // 현재 로그인한 사용자의 이메일이 수신자일 때는 다른 이메일을 수신자로 설정
   const receiverEmail = email1 === username ? email2 : email1;
 
   const sendMessage = async () => {
+    if (!room.includes("-")) {
+      window.alert("종료된 경매입니다.");
+      closeModal(); // 모달 닫기
+      return; // 채팅 메시지를 보내지 않고 함수 종료
+    }
+
     const currentMsg = inputRef.current.value;
     if (currentMsg !== "") {
       const messageData = {
@@ -34,18 +41,15 @@ function Chat({ socket, username, closeModal, room }) {
       };
 
       const alarm = {
-        // 수신인, 방번호가 구매자-판매자 형식이라 loginState 에서 이메일 뽑아오고
-        // loginState.email 이랑 맞지 않는 쪽을 수신자로 설정
         userEmail: receiverEmail,
-        // 발신인, loginState.email, 로그인한 나
         senderEmail: username,
         roomId: room,
         createdAt: messageData.time,
         message: currentMsg,
       };
+
       socket.send(JSON.stringify(messageData));
       sendAlarm(alarm);
-      console.log(alarm);
       setMessageList((list) => [...list, messageData]);
       inputRef.current.value = "";
     }
@@ -76,10 +80,6 @@ function Chat({ socket, username, closeModal, room }) {
       style={{ zIndex: 800 }}
       onClick={handleOutsideClick}
     >
-      {/* <div
-        className="bg-black bg-opacity-50 absolute top-0 left-0 w-full h-full"
-        onClick={handleOutsideClick}
-      ></div> */}
       <div
         className="bg-white rounded-lg p-8 relative"
         style={{ width: "700px", height: "750px", border: "2px solid #CCCCCC" }}

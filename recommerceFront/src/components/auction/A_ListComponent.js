@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 import useCustomTimesList from "../../hooks/useCustomTimesList";
 import LoadingModal from "../modal/LoadingModal";
+import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 
 const host = API_SERVER_HOST;
 
@@ -34,6 +35,9 @@ const A_ListComponent = () => {
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
+  const {loginState} = useCustomLoginPage();
+  const isAdmin = loginState.roleNames.includes('ADMIN');
+  
 
   const navigate = useNavigate();
 
@@ -215,6 +219,7 @@ const A_ListComponent = () => {
             movePage={moveProductListPage}
           />
         </div>
+        {isAdmin && (
         <div className="shopBtn_area w-full flex justify-end m-[30px] pr-[250px]">
           <div
             className="shopList_addBtn bg-[#282222] hover:bg-[#515151] text-white font-bold"
@@ -231,6 +236,7 @@ const A_ListComponent = () => {
             상품 등록
           </div>
         </div>
+      )}
       </div>
     </>
   );

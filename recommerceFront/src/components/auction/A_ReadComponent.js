@@ -33,6 +33,7 @@ const A_ReadComponent = () => {
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal();
+    const isAdmin = loginState.roleNames.includes('ADMIN');
 
   useEffect(() => {
     setLoading(true);
@@ -166,6 +167,7 @@ const A_ReadComponent = () => {
                     <A_Chat
                       username={loginState.email}
                       room={auctionProduct.apno}
+                      apStatus={auctionProduct.apStatus}
                       socket={socket}
                       closeModal={closeChatModal}
                       startPrice={auctionProduct.apStartPrice}
@@ -181,12 +183,14 @@ const A_ReadComponent = () => {
                 >
                   목록
                 </button>
-                <button
-                  className="bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] px-6 py-2 rounded-md"
-                  onClick={() => moveModifyPage(apno)}
-                >
-                  수정
-                </button>
+                {isAdmin && (
+        <button
+          className="bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] px-6 py-2 rounded-md"
+          onClick={() => moveModifyPage(apno)}
+        >
+          수정
+        </button>
+      )}
               </div>
             </div>
           </div>

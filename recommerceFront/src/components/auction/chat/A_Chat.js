@@ -13,6 +13,7 @@ function A_Chat({
   imageSrc,
   room,
   currentPrice,
+  apStatus
 }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
@@ -44,6 +45,11 @@ function A_Chat({
     // 입찰가가 현재 입찰가보다 낮을 경우 알림창으로 알림
     if (parsedMsg <= currentBid) {
       window.alert("입찰가가 현재 입찰가보다 낮습니다.");
+      return;
+    }
+
+    if(apStatus==="CLOSED"){
+      window.alert("종료된 경매 입니다!!")
       return;
     }
 
