@@ -166,6 +166,7 @@ const A_ReadComponent = () => {
                     <A_Chat
                       username={loginState.email}
                       room={auctionProduct.apno}
+                      apStatus={auctionProduct.apStatus}
                       socket={socket}
                       closeModal={closeChatModal}
                       startPrice={auctionProduct.apStartPrice}
