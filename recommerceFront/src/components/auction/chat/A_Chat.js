@@ -135,7 +135,7 @@ function A_Chat({
         </div>
         <div
           className="border border-gray-300 rounded-lg overflow-y-auto mb-4 flex flex-col"
-          style={{ height: "630px" }}
+          style={{ height: "570px" }}
         >
           {messageList.map((messageContent) => {
             return (
