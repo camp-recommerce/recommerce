@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import {  getOne, soldOut } from "../../api/productApi";
+import { getOne, soldOut } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import ImageModal from "../modal/ImageModal";
 import Chat from "../product/chat/chatcomponents/Chat";
@@ -8,7 +8,7 @@ import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ReadPage.scss";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import MapComponent from "../MapComponent";
-import { Link } from 'react-router-dom';  // 맨 위에 추가
+import { Link } from "react-router-dom"; // 맨 위에 추가
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
@@ -38,7 +38,7 @@ const P_ReadComponent = () => {
   const [loading, setLoading] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
   const [openImg, setOpenImg] = useState(false);
-  const { moveModifyPage,moveBeforeReadPage } = useCustomProductPage();
+  const { moveModifyPage, moveBeforeReadPage } = useCustomProductPage();
   const { loginState } = useCustomLoginPage();
   const { changeCart, cartItems, refreshCart } = useCustomWishListPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
@@ -46,7 +46,6 @@ const P_ReadComponent = () => {
 
   const [result, setResult] = useState(null);
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (pno) {
@@ -103,10 +102,8 @@ const P_ReadComponent = () => {
   const closeAlertModal = () => {
     if (result === "soldOut") {
       navigate("/");
+    }
   };
-  }
-
-  
 
   return (
     <div className="shopRead_group ">
@@ -120,7 +117,7 @@ const P_ReadComponent = () => {
       ) : (
         <></>
       )}
-                               
+
       {/* 상품 영역 */}
       <div className="shopRead_img">
         <img
@@ -154,16 +151,22 @@ const P_ReadComponent = () => {
             <p key={product.price}>{product.price}</p>
           </div>
           <div className="shopRead_box">
-  <div className="item_info">
-    <strong>판매자</strong>
-  </div>
-  <p>
-  <Link to={`/user/profile/${product.userEmail}`} style={{ color: '#000', textDecoration: 'none', fontWeight: 'bold' }}>
-  {product.userEmail}
-</Link>
-
-  </p>
-</div>
+            <div className="item_info">
+              <strong>판매자</strong>
+            </div>
+            <p>
+              <Link
+                to={`/user/profile/${product.userEmail}`}
+                style={{
+                  color: "#000",
+                  textDecoration: "none",
+                  fontWeight: "bold",
+                }}
+              >
+                {product.userEmail}
+              </Link>
+            </p>
+          </div>
 
           <div className="shopRead_box">
             <div className="item_info">
@@ -182,11 +185,12 @@ const P_ReadComponent = () => {
               <strong>거래장소</strong>
             </div>
             <p>{product.plocat}</p>
-
-            <MapComponent
-              initialPosition={{ lat: product.lat, lng: product.lng }}
-              readOnly={true}
-            />
+            {product.lat && product.lng && (
+              <MapComponent
+                initialPosition={{ lat: product.lat, lng: product.lng }}
+                readOnly={true}
+              />
+            )}
           </div>
           <div className="btnBox">
             <div className="btnforSeller">
@@ -199,8 +203,10 @@ const P_ReadComponent = () => {
                 </button>
               )}
               {loginState.email === product.userEmail && (
-                <button className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
-                onClick={handleClickSoldOut}>
+                <button
+                  className="btn_sell bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
+                  onClick={handleClickSoldOut}
+                >
                   판매완료
                 </button>
               )}

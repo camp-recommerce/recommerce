@@ -19,11 +19,11 @@ public class UserProfileController {
         this.userProfileService = userProfileService;
     }
 
-    @GetMapping("/profile/{email}")
-    public ResponseEntity<UserProfileDTO> getUserProfile(@PathVariable String email) {
-        UserProfileDTO profile = userProfileService.getUserProfileByEmail(email);
-        if (profile != null) {
-            return ResponseEntity.ok(profile);
+    @GetMapping("/profile/statistics/{email}")
+    public ResponseEntity<UserProfileDTO> getUserProfileStatisticsByEmail(@PathVariable String email) {
+        UserProfileDTO profileStatistics = userProfileService.getUserProfileStatisticsByEmail(email);
+        if (profileStatistics != null) {
+            return ResponseEntity.ok(profileStatistics);
         } else {
             return ResponseEntity.notFound().build();
         }

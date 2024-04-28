@@ -41,5 +41,7 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
             "(:userEmail is null OR p.userEmail = :userEmail)")
     Page<Object[]> findAllByUserEmailWithImages(@Param("userEmail") String userEmail, Pageable pageable);
 
+    List<Product> findAllByUserEmailAndSoldOutTrue(String email);
+
 
 }
