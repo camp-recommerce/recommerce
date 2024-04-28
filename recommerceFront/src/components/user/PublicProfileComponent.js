@@ -1,105 +1,95 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link } from "react-router-dom"; // Link 추가
-import { readUser } from "../../api/userApi";
 import { fetchProductsByUserFrom } from "../../api/productApi";
-import ProfileComponent from "./ProfileComponent";
+import useCustomLogin from "../../hooks/useCustomLoginPage";
+import { Link, useParams } from "react-router-dom";
+import { readUser } from "../../api/userApi";
+import '../../scss/user/PublicProfileComponent.scss';
 
 const PublicProfileComponent = () => {
-  const { email } = useParams();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState('onSale');
   const [profile, setProfile] = useState(null);
-  const [saleItems, setSaleItems] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
+  const { email } = useParams();
 
   useEffect(() => {
-    const fetchProfile = async () => {
-      try {
-        const response = await readUser(email);
-        console.log("Profile data:", response);
-        setProfile(response);
-      } catch (error) {
-        console.error("Error fetching public profile:", error);
-        setError("Failed to load profile.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    const fetchUserSaleItems = async () => {
+    const fetchData = async () => {
       try {
         const data = await fetchProductsByUserFrom({
           page: 1,
           size: 10,
           userEmail: email,
         });
-        setSaleItems(data);
-        setIsLoading(false);
+        setProducts(data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching sale items:", error);
-        setIsLoading(false);
+        console.error("Error fetching products:", error);
+        setLoading(false);
       }
     };
 
-    fetchProfile();
-    fetchUserSaleItems();
+    fetchData();
+
+    if (email) {
+      const fetchProfile = async () => {
+        try {
+          const response = await readUser(email);
+          console.log("Profile data:", response);
+          setProfile(response);
+        } catch (error) {
+          console.error("Error fetching public profile:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchProfile();
+    }
   }, [email]);
 
-  const profileStyle = {
-    maxWidth: '800px',
-    margin: '0 auto',
-    padding: '20px',
-  };
-
-  const listItemStyle = {
-    fontSize: '18px',
-    marginBottom: '8px',
-  };
-
-  if (isLoading) {
-    return <div style={profileStyle}>Loading...</div>;
+  if (loading) {
+    return <div className="loading">로딩 중...</div>;
   }
 
-  if (error) {
-    return <div style={profileStyle}>Error: {error}</div>;
+  if (!products || products.length === 0) {
+    return <div className="no-products">상품이 없습니다.</div>;
   }
+
+  const filteredProducts = products.dtoList.filter(product =>
+    activeTab === 'onSale' ? !product.soldOut : product.soldOut
+  );
 
   return (
-    <div style={profileStyle}>
-      {profile ? (
-        <div>
-          <h2>프로필</h2>
-          <p>Email: {profile.email}</p>
-          <p>닉네임: {profile.nickname}</p>
-        </div>
-      ) : (
-        <div>No profile data available.</div>
-      )}
-
-      <div style={{ marginBottom: '30px' }}>
-        <h2>판매목록</h2>
-        <ul style={{ listStyleType: 'none', padding: 0 }}>
-          {saleItems && saleItems.dtoList && saleItems.dtoList.length > 0 ? (
-            saleItems.dtoList.map((item) => (
-              <li key={item.pno} style={listItemStyle}>
-                {/* 링크 추가 */}
-                <Link to={`/product/read/${item.pno}`} style={{ textDecoration: 'none', color: 'inherit' }}>
-                  <div>
-                    <strong>{item.pname}</strong> - {item.pcategory} - {item.price.toLocaleString()}원
-                  </div>
-                  <div>상태: {item.pstate}</div>
-                  <div>위치: {item.plocat}</div>
-                  <div>상세 설명: {item.pdesc}</div>
-                </Link>
-              </li>
-            ))
-          ) : (
-            <div>판매중인 상품이 없습니다.</div>
-          )}
-        </ul>
+    <div className="container">
+      <div className="profile-section">
+        {profile ? (
+          <div>
+            <h2>프로필</h2>
+            <p>Email: {profile.email}</p>
+            <p>닉네임: {profile.nickname}</p>
+          </div>
+        ) : (
+          <div>사용자의 프로필이 없습니다.</div>
+        )}
       </div>
-
-      <div>
-        <ProfileComponent />
+      <div className="products-section">
+        <h2>상품 목록</h2>
+        </div>
+      <div className="button-group">
+        <button onClick={() => setActiveTab('onSale')}>판매 중</button>
+        <button onClick={() => setActiveTab('soldOut')}>판매 완료</button>
+      </div>
+      <div className="products-grid">
+        {filteredProducts.map((product) => (
+          <div key={product.pno} className="product-card">
+            <Link to={`/product/read/${product.pno}`} className="product-link">
+              <strong>{product.pname}</strong> - {product.pcategory} - {product.price.toLocaleString()}원
+              <div className="product-details">상태: {product.pstate}</div>
+              <div className="product-details">위치: {product.plocat}</div>
+              <div className="product-details">상세 설명: {product.pdesc}</div>
+            </Link>
+          </div>
+        ))}
       </div>
     </div>
   );

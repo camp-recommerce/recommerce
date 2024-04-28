@@ -86,10 +86,11 @@ const PasswordChangeFormComponent = () => {
   };
 
   return (
+    
     <div style={styles.container}>
       {result === true && <AlertModal title="비밀번호 변경" content="비밀번호가 성공적으로 변경되었습니다." />}
       {result === false && <AlertModal title="오류" content={errorMessage} />}
-      <h2>비밀번호 변경</h2>
+      
       <form onSubmit={handleSubmit}>
         <div>
           <label style={styles.label}>현재 비밀번호</label>
