@@ -35,8 +35,6 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
     refreshAlarm();
     console.log("Alarms marked as read.");
 
-    // 채팅 모달 열기
-    openChatModal(alarmsInRoom[0].roomId);
   };
 
   useEffect(() => {
@@ -74,6 +72,8 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
             <button
               className="text-blue-500 hover:underline"
               onClick={() => {
+                const roomId = groupedAlarms[senderEmail][0].roomId;
+                openChatModal(roomId);
                 handleReadAlarms(senderEmail);
               }}
             >
@@ -89,6 +89,16 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
                   <p>메시지: {alarm.message}</p>
                 </div>
               ))}
+              <div>
+              {isChatModalOpen && (
+                <Chat
+                  room={groupedAlarms[senderEmail][0].roomId}
+                  username={loginState.email}
+                  socket={socket}
+                  closeModal={closeChatModal}
+                />
+              )}
+            </div>
           </div>
         </div>
       );
