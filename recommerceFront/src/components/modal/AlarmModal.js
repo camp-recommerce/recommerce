@@ -74,10 +74,6 @@ const AlarmModal = ({ closeModal, email }) => {
             <button
               className="text-blue-500 hover:underline"
               onClick={() => {
-                const roomId = groupedAlarms[senderEmail][0].roomId;
-                console.log(roomId);
-                openChatModal(roomId);
-                console.log(isChatModalOpen);
                 handleReadAlarms(senderEmail);
               }}
             >
@@ -85,14 +81,6 @@ const AlarmModal = ({ closeModal, email }) => {
             </button>
           </h3>
           <div>
-            {isChatModalOpen && (
-              <Chat
-                room={groupedAlarms[senderEmail][0].roomId} // 해당 발신자의 roomId 사용
-                username={loginState.email} // 발신자의 이메일 전달
-                socket={socket}
-                closeModal={closeChatModal}
-              />
-            )}
           </div>
           <div>
             {groupedAlarms[senderEmail]
