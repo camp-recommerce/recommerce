@@ -17,6 +17,13 @@ export const getAlarms = async () => {
 };
 
 export const readAlarms = async (alarmIds) => {
-  const res = await jwtAxios.post(`${host}/read`, alarmIds);
-  return res.data;
+  try {
+    for (const alarmId of alarmIds) {
+      await jwtAxios.put(`${host}/read/${alarmId}`);
+    }
+    console.log("Alarms marked as read.");
+  } catch (error) {
+    console.error("Error marking alarms as read:", error);
+    throw error;
+  }
 };

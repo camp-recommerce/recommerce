@@ -21,7 +21,6 @@ public class ChatAlarm {
     //수신인
     private User user;
 
-
     private String roomId;
     private String message;
     //발신인

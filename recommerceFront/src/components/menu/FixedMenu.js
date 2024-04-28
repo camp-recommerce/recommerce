@@ -37,11 +37,13 @@ function FixedMenu() {
   });
 
   const openModal = (alarm) => {
+    refreshAlarm();
     setIsModalOpen(true); // 모달창 열기
+    
   };
 
   const closeModal = () => {
-    closeChatModal();
+    refreshAlarm();
     setIsModalOpen(false); // 모달창 닫기
   };
 
@@ -122,7 +124,7 @@ function FixedMenu() {
         </>
       )}
       {isModalOpen && ( // 모달창이 열려 있는 경우
-        <AlarmModal email={loginState.email} closeModal={closeModal} />
+        <AlarmModal email={loginState.email} closeModal={closeModal} isModalOpen={isModalOpen} />
       )}
     </div>
   );

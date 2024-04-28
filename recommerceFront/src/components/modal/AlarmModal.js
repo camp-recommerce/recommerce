@@ -5,7 +5,7 @@ import useCustomLogin from "../../hooks/useCustomLoginPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import { readAlarms } from "../../api/chatAlarmApi";
 
-const AlarmModal = ({ closeModal, email }) => {
+const AlarmModal = ({ closeModal, email,isModalOpen }) => {
   const { openChatModal, isChatModalOpen, socket, closeChatModal } =
     useCustomChatModal(); // closeChatModal 함수 불러오기
   const { loginState } = useCustomLogin();
@@ -54,7 +54,7 @@ const AlarmModal = ({ closeModal, email }) => {
       return grouped;
     };
     setGroupedAlarms(groupAlarms());
-  }, [isChatModalOpen, originalAlarmList]);
+  }, [isModalOpen, originalAlarmList]);
 
   const renderGroupedAlarms = () => {
     return Object.keys(groupedAlarms).map((senderEmail, index) => {
@@ -80,8 +80,6 @@ const AlarmModal = ({ closeModal, email }) => {
               확인하기
             </button>
           </h3>
-          <div>
-          </div>
           <div>
             {groupedAlarms[senderEmail]
               .filter((alarm) => !alarm.readCheck) // 읽지 않은 알람만 필터링

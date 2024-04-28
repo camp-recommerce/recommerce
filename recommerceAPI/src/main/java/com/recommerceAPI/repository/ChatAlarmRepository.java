@@ -17,10 +17,8 @@ import java.util.Optional;
 public interface ChatAlarmRepository extends JpaRepository<ChatAlarm, Long> {
 
 
-    @Query("SELECT chatalarm FROM ChatAlarm chatalarm WHERE chatalarm.user.email = :email")
+    @Query("SELECT chatalarm FROM ChatAlarm chatalarm WHERE chatalarm.user.email = :email AND chatalarm.readCheck = false")
     public List<ChatAlarm> findAllByUserEmail(@Param("email") String email);
-
-
 
     Optional<ChatAlarm> findByUserAndReadCheck(User user, boolean b);
 }

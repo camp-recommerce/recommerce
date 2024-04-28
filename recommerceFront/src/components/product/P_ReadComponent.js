@@ -221,7 +221,6 @@ const P_ReadComponent = () => {
                 찜
               </button>
             </div>
-
             <div>
               {isChatModalOpen && (
                 <Chat
