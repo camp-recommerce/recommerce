@@ -3,6 +3,11 @@ import { createBrowserRouter } from "react-router-dom";
 import productRouter from "./productRouter";
 import userRouter from "./userRouter";
 import auctionRouter from "./auctionRouter";
+
+import { CheckoutPage } from "../pages/payments/CheckoutPage";
+import { SuccessPage } from "../pages/payments/SuccessPage";
+import { FailPage } from "../pages/payments/FailPage";
+import { PaymentSuccessPage } from "../pages/payments/PaymentSuccessPage";
 const Loading = <div>Loading....</div>;
 const ProductIndex = lazy(() => import("../pages/product/P_IndexPage"));
 const LoginIndex = lazy(() => import("../pages/user/IndexPage"));
@@ -35,6 +40,22 @@ const root = createBrowserRouter([
       </Suspense>
     ),
     children: auctionRouter(),
+  },
+  {
+    path: "/payment",
+    element: <CheckoutPage />,
+  },
+  {
+    path: "/payment/success",
+    element: <SuccessPage />,
+  },
+  {
+    path: "/payment/fail",
+    element: <FailPage />,
+  },
+  {
+    path: "/payment/success/1",
+    element: <PaymentSuccessPage />,
   },
 ]);
 

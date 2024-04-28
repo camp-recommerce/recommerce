@@ -7,6 +7,8 @@
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "@tosspayments/payment-sdk": "^1.7.1",
+    "@tosspayments/payment-widget-sdk": "^0.10.2",
     "axios": "^1.6.8",
     "jquery": "^3.7.1",
     "qs": "^6.12.1",

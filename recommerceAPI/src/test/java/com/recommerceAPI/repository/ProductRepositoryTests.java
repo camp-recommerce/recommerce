@@ -21,7 +21,7 @@ public class ProductRepositoryTests {
   @Test
   public void testInsert() {
 
-      for (int i = 5; i < 100; i++) {
+      for (int i = 0; i < 100; i++) {
 
           Product product = Product.builder()
                   .pname("상품"+i)
