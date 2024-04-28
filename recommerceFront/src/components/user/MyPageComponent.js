@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { readUser } from "../../api/userApi";
+import { fetchSaleItems } from "../../api/salesApi";
 import { fetchPurchaseItems } from "../../api/purchaseApi";
 import { getBidList } from "../../api/auctionBidApi";
 import { getMyList } from "../../api/auctionApi";
@@ -11,8 +12,8 @@ import ImageModal from "../modal/ImageModal";
 import A_Chat from "../auction/chat/A_Chat";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
-import UserProductComponent from "./UserProductComponent";
-import styles from '../../scss/user/MyPageComponent.scss';
+import styles from "../../scss/user/MyPageComponent.module.scss";
+import UserProductComponent from "./UserProductComponent"; // 판매 목록 컴포넌트
 
 const host = API_SERVER_HOST;
 
@@ -48,7 +49,8 @@ const MyPageComponent = () => {
         try {
           const userData = await readUser(user.email);
           setUserData(userData);
-         
+          const sales = await fetchSaleItems(user.email);
+          setSaleItems(sales);
           const purchases = await fetchPurchaseItems(user.email);
           setPurchaseItems(purchases);
 
@@ -69,44 +71,59 @@ const MyPageComponent = () => {
   }, [user]);
 
   const goToSales = () => {
-    navigate("/user/by-user"); // UserProducts 컴포넌트의 경로로 이동
+   setActiveMenu("sales"); // UserProducts 컴포넌트의 경로로 이동
   };
 
   return (
-    <div className={styles.myPageContainer}>
-      <div className={styles.sidebar}>
-        <div className={`${styles.menuItem} ${activeMenu === "profile" ? styles.active : ""}`}
-             onClick={() => setActiveMenu("profile")}>프로필</div>
-        <div className={`${styles.menuItem} ${activeMenu === "sales" ? styles.active : ""}`}
-             onClick={() => setActiveMenu("sales")}>판매목록</div>
-        <div className={`${styles.menuItem} ${activeMenu === "bid" ? styles.active : ""}`}
-             onClick={() => setActiveMenu("bid")}>경매</div>
-        <div className={`${styles.menuItem} ${activeMenu === "settings" ? styles.active : ""}`}
-             onClick={() => setActiveMenu("settings")}>설정</div>
+    <div className={styles.myPageBundle}>
+      <div className={styles.menuBar}>
+      <div className={styles.menuItem} onClick={() => setActiveMenu("profile")}>
+  프로필
+</div>
+<div className={styles.menuItem} onClick={goToSales}>
+  판매목록
+</div>
+<div className={styles.menuItem} onClick={() => setActiveMenu("bid")}>
+  경매
+</div>
+<div className={styles.menuItem} onClick={() => setActiveMenu("settings")}>
+  정보 설정
+</div>
+
       </div>
-      <div className={styles.content}>
-        {/* 컨텐츠는 activeMenu에 따라 다르게 렌더링 됩니다 */}
+      <h1 className={styles.title}>My Page</h1>
+      <div className={styles.infoBundle}>
         {activeMenu === "profile" && userData && (
           <div className={styles.userInfo}>
             <p>Email: {userData.email}</p>
             <p>닉네임: {userData.nickname}</p>
             <p>휴대폰: {userData.phone}</p>
             <p>생년월일: {userData.birth}</p>
-            <Link to={`../profile/${email}`}>
-              <button className={styles.button}>프로필 보기</button>
-            </Link>
+          </div>
+        )}
+        {activeMenu === "sales" && <UserProductComponent />}
+        {activeMenu === "bid" && bidlist && (
+          <div className="mt-5">
+            <ul className={styles.list}>
+              {bidlist.map((item) => (
+                <div key={item.auctionApno}>
+                  <div>
+                    <img alt={item.auctionApno} src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                         className={styles.image} onClick={() => handleImageClick(item.uploadFileNames[0])} />
+                  </div>
+                  <li className={styles.listItem}>
+                    상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원, 현재 입찰가: {item.currentPrice}
+                  </li>
+                </div>
+              ))}
+            </ul>
           </div>
         )}
         {activeMenu === "address" && userData && (
           <div className={styles.userInfo}>
             <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
-            <p>
-              우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}
-            </p>
-            <p>
-              상세주소:{" "}
-              {userData.addressDetail || "등록된 상세주소가 없습니다."}
-            </p>
+            <p>우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}</p>
+            <p>상세주소: {userData.addressDetail || "등록된 상세주소가 없습니다."}</p>
           </div>
         )}
         {activeMenu === "settings" && (
@@ -125,16 +142,11 @@ const MyPageComponent = () => {
             </Link>
           </div>
         )}
-        {activeMenu === "sales" && (
-          <div className={styles.userInfo}>
-            <UserProductComponent /> {/* UserProductComponent 렌더링 */}
-          </div>
-        )}
         {activeMenu === "bid" && (
           <div>
             <ul className={styles.list}>
               <li className={styles.title}>낙찰 물품</li>
-              {auction && auction.dtoList.map((item) => (
+              {auction.dtoList.map((item) => (
                 <div key={item.apno}>
                   <img
                     alt={item.apno}
@@ -160,85 +172,101 @@ const MyPageComponent = () => {
                   </button>
                 </div>
               ))}
-              {auction && auction.dtoList.length === 0 && (
+              {auction.dtoList.length === 0 && (
                 <p className="mt-3 text-gray-500">낙찰한 물품이 없습니다.</p>
               )}
             </ul>
-            {bidlist && bidlist.length > 0 && (
-              <div className="mt-5">
-                <ul className={styles.list}>
-                  <li className={styles.title}>입찰한 경매</li>
-                  {bidlist.map((item) => {
-                    let status;
-                    if (item.apStatus === "ACTIVE") {
-                      status = "경매중";
-                    } else if (item.apStatus === "CLOSED") {
-                      status = "경매 종료";
-                      return null;
-                    } else {
-                      status = item.apStatus;
-                    }
-                    return (
-                      <div key={item.apno}>
-                        <div>
-                          <img
-                            alt={item.auctionApno}
-                            src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
-                            className={styles.image}
-                            onClick={() => handleImageClick(item.uploadFileNames[0])}
-                          />
-                        </div>
-                        <li className={styles.listItem}>
-                          상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원,
-                          현재 입찰가: {item.currentPrice}
-                        </li>
-                        <button
-                          className="bg-black text-white font-bold mt-1 mb-2"
-                          onClick={() => moveMyPageToAuctonRead(item.auctionApno)}
-                          style={{ width: 130, height: 28, borderRadius: 5 }}
-                        >
-                          페이지 이동
-                        </button>
-                        {item.apStatus !== "CLOSED" && (
-                          <button
-                            className="bg-black text-white font-bold mt-1 ml-2 mb-2"
-                            style={{ width: 130, height: 28, borderRadius: 5 }}
-                            onClick={() => openChatModal(item.auctionApno, {
-                              startPrice: item.startPrice,
-                              bidIncrement: item.bidIncrement,
-                              imageSrc: item.uploadFileNames,
-                              currentPrice: item.currentPrice
-                            })}
-                          >
-                            입찰 하기
-                          </button>
-                        )}
-                        {roomId === item.auctionApno && (
-                          <A_Chat
-                            username={email}
-                            room={item.auctionApno}
-                            socket={socket}
-                            closeModal={closeChatModal}
-                            startPrice={item.startPrice}
-                            bidIncrement={item.bidIncrement}
-                            imageSrc={item.uploadFileNames}
-                            currentPrice={item.currentPrice}
-                          />
-                        )}
+          </div>
+        )}
+        {activeMenu === "bid" && (
+          <div className="mt-5">
+            <ul className={styles.list}>
+              <li className={styles.title}>입찰한 경매</li>
+              {bidlist && bidlist.length > 0 ? (
+                bidlist.map((item) => {
+                  let status;
+                  if (item.apStatus === "ACTIVE") {
+                    status = "경매중";
+                  } else if (item.apStatus === "CLOSED") {
+                    status = "경매 종료";
+                    return null;
+                  } else {
+                    status = item.apStatus;
+                  }
+                  return (
+                    <div key={item.apno}>
+                      <div>
+                        <img
+                          alt={item.auctionApno}
+                          src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                          className={styles.image}
+                          onClick={() => handleImageClick(item.uploadFileNames[0])}
+                        />
                       </div>
-                    );
-                  })}
-                </ul>
-                {openImg && (
-                  <ImageModal
-                    openImg={openImg}
-                    callbackFn={closeImageModal}
-                    imagePath={selectedImgPath}
-                  />
-                )}
-              </div>
+                      <li className={styles.listItem}>
+                        상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원,
+                        현재 입찰가: {item.currentPrice}
+                      </li>
+                      <button
+                        className="bg-black text-white font-bold mt-1 mb-2"
+                        onClick={() => moveMyPageToAuctonRead(item.auctionApno)}
+                        style={{ width: 130, height: 28, borderRadius: 5 }}
+                      >
+                        페이지 이동
+                      </button>
+                      {item.apStatus !== "CLOSED" && (
+                        <button
+                          className="bg-black text-white font-bold mt-1 ml-2 mb-2"
+                          style={{ width: 130, height: 28, borderRadius: 5 }}
+                          onClick={() => openChatModal(item.auctionApno, {
+                            startPrice: item.startPrice,
+                            bidIncrement: item.bidIncrement,
+                            imageSrc: item.uploadFileNames,
+                            currentPrice: item.currentPrice
+                          })}
+                        >
+                          입찰 하기
+                        </button>
+                      )}
+
+                      {roomId === item.auctionApno && (
+                        <A_Chat
+                          username={email}
+                          room={item.auctionApno}
+                          socket={socket}
+                          closeModal={closeChatModal}
+                          startPrice={item.startPrice}
+                          bidIncrement={item.bidIncrement}
+                          imageSrc={item.uploadFileNames}
+                          currentPrice={item.currentPrice}
+                        />
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <p className="mt-3 text-gray-500">입찰 중인 물품이 없습니다.</p>
+              )}
+            </ul>
+            {openImg && (
+              <ImageModal
+                openImg={openImg}
+                callbackFn={closeImageModal}
+                imagePath={selectedImgPath}
+              />
             )}
           </div>
+        )}
+
+        {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
+          <ul className={styles.list}>
+            <li className={styles.title}>판매리스트:</li>
+            {saleItems.map((item) => (
+              <li key={item.id} className={styles.listItem}>
+                {item.name} - ${item.price}
+              </li>
+            ))}
+          </ul>
         )}
       </div>
     </div>
