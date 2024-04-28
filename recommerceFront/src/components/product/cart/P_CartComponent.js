@@ -44,28 +44,20 @@ const P_CartComponent = () => {
     }
   }, [isLogin]); // 로그인 상태가 변경될 때만 refreshCart를 호출
 
-
   useEffect(() => {
     const total = calculateTotalAmount();
     setTotalAmount(total);
   }, [cartItems, selectedItems]);
 
   return (
-    <div className="cart-group basketdiv">
+    <div className="cart-group basketdiv" style={{ minHeight: 800 }}>
       {isLogin ? (
         <div className="cart-area">
           <div className="cart-wrap itemWrap">
-            <div className="cart-box cartLength">
-              장바구니 상품({cartItems.length})
+            <div className="cart-box cartLength border-b-2 border-black font-bold text-lg mt-2" style={{ display: 'flex',  alignItems: 'center', height:50 }}>
+              찜 목록({cartItems.length})
             </div>
-            <ul className="cart-box cartMenu flex justify-between font-bold text-sm border-t border-b">
-              <li>선택</li>
-              <li>사진</li>
-              <li>상품명</li>
-              <li>판매가</li>
-              <li>취소</li>
-            </ul>
-            <ul>
+            <div className="grid grid-cols-4 gap-4">
               {cartItems.map((item) => (
                 <P_CartItemComponent
                   {...item}
@@ -76,12 +68,6 @@ const P_CartComponent = () => {
                   isSelected={selectedItems.includes(item.wino)}
                 />
               ))}
-            </ul>
-          </div>
-          <div className="cart-wrap cartTotal">
-            <div className="cart-box cartTprice">
-              <div>총 상품 금액</div>
-              <div>{formatNumber(totalAmount)}원</div>
             </div>
           </div>
         </div>
@@ -90,6 +76,7 @@ const P_CartComponent = () => {
       )}
     </div>
   );
+  
 };
 
 export default P_CartComponent;

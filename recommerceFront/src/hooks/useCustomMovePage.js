@@ -63,6 +63,15 @@ const useCustomMovePage = (pno) => {
     });
   };
 
+  const moveCartToProductRead = (num) => {
+    console.log(queryDefault);
+
+    navigate({
+      pathname: `../product/read/${num}`,
+      search: queryDefault,
+    });
+  };
+
   const moveModifyPage = (num) => {
     console.log(queryDefault);
 
@@ -127,6 +136,7 @@ const useCustomMovePage = (pno) => {
     moveProductListPage,
     moveReviewQnaListPage,
     moveMyPageToAuctonRead,
+    moveCartToProductRead,
     page,
     size,
     reviewQnaPage,

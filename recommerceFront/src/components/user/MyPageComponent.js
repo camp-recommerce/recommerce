@@ -49,8 +49,7 @@ const MyPageComponent = () => {
         try {
           const userData = await readUser(user.email);
           setUserData(userData);
-          const sales = await fetchSaleItems(user.email);
-          setSaleItems(sales);
+
           const purchases = await fetchPurchaseItems(user.email);
           setPurchaseItems(purchases);
 
@@ -212,42 +211,44 @@ const MyPageComponent = () => {
           </div>
         )}
 
-        {activeMenu === "bid" && (
-          <div>
-            <ul style={styles.list}>
-              <li style={styles.title}>낙찰 물품</li>
-              {auction.dtoList.map((item) => (
-                <div key={item.apno}>
-                  <img
-                    alt={item.apno}
-                    src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
-                    style={{ width: 180, height: 120, cursor: "pointer" }}
-                    onClick={() => handleImageClick(item.uploadFileNames[0])}
-                  />
-                  <li style={styles.listItem}>
-                    상품이름: {item.apName} , 낙찰가: {item.apCurrentPrice}원
-                  </li>
-                  <button
-                    className="bg-black text-white font-bold mt-1 mb-2"
-                    onClick={() => moveMyPageToAuctonRead(item.apno)}
-                    style={{ width: 130, height: 28, borderRadius: 5 }}
-                  >
-                    페이지 이동
-                  </button>
-                  <button
-                    className="bg-black text-white font-bold mt-1 ml-2 mb-2"
-                    style={{ width: 130, height: 28, borderRadius: 5 }}
-                  >
-                    결제
-                  </button>
-                </div>
-              ))}
-            </ul>
-            {auction.dtoList.length === 0 && (
-              <p className="mt-3 text-gray-500">낙찰한 물품이 없습니다.</p>
-            )}
+{activeMenu === "bid" && (
+  <div>
+    <ul style={styles.list}>
+      <li style={styles.title}>낙찰 물품</li>
+      {auction.dtoList && auction.dtoList.length > 0 ? (
+        auction.dtoList.map((item) => (
+          <div key={item.apno}>
+            <img
+              alt={item.apno}
+              src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+              style={{ width: 180, height: 120, cursor: "pointer" }}
+              onClick={() => handleImageClick(item.uploadFileNames[0])}
+            />
+            <li style={styles.listItem}>
+              상품이름: {item.apName} , 낙찰가: {item.apCurrentPrice}원
+            </li>
+            <button
+              className="bg-black text-white font-bold mt-1 mb-2"
+              onClick={() => moveMyPageToAuctonRead(item.apno)}
+              style={{ width: 130, height: 28, borderRadius: 5 }}
+            >
+              페이지 이동
+            </button>
+            <button
+              className="bg-black text-white font-bold mt-1 ml-2 mb-2"
+              style={{ width: 130, height: 28, borderRadius: 5 }}
+            >
+              결제
+            </button>
           </div>
-        )}
+        ))
+      ) : (
+        <p className="mt-3 text-gray-500">낙찰한 물품이 없습니다.</p>
+      )}
+    </ul>
+  </div>
+)}
+
         {activeMenu === "bid" && (
           <div className="mt-5">
             <ul style={styles.list}>
