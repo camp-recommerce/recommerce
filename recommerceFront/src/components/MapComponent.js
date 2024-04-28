@@ -67,30 +67,35 @@ const MapComponent = ({
         });
       }
 
-      // 드래그 끝난 후 주소 업데이트
+      // 드래그 끝난 후 주소 업데이트만 등록
       kakao.maps.event.addListener(initializedMap, "dragend", () => {
-        updateAddress(initializedMap.getCenter());
+        const newPos = marker.getPosition();
+        updateAddress(newPos); // 사용자가 위치를 변경했을 때만 주소 업데이트
       });
-
-      updateAddress(new kakao.maps.LatLng(lat, lng));
     };
 
-    if (initialPosition) {
+    if (
+      initialPosition &&
+      typeof initialPosition.lat === "number" &&
+      typeof initialPosition.lng === "number"
+    ) {
       initializeMap(initialPosition.lat, initialPosition.lng);
+      // 초기화 시 updateAddress 호출 제거
     } else {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-          (position) =>
-            initializeMap(position.coords.latitude, position.coords.longitude),
+          (position) => {
+            initializeMap(position.coords.latitude, position.coords.longitude);
+          },
           (error) => {
-            console.error("Geolocation 에러:", error);
-            alert("위치 정보를 찾을 수 없습니다.");
-            initializeMap(37.566826, 126.9786567); // 에러 시 기본 주소
+            console.error("Geolocation error:", error);
+            alert("Location information cannot be found.");
+            initializeMap(37.566826, 126.9786567); // Default location
           }
         );
       } else {
-        alert("브라우저가 GPS를 지원하지 않습니다.");
-        initializeMap(37.566826, 126.9786567); // 에러 시 기본 주소
+        alert("This browser does not support GPS.");
+        initializeMap(37.566826, 126.9786567); // Default location
       }
     }
   }, [initialPosition, readOnly]);

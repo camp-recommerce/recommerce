@@ -78,9 +78,13 @@ export const getPublicProfileByEmail = async (email) => {
 };
 
 // 특정 사용자 분석 정보 가져오기
-export const getUserProfile = async (email) => {
-  const res = await axios.get(`${host}/profile/${email}`, {});
-  return res.data;
+export const getUserProfileStatisticsByEmail = async (email) => {
+  try {
+    const response = await axios.get(`${host}/profile/statistics/${email}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
 };
 
 // 비밀번호 변경

@@ -4,12 +4,15 @@
   padding: 20px;
 }
 
-.loading, .no-products {
+.loading,
+.no-products {
   text-align: center;
   margin-top: 20px;
 }
 
-.profile-section, .products-section {
+.profile-section,
+.products-section,
+.analysis-section {
   margin-bottom: 20px;
 }
 
@@ -20,14 +23,17 @@
   margin-bottom: 20px;
 }
 
-.products-section h2 {
+.products-section h2,
+.analysis-section h2 {
   font-size: 24px;
   font-weight: bold; // 글씨 두께 두껍게
   color: #333;
   margin-bottom: 20px;
 }
 
-.profile-section p, .products-section p {
+.profile-section p,
+.products-section p,
+.analysis-section p {
   font-size: 18px;
 }
 
