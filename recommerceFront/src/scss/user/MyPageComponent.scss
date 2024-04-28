@@ -1,19 +1,22 @@
+/* 전체 페이지 컨테이너 */
 .my-page-bundle {
-    padding: 20px;
+    display: flex;
+    max-width: 1200px;
     margin: 20px auto;
-    max-width: 800px;
     background-color: #fff;
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   }
   
+  /* 메뉴 버튼 그룹 */
   .menu-buttons {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
   }
   
+  /* 일반 버튼 스타일 */
   .button {
     padding: 10px 15px;
     background-color: #000;
@@ -23,11 +26,13 @@
     cursor: pointer;
     font-size: 16px;
     font-weight: bold;
-    &:hover {
-      background-color: #0056b3;
-    }
   }
   
+  .button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* 사용자 정보 컨테이너 */
   .info-bundle {
     background-color: #f9f9f9;
     padding: 15px;
@@ -38,38 +43,66 @@
     align-items: center;
   }
   
+  /* 사용자 정보 요소 */
   .user-info {
     margin-bottom: 10px;
   }
   
+  /* 리스트 스타일 */
   .list {
     list-style: none;
     padding-left: 0;
   }
   
+  /* 리스트 아이템 스타일 */
   .list-item {
     padding: 5px 0;
   }
   
+  /* 제목 스타일 */
   .title {
     font-weight: bold;
-    font-size: 18px;
-    margin-bottom: 10px;
+    font-size: 24px; /* 글자 크기 증가 */
+    margin-bottom: 20px; /* 여백 증가 */
   }
   
-  .profile-image-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .profile-image {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
-  }
-  
+  /* 파일 입력 스타일 */
   .file-input {
-    margin-top: 10px;
+    margin-top: 20px;
   }
   
+  /* 마이 페이지 컨테이너 */
+  .myPageContainer {
+    display: flex;
+    margin: 20px auto;
+    max-width: 1200px;
+  }
+  
+ /* 사이드바 스타일 */
+.sidebar {
+    width: 250px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-right: 1px solid #ccc;
+  }
+  
+  /* 메인 콘텐츠 스타일 */
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    display: flex; /* 메인 콘텐츠를 열로 배치 */
+    flex-direction: column; /* 세로로 쌓이도록 설정 */
+  }
+  
+  /* 사이드바 내부 메뉴 아이템 스타일 */
+  .menuItem {
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+    &:hover {
+      background-color: #eee;
+    }
+    &.active {
+      background-color: #ddd;
+    }
+  }

@@ -8,6 +8,7 @@ import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ReadPage.scss";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import MapComponent from "../MapComponent";
+import { Link } from 'react-router-dom';  // 맨 위에 추가
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
@@ -104,6 +105,9 @@ const P_ReadComponent = () => {
       navigate("/");
   };
   }
+
+  
+
   return (
     <div className="shopRead_group ">
       {loading ? <LoadingModal /> : <></>}
@@ -150,11 +154,16 @@ const P_ReadComponent = () => {
             <p key={product.price}>{product.price}</p>
           </div>
           <div className="shopRead_box">
-            <div className="item_info">
-              <strong>판매자</strong>
-            </div>
-            <p>{product.userEmail}</p>
-          </div>
+  <div className="item_info">
+    <strong>판매자</strong>
+  </div>
+  <p>
+  <Link to={`/user/profile/${product.userEmail}`} style={{ color: '#000', textDecoration: 'none', fontWeight: 'bold' }}>
+  {product.userEmail}
+</Link>
+
+  </p>
+</div>
 
           <div className="shopRead_box">
             <div className="item_info">
