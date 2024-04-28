@@ -76,7 +76,7 @@ const MyPageComponent = () => {
     <div className={styles.myPageContainer}>
       <div className={styles.sidebar}>
         <div className={`${styles.menuItem} ${activeMenu === "profile" ? styles.active : ""}`}
-             onClick={() => setActiveMenu("profile")}>프로필</div>
+             onClick={() => setActiveMenu("profile")}>My Page</div>
         <div className={`${styles.menuItem} ${activeMenu === "sales" ? styles.active : ""}`}
              onClick={() => setActiveMenu("sales")}>판매목록</div>
         <div className={`${styles.menuItem} ${activeMenu === "bid" ? styles.active : ""}`}
@@ -92,9 +92,6 @@ const MyPageComponent = () => {
             <p>닉네임: {userData.nickname}</p>
             <p>휴대폰: {userData.phone}</p>
             <p>생년월일: {userData.birth}</p>
-            <Link to={`../profile/${email}`}>
-              <button className={styles.button}>프로필 보기</button>
-            </Link>
           </div>
         )}
         {activeMenu === "address" && userData && (
