@@ -12,6 +12,7 @@ const P_CartItemComponent = ({
   changeCart,
   email,
   soldOut,
+  userEmail,
 
 }) => {
   const host = API_SERVER_HOST;
@@ -55,6 +56,9 @@ const P_CartItemComponent = ({
           </div>
           <div className="shopList_pname text-sm mb-1 flex justify-center">
           상품명: {pname} ({soldOut ? '판매완료' : '판매중'})
+          </div>
+          <div className="shopList_pname text-sm mb-1 flex justify-center">
+          판매자: {userEmail}
           </div>
           <div className="shopList_pname text-sm mb-1 flex justify-center">
           가격: {formatNumber(price)}원
