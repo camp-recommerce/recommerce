@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "recommerce-heky",
+  "private_key_id": "dc50bacddfd11297538d767d1231a4699dff4aa5",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvwIBADANBgkqhkiG9w0BAQEFAASCBKkwggSlAgEAAoIBAQDFQgjKzELGBgRj\n/qE8GcdyrlzvxzW9ba4KYFTXB8g+hGrTHwQuUSBY7+dVRmzZ/fnqbFOw9wyuMVNh\nG95guJkxT4lubsQG5tD6mUSD5X4QV3xeympgEJIS+OU/JlRo84RQwp0v/hKQfDsk\nX3zq0cC7z8oLo+HUU436bT1VGr5o4S01a4Bnk0ex7Bwy45TaZ2eoDpXIJ7VZ7o3m\nkO/no0mGxtjR3/PBWkY3+SF+WYR0S6lChjc6u6OM1rDAM7mSadOm1Uld4ADIZw1F\n0p2Me0qVYcVwMB1FusAkGVK2imVfONPem06INTAmKgSsF+yH6d5F9zyV5FrV5vqf\nTjLl5mC7AgMBAAECggEACJZQVavAuGgopsW99STWJurqRtHwR/fPXMpGxzmigP44\nvEocX3vOobCH7JFtSawhxg/DMPAAUFD7ZT3WV3WRzbC9td4CkJ5ZuJ8VeXxzGXkF\nhAbhzJ7MDSFisXYUtKDtQKrINv+jhUCzPmkdwgcxkbuA+zK+MQUWKDG7Oso4Qc6A\nHNgAvmhLbcrEx1Esk+T3mbuR0LT9Ozp+KDDXpuU9Q+x/TScb3w/fwzb900T3SiCi\ntoU1/zQ9jTagn63Kjc2tUAxyBzPV/ve2YPcSil3foqz4qXGGPSY+qcYRs0Er0ZJr\nLLCNkAr8tHduBlbTzzwIN/W+rUp7C8O0hM5EypMnwQKBgQDknGV3MWiTuEJmcRS5\nIA6MwsfkiqNQR5ziXmd2aqPgbDIY6NGh3pfZprqx14RftUtV+efs6AtZbf9SDFz+\nL+1dnM5daa/bueE551eWJlkJANPeo21XTlWuasJvrKzcg3i2fEyO5CJm1sS1IvDR\nqJo06pitJtdS60T2iifPtXhv4QKBgQDc5AcPXbv9oslVYRVOTp8/sH/kF6sp632a\na/yfpae61VSpgl4tcKVHDVzZ3mTuRYNvcean9sig2UjNq9DJ9RWetiat5GhjQd/i\nNBZlZY7rTOUtvTiHGEhIXjKX58eLTd2ooqsl4ThQ8PzSHSGHQr8Q0QJCthpe18/X\ntckxrBUUGwKBgQCFxnchjooRlwtUAuwLgJTDDeAG/pGekqldVbzZcIHA+889AFBb\nlnPpa0VoeCMAFoilIP30hbzOci2sB4wLOmR+GRoxU30S6OzBA30fYgVL3W4dpCiB\npFdDHzn0O2lUCKMEtivemeT/pMGq9W1SYoUKXhVFjasG3KGYWzP8ucZmQQKBgQCk\njaLMybFgM8L0vcwXd+6ejafYjeFO60W4ojWh4NBhGMdnN91c0IvvsH65NznNXy+Y\n+CsyeV/go73eqd5ydQfUIjISXRN+zfYxF0iP5OZhV/lq54mS6n3+m13pWBuJJUq5\nc+U35N4FPmG5TUZK82hO6MVcWTiv6unE8oGdZWqWfQKBgQDjZ/3TAYPOcHlQzj47\nMO6OXDItC0QAwWfMUbdkhD9EnawhUPe5SttwfH/wst4QYAzKDr5qznwfaOiGQ7Op\nakc+rRwJcFLloW0DG82qBDbfj6cET6Cv3ogYesG8hNgRbpGH0dRolY/SbggmmXCd\npU8EBWyykS6oN6bWsBXT/iRjxg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "recommence@recommerce-heky.iam.gserviceaccount.com",
+  "client_id": "106333231601101517704",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/recommence%40recommerce-heky.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
