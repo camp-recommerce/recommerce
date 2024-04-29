@@ -218,7 +218,7 @@ const P_InfiniteComponent = () => {
         hasMore={serverData.hasMore}
         endMessage={
           serverData.dtoList.length > 0 ? (
-            <p>You are all set!</p>
+            <p></p>
           ) : (
             <p className="h-[300px] text-center flex flex-col justify-center items-center">
               <span>검색 결과가 없습니다.</span>
