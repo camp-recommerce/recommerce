@@ -31,7 +31,7 @@ public class UserController {
 
     private final UserRepository userRepository;
 
-    private final JavaMailSender javaMailSender;
+
 
     @GetMapping("/kakao")
     public Map<String, Object> getUserFromKakao(String accessToken) {

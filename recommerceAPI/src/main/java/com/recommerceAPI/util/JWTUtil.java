@@ -14,6 +14,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.Keys;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.Authentication;
 
 // JWTUtil 클래스는 JWT 토큰 생성 및 검증에 사용되는 유틸리티 클래스입니다.
 @Log4j2
@@ -70,5 +71,42 @@ public class JWTUtil {
             throw new CustomJWTException("Error");
         }
         return claim;
+    }
+
+    // JWT 토큰이 만료되었는지 확인하는 메소드
+    public static boolean isTokenExpired(Authentication authentication) {
+        // authentication 객체에서 토큰을 가져옵니다.
+        Object token = authentication.getCredentials();
+
+        // 토큰을 문자열로 변환하여 토큰이 만료되었는지 확인합니다.
+        try {
+            Map<String, Object> claims = validateToken(token.toString());
+            // 토큰이 유효하면 false 반환
+            return false;
+        } catch (ExpiredJwtException e) {
+            // 토큰이 만료되었으면 true 반환
+            return true;
+        }
+    }
+
+    // 새로운 토큰을 생성하는 메소드
+    public static String refreshToken(Authentication authentication) {
+        try {
+            // authentication 객체에서 토큰을 가져옵니다.
+            Object token = authentication.getCredentials();
+            // 만료된 토큰을 검증하고 클레임을 가져옵니다.
+            Map<String, Object> claims = validateToken(token.toString());
+
+            // 기존 토큰에서 이메일 정보를 가져옵니다.
+            String email = (String) claims.get("email");
+
+            // 새로운 토큰을 생성합니다.
+            String newToken = generateToken(claims, 30); // 예: 15분 동안 유효한 토큰 생성
+
+            return newToken;
+        } catch (CustomJWTException e) {
+            // 만료된 토큰 검증 실패 시 예외 처리
+            throw new RuntimeException("Failed to refresh token: " + e.getMessage());
+        }
     }
 }

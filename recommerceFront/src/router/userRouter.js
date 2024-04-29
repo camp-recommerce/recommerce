@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import MyProfileComponent from "../components/user/MyProfileComponent";
 
 const Loading = <div>Loading....</div>;
 const Join = lazy(() => import("../components/user/JoinComponent"));
@@ -10,6 +11,7 @@ const MyPage = lazy(() => import("../components/user/MyPageComponent"));
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const Address = lazy(() => import("../components/user/AddressComponent"));
+const MyProfile = lazy(() => import("../components/user/MyProfileComponent"));
 const PasswordChangeForm = lazy(() =>
   import("../components/user/PasswordChangeFormComponent")
 );
@@ -71,6 +73,14 @@ const userRouter = () => {
       ),
     },
     {
+      path: "mypage",
+      element: (
+        <Suspense fallback={Loading}>
+          <MyPage />
+        </Suspense>
+      ),
+    },
+    {
       path: "remove/:email",
       element: (
         <Suspense fallback={Loading}>
@@ -111,10 +121,18 @@ const userRouter = () => {
       ),
     },
     {
-      path: "by-user", // 판매목록 , 판매중, 판매완료 추가
+      path: "mypage/by-user", // 판매목록 , 판매중, 판매완료 추가
       element: (
         <Suspense fallback={Loading}>
           <UserProduct />
+        </Suspense>
+      ),
+    },
+    {
+      path: "mypage/myprofile", // 판매목록 , 판매중, 판매완료 추가
+      element: (
+        <Suspense fallback={Loading}>
+          <MyProfile />
         </Suspense>
       ),
     },

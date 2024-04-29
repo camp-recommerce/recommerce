@@ -95,7 +95,7 @@ export const changePassword = async (
   confirmPassword
 ) => {
   try {
-    const res = await jwtAxios.put(
+    const res = await axios.put(
       `${host}/password/${email}`,
       null, // POST 요청에 사용될 body 데이터. 이 경우 URL 파라미터를 사용하므로 null 처리.
       {

@@ -18,7 +18,7 @@ const PublicProfileComponent = () => {
       try {
         const data = await fetchProductsByUserFrom({
           page: 1,
-          size: 10,
+          size: 50,
           userEmail: email,
         });
         setProducts(data);

@@ -11,6 +11,7 @@ import { PaymentSuccessPage } from "../pages/payments/PaymentSuccessPage";
 const Loading = <div>Loading....</div>;
 const ProductIndex = lazy(() => import("../pages/product/P_IndexPage"));
 const LoginIndex = lazy(() => import("../pages/user/IndexPage"));
+const MyPageIndex = lazy(() => import("../components/user/MyPageComponent"));
 const AuctionIndex = lazy(() => import("../pages/auction/A_IndexPage"));
 const root = createBrowserRouter([
   {
@@ -28,6 +29,15 @@ const root = createBrowserRouter([
     element: (
       <Suspense fallback={Loading}>
         <LoginIndex />
+      </Suspense>
+    ),
+    children: userRouter(),
+  },
+  {
+    path: "/user/mypage",
+    element: (
+      <Suspense fallback={Loading}>
+        <MyPageIndex />
       </Suspense>
     ),
     children: userRouter(),
