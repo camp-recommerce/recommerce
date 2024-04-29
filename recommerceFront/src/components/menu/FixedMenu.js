@@ -4,6 +4,7 @@ import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import AlarmModal from "../modal/AlarmModal";
+import ChatbotModal from "../chatbot/ChatbotModal";
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { IoTriangle } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
@@ -16,11 +17,19 @@ function FixedMenu() {
   const { isLogin, loginState } = useCustomLoginPage();
   const { refreshCart, cartItems } = useCustomWishListPage();
   const { refreshAlarm, alarmList } = useCustomChatAlarm();
-  const { closeChatModal } = useCustomChatModal();
   const [isClosed, setIsClosed] = useState(false);
+  const [isBotModalOpen, setIsBotModalOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달창 상태 변수 추가
   const unreadAlarmCount = alarmList.filter((alarm) => !alarm.readCheck).length;
+
+  const openBotModal = () => {
+    setIsBotModalOpen(true);
+  };
+
+  const closeBotModal = () => {
+    setIsBotModalOpen(false);
+  };
 
   const handleClose = () => {
     setIsClosed(true);
@@ -113,13 +122,13 @@ function FixedMenu() {
             {isLogin ? `(${unreadAlarmCount})` : "(0)"}
           </button>
           {/* 챗봇 추가용 */}
-          {/* <button
+          <button
             className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
-            onClick={() => openModal()} // 모달창 열기
+            onClick={openBotModal} // 모달창 열기
           >
             <RiRobot2Fill className="text-lg" />
             <span>챗봇</span>
-          </button> */}
+          </button>
         </>
       )}
       {isModalOpen && ( // 모달창이 열려 있는 경우
@@ -129,6 +138,7 @@ function FixedMenu() {
           isModalOpen={isModalOpen}
         />
       )}
+      {isBotModalOpen && <ChatbotModal closeModal={closeBotModal} />}
     </div>
   );
 }
