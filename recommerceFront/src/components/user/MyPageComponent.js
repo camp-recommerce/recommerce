@@ -51,6 +51,18 @@ const MyPageComponent = () => {
     }
   };
 
+  const handleClickPayment = (item) => {
+    navigate("/payment", {
+      state: {
+        productName: item.apName,
+        productPrice: item.apCurrentPrice,
+        productId: item.pno,
+        quantity: 1,
+      },
+    });
+    window.location.reload();
+  };
+
   const handleImageClick = (imageName) => {
     setSelectedImgPath(`${host}/auction/view/${imageName}`);
     setOpenImg(true);
@@ -202,6 +214,9 @@ const MyPageComponent = () => {
                   <button
                     className="bg-black text-white font-bold mt-1 ml-2 mb-2"
                     style={{ width: 130, height: 28, borderRadius: 5 }}
+                    onClick={() => {
+                      handleClickPayment(item);
+                    }}
                   >
                     결제
                   </button>

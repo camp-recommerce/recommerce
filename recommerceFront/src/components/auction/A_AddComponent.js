@@ -64,6 +64,13 @@ const A_AddComponent = () => {
     return tomorrow.toISOString().slice(0, 16);
   };
 
+  const cancelImageUpload = () => {
+    setAuction({ ...auction, files: [] }); // 파일 목록 초기화
+    uploadRef.current.value = null; // 파일 업로드 input의 값 초기화
+    uploadRef.current.style.display = "block"; // 파일 선택 창 다시 표시
+    setImagePreviewUrl(""); // 이미지 미리보기 초기화
+  };
+
   useEffect(() => {
     const initialStartTime = getInitialStartTime();
     const initialClosingTime = getInitialClosingTime();
@@ -83,6 +90,7 @@ const A_AddComponent = () => {
 
     reader.onloadend = () => {
       setImagePreviewUrl(reader.result);
+      uploadRef.current.style.display = "none"; // 이미지를 선택한 후 파일 선택 창 숨김
     };
 
     if (file) {
@@ -143,11 +151,11 @@ const A_AddComponent = () => {
 
   return (
     <>
-      {loading ? <LoadingModal /> : <></>}
+      {loading ? <LoadingModal /> : null} {/* <></> 대신에 null로 수정 */}
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
         <div className="grid grid-cols-2 gap-10">
           <div
-            className=" max-w-md flex items-end justify-center"
+            className="max-w-md flex items-center justify-center relative"
             style={{
               border: "1px solid #CCCCCC",
               width: 550,
@@ -157,8 +165,11 @@ const A_AddComponent = () => {
           >
             {imagePreviewUrl ? (
               <img
+                style={{
+                  maxWidth: "100%",
+                  maxHeight: "100%",
+                }}
                 src={imagePreviewUrl}
-                className="addImage"
                 alt={auction.apName}
               />
             ) : (
@@ -171,10 +182,20 @@ const A_AddComponent = () => {
               multiple={true}
               onChange={handleImagePreview}
             />
+            {imagePreviewUrl && (
+              <button
+                className="absolute top-0 right-0 m-2 p-1 bg-red-500 text-white rounded"
+                onClick={cancelImageUpload}
+              >
+                취소
+              </button>
+            )}
           </div>
 
           <div>
-            <div className="max-w-md" style={{ Height: "500px" }}>
+            <div className="max-w-md" style={{ height: "500px" }}>
+              {" "}
+              {/* Height 대문자 -> 소문자로 수정 */}
               <div className="flex items-center justify-between mb-4">
                 <div className="font-bold text-lg">카테고리</div>
                 <div className="text-lg">
