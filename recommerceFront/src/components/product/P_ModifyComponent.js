@@ -156,7 +156,7 @@ const P_ModifyComponent = () => {
   };
 
   const handleOpenImg = (files) => {
-    setSelectedImgPath(`${host}/product/view/s_${files}`);
+    setSelectedImgPath(`${host}/product/view/${files}`);
     setOpenImg(true);
   };
 
@@ -186,8 +186,11 @@ const P_ModifyComponent = () => {
                 <div className="imageContainer">
                   <img
                     alt={product.pname}
-                    src={`${host}/product/view/s_${files}`}
-                    onClick={handleOpenImg}
+                    src={`${host}/product/view/${files}`}
+                    onClick={() => {
+                      setOpenImg(true);
+                      setSelectedImgPath(`${host}/product/view/${files}`);
+                    }}
                   />
                 </div>
                 {openImg && (

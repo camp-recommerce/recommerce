@@ -123,7 +123,12 @@ const P_ReadComponent = () => {
         <img
           alt="product"
           src={`${host}/product/view/${product.uploadFileNames}`}
-          onClick={handleOpenImg}
+          onClick={() => {
+            setOpenImg(true);
+            setSelectedImgPath(
+              `${host}/product/view/${product.uploadFileNames}`
+            );
+          }}
         />
         <button className="goBack_btn" onClick={handleCilkToList}>
           목록으로

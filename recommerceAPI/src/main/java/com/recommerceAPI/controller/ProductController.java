@@ -178,6 +178,4 @@ public class ProductController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("No Authorization token found"); // 토큰 없음
     }
-
-
 }

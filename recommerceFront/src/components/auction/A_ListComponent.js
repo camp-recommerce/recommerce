@@ -35,9 +35,8 @@ const A_ListComponent = () => {
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
-  const {loginState} = useCustomLoginPage();
-  const isAdmin = loginState.roleNames.includes('ADMIN');
-  
+  const { loginState } = useCustomLoginPage();
+  const isAdmin = loginState.roleNames.includes("ADMIN");
 
   const navigate = useNavigate();
 
@@ -220,23 +219,23 @@ const A_ListComponent = () => {
           />
         </div>
         {isAdmin && (
-        <div className="shopBtn_area w-full flex justify-end m-[30px] pr-[250px]">
-          <div
-            className="shopList_addBtn bg-[#282222] hover:bg-[#515151] text-white font-bold"
-            style={{
-              width: "80px",
-              height: "40px",
-              lineHeight: "40px",
-              textAlign: "center",
-              zIndex: "10",
-              borderRadius: "5px" /* 모서리 둥글게 설정 */,
-            }}
-            onClick={handleClickAdd}
-          >
-            상품 등록
+          <div className="shopBtn_area w-full flex justify-end m-[30px] pr-[250px]">
+            <div
+              className="shopList_addBtn bg-[#282222] hover:bg-[#515151] text-white font-bold"
+              style={{
+                width: "80px",
+                height: "40px",
+                lineHeight: "40px",
+                textAlign: "center",
+                zIndex: "10",
+                borderRadius: "5px" /* 모서리 둥글게 설정 */,
+              }}
+              onClick={handleClickAdd}
+            >
+              상품 등록
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </div>
     </>
   );
