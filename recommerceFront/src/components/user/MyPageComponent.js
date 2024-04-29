@@ -71,25 +71,30 @@ const MyPageComponent = () => {
   }, [user]);
 
   const goToSales = () => {
-   setActiveMenu("sales"); // UserProducts 컴포넌트의 경로로 이동
+    setActiveMenu("sales"); // UserProducts 컴포넌트의 경로로 이동
   };
 
   return (
     <div className={styles.myPageBundle}>
       <div className={styles.menuBar}>
-      <div className={styles.menuItem} onClick={() => setActiveMenu("profile")}>
-  프로필
-</div>
-<div className={styles.menuItem} onClick={goToSales}>
-  판매목록
-</div>
-<div className={styles.menuItem} onClick={() => setActiveMenu("bid")}>
-  경매
-</div>
-<div className={styles.menuItem} onClick={() => setActiveMenu("settings")}>
-  정보 설정
-</div>
-
+        <div
+          className={styles.menuItem}
+          onClick={() => setActiveMenu("profile")}
+        >
+          프로필
+        </div>
+        <div className={styles.menuItem} onClick={goToSales}>
+          판매목록
+        </div>
+        <div className={styles.menuItem} onClick={() => setActiveMenu("bid")}>
+          경매
+        </div>
+        <div
+          className={styles.menuItem}
+          onClick={() => setActiveMenu("settings")}
+        >
+          정보 설정
+        </div>
       </div>
       <h1 className={styles.title}>My Page</h1>
       <div className={styles.infoBundle}>
@@ -102,28 +107,38 @@ const MyPageComponent = () => {
           </div>
         )}
         {activeMenu === "sales" && <UserProductComponent />}
-        {activeMenu === "bid" && bidlist && (
+        {/* {activeMenu === "bid" && bidlist && ( 요거 중복입니다
           <div className="mt-5">
             <ul className={styles.list}>
               {bidlist.map((item) => (
                 <div key={item.auctionApno}>
                   <div>
-                    <img alt={item.auctionApno} src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
-                         className={styles.image} onClick={() => handleImageClick(item.uploadFileNames[0])} />
+                    <img
+                      alt={item.auctionApno}
+                      src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                      className={styles.image}
+                      onClick={() => handleImageClick(item.uploadFileNames[0])}
+                    />
                   </div>
                   <li className={styles.listItem}>
-                    상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원, 현재 입찰가: {item.currentPrice}
+                    상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원,
+                    현재 입찰가: {item.currentPrice}
                   </li>
                 </div>
               ))}
             </ul>
           </div>
-        )}
+        )} */}
         {activeMenu === "address" && userData && (
           <div className={styles.userInfo}>
             <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
-            <p>우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}</p>
-            <p>상세주소: {userData.addressDetail || "등록된 상세주소가 없습니다."}</p>
+            <p>
+              우편번호: {userData.postcode || "등록된 우편번호가 없습니다."}
+            </p>
+            <p>
+              상세주소:{" "}
+              {userData.addressDetail || "등록된 상세주소가 없습니다."}
+            </p>
           </div>
         )}
         {activeMenu === "settings" && (
@@ -184,68 +199,65 @@ const MyPageComponent = () => {
               <li className={styles.title}>입찰한 경매</li>
               {bidlist && bidlist.length > 0 ? (
                 bidlist.map((item) => {
-                  let status;
-                  if (item.apStatus === "ACTIVE") {
-                    status = "경매중";
-                  } else if (item.apStatus === "CLOSED") {
-                    status = "경매 종료";
-                    return null;
-                  } else {
-                    status = item.apStatus;
-                  }
-                  return (
-                    <div key={item.apno}>
-                      <div>
-                        <img
-                          alt={item.auctionApno}
-                          src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
-                          className={styles.image}
-                          onClick={() => handleImageClick(item.uploadFileNames[0])}
-                        />
-                      </div>
-                      <li className={styles.listItem}>
-                        상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}원,
-                        현재 입찰가: {item.currentPrice}
-                      </li>
-                      <button
-                        className="bg-black text-white font-bold mt-1 mb-2"
-                        onClick={() => moveMyPageToAuctonRead(item.auctionApno)}
-                        style={{ width: 130, height: 28, borderRadius: 5 }}
-                      >
-                        페이지 이동
-                      </button>
-                      {item.apStatus !== "CLOSED" && (
+                  if (item.apStatus !== "CLOSED") {
+                    return (
+                      <div key={item.apno}>
+                        <div>
+                          <img
+                            alt={item.auctionApno}
+                            src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                            className={styles.image}
+                            onClick={() =>
+                              handleImageClick(item.uploadFileNames[0])
+                            }
+                          />
+                        </div>
+                        <li className={styles.listItem}>
+                          상품 이름: {item.apName}, 내 입찰가: {item.bidAmount}
+                          원, 현재 입찰가: {item.currentPrice}
+                        </li>
+                        <button
+                          className="bg-black text-white font-bold mt-1 mb-2"
+                          onClick={() =>
+                            moveMyPageToAuctonRead(item.auctionApno)
+                          }
+                          style={{ width: 130, height: 28, borderRadius: 5 }}
+                        >
+                          페이지 이동
+                        </button>
                         <button
                           className="bg-black text-white font-bold mt-1 ml-2 mb-2"
                           style={{ width: 130, height: 28, borderRadius: 5 }}
-                          onClick={() => openChatModal(item.auctionApno, {
-                            startPrice: item.startPrice,
-                            bidIncrement: item.bidIncrement,
-                            imageSrc: item.uploadFileNames,
-                            currentPrice: item.currentPrice
-                          })}
+                          onClick={() =>
+                            openChatModal(item.auctionApno, {
+                              startPrice: item.startPrice,
+                              bidIncrement: item.bidIncrement,
+                              imageSrc: item.uploadFileNames,
+                              currentPrice: item.currentPrice,
+                            })
+                          }
                         >
                           입찰 하기
                         </button>
-                      )}
-
-                      {roomId === item.auctionApno && (
-                        <A_Chat
-                          username={email}
-                          room={item.auctionApno}
-                          socket={socket}
-                          closeModal={closeChatModal}
-                          startPrice={item.startPrice}
-                          bidIncrement={item.bidIncrement}
-                          imageSrc={item.uploadFileNames}
-                          currentPrice={item.currentPrice}
-                        />
-                      )}
-                    </div>
-                  );
+                        {roomId === item.auctionApno && (
+                          <A_Chat
+                            username={email}
+                            room={item.auctionApno}
+                            socket={socket}
+                            closeModal={closeChatModal}
+                            startPrice={item.startPrice}
+                            bidIncrement={item.bidIncrement}
+                            imageSrc={item.uploadFileNames}
+                            currentPrice={item.currentPrice}
+                          />
+                        )}
+                      </div>
+                    );
+                  }
+                  return null; // 경매 종료된 상품은 렌더링하지 않음
                 })
               ) : (
-                <p className="mt-3 text-gray-500">입찰 중인 물품이 없습니다.</p>
+                <p className="text-gray-500">현재 입찰중인 상품이 없습니다.</p>
               )}
             </ul>
             {openImg && (
