@@ -54,7 +54,7 @@ public class InputData {
 
                User user2 = User.builder()
                        .email("user2@example.com")
-                       .pw("password2")
+                       .pw(passwordEncoder.encode("2222"))
                        .nickname("nickname2")
                        .phone("010-8765-4321")
                        .birth("1992-02-02")

@@ -8,6 +8,7 @@ import { API_SERVER_HOST } from "../../api/userApi";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import { FaMapMarkedAlt } from "react-icons/fa";
 import { useLocation } from "react-router-dom";
+import { formatNumber } from "../../util/formatNumberUtil";
 
 const host = API_SERVER_HOST;
 
@@ -141,6 +142,8 @@ const P_InfiniteComponent = () => {
 
   const handleDistrictSelect = (district) => {
     setPNameInput(district); // 검색 입력란에 동 정보 설정
+    setPName(pnameInput);
+    setAddressLine(pnameInput);
   };
 
   const handleClickOutside = (event) => {
@@ -246,7 +249,7 @@ const P_InfiniteComponent = () => {
                 </div>
 
                 <div className="shopList_price text-sm mb-1 text-center">
-                  {product.price}원
+                  {formatNumber(product.price)}원
                 </div>
               </div>
             ))}

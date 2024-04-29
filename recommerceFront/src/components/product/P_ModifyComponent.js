@@ -36,6 +36,7 @@ const P_ModifyComponent = () => {
   const { moveBeforeReadPage } = useCustomProductPage();
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
+  const [showFileSelect, setShowFileSelect] = useState(true); // 파일 선택 창 표시 여부
   const uploadRef = useRef();
   const navigate = useNavigate();
 
@@ -47,6 +48,11 @@ const P_ModifyComponent = () => {
         data.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       );
       setLocation({ lat: data.lat, lng: data.lng });
+      // 이미지 파일명이 존재할 경우 이미지 미리보기 설정
+      if (data.uploadFileNames.length > 0) {
+        setImagePreviewUrl(`${host}/product/view/${data.uploadFileNames}`);
+        setShowFileSelect(false); // 이미지 파일이 있으면 파일 선택 창 숨김
+      }
     });
   }, [pno]);
 
@@ -112,37 +118,12 @@ const P_ModifyComponent = () => {
     });
   };
 
-  // 이미지 등록 시 미리보기 생성s
-  const handleImageChange = (e) => {
-    e.preventDefault();
-
-    let reader = new FileReader();
-    let file = e.target.files[0];
-
-    reader.onloadend = () => {
-      setImagePreviewUrl(reader.result);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-  };
-
-  //이미지 삭제처리
-  const removeImages = (imageName) => {
-    const resultFileNames = product.uploadFileNames.filter(
-      (fileName) => fileName !== imageName
-    );
-    product.uploadFileNames = resultFileNames;
-
-    setProduct({ ...product });
-  };
-
   const handleClickDelete = () => {
     setLoading(true);
     deleteOne(product).then((data) => {
       setResult("Deleted");
       setLoading(false);
+      alert("삭제되었습니다.");
     });
   };
 
@@ -155,13 +136,27 @@ const P_ModifyComponent = () => {
     setResult(null);
   };
 
-  const handleOpenImg = (files) => {
-    setSelectedImgPath(`${host}/product/view/${files}`);
-    setOpenImg(true);
+  const handleImagePreview = (e) => {
+    e.preventDefault();
+
+    let reader = new FileReader();
+    let file = e.target.files[0];
+
+    reader.onloadend = () => {
+      setImagePreviewUrl(reader.result);
+      setShowFileSelect(false); // 이미지를 선택한 후 파일 선택 창 숨김
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
-  const closeImageModal = () => {
-    setOpenImg(false);
+  const cancelImageUpload = () => {
+    setProduct({ ...product, uploadFileNames: [] }); // 파일 목록 초기화
+    uploadRef.current.value = null; // 파일 업로드 input의 값 초기화
+    setShowFileSelect(true); // 파일 선택 창 표시
+    setImagePreviewUrl(""); // 이미지 미리보기 초기화
   };
 
   return (
@@ -180,59 +175,24 @@ const P_ModifyComponent = () => {
       <div className="modify_container">
         {/* 상품 이미지 영역 */}
         <div className="modify_imgArea">
-          <div className="modify_imgRemove">
-            {product.uploadFileNames.map((files, i) => (
-              <div className="modify-box" key={i}>
-                <div className="imageContainer">
-                  <img
-                    alt={product.pname}
-                    src={`${host}/product/view/${files}`}
-                    onClick={() => {
-                      setOpenImg(true);
-                      setSelectedImgPath(`${host}/product/view/${files}`);
-                    }}
-                  />
-                </div>
-                {openImg && (
-                  <ImageModal
-                    openImg={openImg}
-                    callbackFn={closeImageModal}
-                    imagePath={selectedImgPath}
-                  />
-                )}
-                {/* <button
-                  className="imgRemoveBtn"
-                  onClick={() => removeImages(files)}
-                >
-                  삭제하기
-                </button> */}
-                <button
-                  type="button"
-                  onClick={() => removeImages(files)}
-                  class="btn-close"
-                  aria-label="Close"
-                ></button>
-              </div>
-            ))}
-          </div>
-          <div className="modify_imgAdd">
-            <div className="image_upload_preview">
-              {imagePreviewUrl ? (
-                <img src={imagePreviewUrl} className="addImage" alt="preview" />
-              ) : (
-                <label htmlFor="uploadImage">파일 선택</label>
-              )}
-              <input
-                ref={uploadRef}
-                id="uploadImage"
-                type="file"
-                multiple={true}
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-                alt={product.pname}
-              />
-            </div>
-          </div>
+          {imagePreviewUrl ? (
+            <img alt={product.pname} src={imagePreviewUrl} />
+          ) : (
+            <label htmlFor="uploadImage"></label>
+          )}
+          <input
+            ref={uploadRef}
+            id="uploadImage"
+            type="file"
+            multiple={true}
+            onChange={handleImagePreview}
+            style={{ display: showFileSelect ? "block" : "none" }} // Adjusted condition
+          />
+          {imagePreviewUrl && (
+            <button className="deleteBtn" onClick={cancelImageUpload}>
+              취소
+            </button>
+          )}
         </div>
         {/* 상품 상세 영역 */}
         <div className="modify_textArea">
@@ -245,7 +205,6 @@ const P_ModifyComponent = () => {
               onChange={handleChangeProduct}
             ></input>
           </div>
-
           <div className="modify-wrap">
             <div className="modify-info ">판매가</div>
             <input

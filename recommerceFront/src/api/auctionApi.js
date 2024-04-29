@@ -56,6 +56,12 @@ export const putOne = async (apno, auction) => {
 
   return res.data;
 };
+export const buyOne = async (apno) => {
+  const res = await jwtAxios.put(`${host}/modify/${apno}`);
+  // const res = await jwtAxios.put(`${host}/${apno}`, auction, header); // 권한 작업 후 jwtAxios로 수정 예정
+
+  return res.data;
+};
 
 export const deleteOne = async (auction) => {
   const res = await jwtAxios.delete(`${host}/delete/${auction.apno}`, {

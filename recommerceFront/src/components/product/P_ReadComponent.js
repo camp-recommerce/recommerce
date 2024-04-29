@@ -9,6 +9,7 @@ import "../../scss/product/ReadPage.scss";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import MapComponent from "../MapComponent";
 import { Link } from "react-router-dom"; // 맨 위에 추가
+import { formatNumber } from "../../util/formatNumberUtil";
 
 import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { API_SERVER_HOST } from "../../api/userApi";
@@ -153,7 +154,7 @@ const P_ReadComponent = () => {
             <div className="item_info">
               <strong>가격</strong>
             </div>
-            <p key={product.price}>{product.price}</p>
+            <p key={product.price}>{formatNumber(product.price)}원</p>
           </div>
           <div className="shopRead_box">
             <div className="item_info">

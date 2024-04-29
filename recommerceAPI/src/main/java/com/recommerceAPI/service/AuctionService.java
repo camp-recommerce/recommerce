@@ -16,4 +16,6 @@ public interface AuctionService {
     PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO,String apName, String apCategory);
 
     PageResponseDTO<AuctionDTO>findByApBuyer(PageRequestDTO pageRequestDTO,String apBuyer);
+
+    void  buy (Long apno);
 }

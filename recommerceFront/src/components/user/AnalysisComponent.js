@@ -42,15 +42,27 @@ const AnalysisComponent = ({ email }) => {
       </div> */}
       <div className="flex justify-between">
         <p className="min-w-[150px]">최다 판매 카테고리</p>
-        <p>{profile.topSaleCategory}</p>
+        <p>
+          {profile.topSaleCategory !== "None"
+            ? profile.topSaleCategory
+            : "판매 내역 없음"}
+        </p>
       </div>
       <div className="flex justify-between">
         <p className="min-w-[150px]">평균 판매가</p>
-        <p>{formatPrice(profile.averagePrice)}원</p>
+        <p>
+          {profile.averagePrice > 0
+            ? formatPrice(profile.averagePrice) + "원"
+            : ""}
+        </p>
       </div>
       <div className="flex justify-between">
         <p className="min-w-[150px]">주요 거래 지역</p>
-        <p>{profile.topSellingLocation}</p>
+        <p>
+          {profile.topSellingLocation !== "None"
+            ? profile.topSellingLocation
+            : ""}
+        </p>
       </div>
     </div>
   );

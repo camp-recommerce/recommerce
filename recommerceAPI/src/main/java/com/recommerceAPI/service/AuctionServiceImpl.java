@@ -69,6 +69,17 @@ public class AuctionServiceImpl implements AuctionService{
 
         return dto;
     }
+    @Override
+    public void  buy (Long apno) {
+        java.util.Optional<Auction> result = auctionRepository.findById(apno);
+
+        Auction auction = result.orElseThrow();
+
+        auction.setDeleted(true);
+
+        auctionRepository.save(auction);
+
+    }
 
     @Override
     public void modify(AuctionDTO auctionDTO) {
