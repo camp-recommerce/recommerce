@@ -240,7 +240,7 @@ const MyPageComponent = () => {
                         <div>
                           <img
                             alt={item.auctionApno}
-                            src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                            src={`${host}/auction/view/${item.uploadFileNames[0]}`}
                             className={styles.image}
                             onClick={() =>
                               handleImageClick(item.uploadFileNames[0])

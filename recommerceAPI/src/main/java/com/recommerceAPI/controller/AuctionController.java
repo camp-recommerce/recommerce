@@ -75,6 +75,14 @@ public class AuctionController {
         return Map.of("APNO", apno);
     }
 
+    @PutMapping("/buy/{apno}")
+    public Map<String,String> buy(@PathVariable(name = "apno")Long apno){
+
+        auctionService.buy(apno);
+
+        return Map.of("RESULT", "SUCCESS");
+    }
+
 //    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/modify/{apno}")
     public Map<String, String> modify(@PathVariable(name="apno") Long apno,
