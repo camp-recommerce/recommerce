@@ -24,14 +24,14 @@ const styles = {
     padding: "20px",
     border: "1px solid #ccc",
     borderRadius: "4px",
-    backgroundColor: "#f9f9f9"
+    backgroundColor: "#f9f9f9",
   },
   input: {
     width: "100%",
     padding: "10px",
     margin: "10px 0",
     border: "1px solid #ddd",
-    borderRadius: "4px"
+    borderRadius: "4px",
   },
   button: {
     width: "100%",
@@ -40,28 +40,29 @@ const styles = {
     color: "white",
     border: "none",
     borderRadius: "4px",
-    cursor: "pointer"
+    cursor: "pointer",
   },
   label: {
     display: "block",
-    marginBottom: "5px"
-  }
+    marginBottom: "5px",
+  },
 };
 
 const PasswordChangeFormComponent = () => {
   const [passwords, setPasswords] = useState({
+    email: "",
     currentPassword: "",
     newPassword: "",
     confirmPassword: "",
-    email: ""
   });
   const [errorMessage, setErrorMessage] = useState("");
-  const [result, setResult] = useState();
+  const [result, setResult] = useState(null);
+  const [modalOpen, setModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setPasswords(prevPasswords => ({ ...prevPasswords, [name]: value }));
+    setPasswords((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async (e) => {
@@ -71,26 +72,37 @@ const PasswordChangeFormComponent = () => {
       await changePassword(
         passwords.email,
         passwords.currentPassword,
-        passwords.newPassword
+        passwords.newPassword,
+        passwords.confirmPassword
       );
       setResult(true);
-      navigate("/user/mypage/:email");
+      setModalOpen(true);
     } catch (error) {
       setResult(false);
       if (error instanceof Yup.ValidationError) {
-        setErrorMessage(error.inner.map(err => err.message).join(", "));
+        setErrorMessage(error.inner.map((err) => err.message).join(", "));
       } else {
-        setErrorMessage("An unexpected error occurred.");
+        setErrorMessage("비밀번호 변경 중 오류가 발생했습니다.");
       }
     }
   };
 
+  const handleModalClose = () => {
+    setModalOpen(false);
+    navigate("/user/mypage/:email");
+  };
+
   return (
-    
     <div style={styles.container}>
-      {result === true && <AlertModal title="비밀번호 변경" content="비밀번호가 성공적으로 변경되었습니다." />}
+      {result === true && modalOpen && (
+        <AlertModal
+          title="비밀번호 변경"
+          content="비밀번호가 성공적으로 변경되었습니다."
+          onClose={handleModalClose}
+        />
+      )}
       {result === false && <AlertModal title="오류" content={errorMessage} />}
-      
+
       <form onSubmit={handleSubmit}>
         <div>
           <label style={styles.label}>현재 비밀번호</label>

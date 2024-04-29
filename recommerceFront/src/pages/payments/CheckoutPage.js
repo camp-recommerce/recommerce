@@ -20,8 +20,7 @@ export function CheckoutPage() {
     }
   };
 
-  const { productName, productPrice, productId } =
-    location.state || {};
+  const { productName, productPrice, productId } = location.state || {};
 
   useEffect(() => {
     (async () => {
@@ -53,7 +52,7 @@ export function CheckoutPage() {
         orderName: productName || "Default Product Name",
         customerName: "고객 이름", // 고객 이름 동적 할당
         customerEmail: "customer@example.com", // 고객 이메일 동적 할당
-        amount: productPrice ,
+        amount: productPrice,
         successUrl: window.location.origin + "/payment/success", // 성공 시 리디렉션할 경로
         failUrl: window.location.origin + "/payment/fail", // 실패 시 리디렉션할 경로
       });
@@ -74,7 +73,6 @@ export function CheckoutPage() {
       navigate("/payment/fail"); // 에러 발생 시 실패 페이지로 리디렉션
     }
   };
-
 
   return (
     <div className="wrapper w-100">

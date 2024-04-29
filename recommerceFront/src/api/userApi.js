@@ -88,14 +88,21 @@ export const getUserProfileStatisticsByEmail = async (email) => {
 };
 
 // 비밀번호 변경
-export const changePassword = async (email, newPassword) => {
+export const changePassword = async (
+  email,
+  currentPassword,
+  newPassword,
+  confirmPassword
+) => {
   try {
     const res = await jwtAxios.put(
-      `${API_SERVER_HOST}/api/user/password/${email}`,
-      null,
+      `${host}/password/${email}`,
+      null, // POST 요청에 사용될 body 데이터. 이 경우 URL 파라미터를 사용하므로 null 처리.
       {
         params: {
+          currentPassword: currentPassword, // 현재 비밀번호 추가
           newPassword: newPassword,
+          confirmPassword: confirmPassword,
         },
       }
     );
