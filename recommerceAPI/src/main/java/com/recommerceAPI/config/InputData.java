@@ -31,7 +31,7 @@ public class InputData {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    LocalDate date = LocalDate.of(2024, 12, 31);
+    LocalDate currentDate = LocalDate.now();
 
     @Bean
        CommandLineRunner initData() {
@@ -73,52 +73,91 @@ public class InputData {
                log.info("Saved user1 and user2");
 
 
-// Product 객체 생성 및 저장을 반복문을 사용하여 처리
-            for (int i = 0; i < 30; i++) {
-                Product product = Product.builder()
-                        .pname("product" + i)
-                        .pcategory("Electronics")
-                        .price(100 + i) // 예: 가격을 조금씩 다르게 설정
-                        .pstate("New")
-                        .plocat("Seoul")
-                        .addressLine("Gangnam")
-                        .lat(37.4979)
-                        .lng(127.0276)
-                        .pdesc("Description for product" + i)
-                        .delFlag(false)
-                        .soldOut(false)
-                        .userEmail(user1.getEmail()) // 연관된 사용자 이메일
-                        .build();
+                // Product 객체 생성 및 저장을 반복문을 사용하여 처리
+               for (int i = 0; i < 30; i++) {
+                   Product product;
+                   if (i < 10) {
+                       // 원래 설정
+                       product = Product.builder()
+                               .pname("product" + i)
+                               .pcategory("옷")
+                               .price(100 + i)
+                               .pstate("New")
+                               .plocat("서울")
+                               .addressLine("강남")
+                               .lat(37.4979)
+                               .lng(127.0276)
+                               .pdesc("Description for product" + i)
+                               .delFlag(false)
+                               .soldOut(false)
+                               .userEmail(user1.getEmail())
+                               .build();
+                   } else if (i < 20) {
+                       // 종각 설정
+                       product = Product.builder()
+                               .pname("product" + i)
+                               .pcategory("신발")
+                               .price(100 + i)
+                               .pstate("New")
+                               .plocat("서울")
+                               .addressLine("종각")
+                               .lat(37.5708)
+                               .lng(126.9820)
+                               .pdesc("Description for product" + i)
+                               .delFlag(false)
+                               .soldOut(false)
+                               .userEmail(user1.getEmail())
+                               .build();
+                   } else {
+                       // 충무로 설정
+                       product = Product.builder()
+                               .pname("product" + i)
+                               .pcategory("시계")
+                               .price(100 + i)
+                               .pstate("New")
+                               .plocat("서울")
+                               .addressLine("충무로")
+                               .lat(37.5613)
+                               .lng(126.9956)
+                               .pdesc("Description for product" + i)
+                               .delFlag(false)
+                               .soldOut(false)
+                               .userEmail(user1.getEmail())
+                               .build();
+                   }
+                   // Product 객체 저장 등 추가 로직 수행
+                   productRepository.save(product);
+                   log.info("Saved user1 and 30 products");
+               }
+               for (int i = 1; i <= 10; i++) {
+                   LocalTime startTime = LocalTime.of(11 + i, 0);
+                   LocalTime closingTime = LocalTime.of(12 + i, 59);
 
-                product.addImageString("bag.jpg");
-                productRepository.save(product);
-            }
+                   String category;
+                   if (i >= 1 && i <= 3) {
+                       category = "옷";
+                   } else if (i >= 4 && i <= 6) {
+                       category = "시계";
+                   } else {
+                       category = "기타";
+                   }
+                   Auction auction = Auction.builder()
+                           .apName("Auction Product Name " + i)
+                           .apDesc("Auction Product Description " + i)
+                           .apCategory(category)
+                           .apStartPrice(5000 * i)
+                           .apBidIncrement(500 * i)
+                           .apStartTime(LocalDateTime.of(currentDate, startTime))
+                           .apClosingTime(LocalDateTime.of(currentDate, closingTime))
+                           .apStatus(AuctionStatus.PENDING)
+                           .build();
 
-            log.info("Saved user1 and 30 products");
+                   // 이미지 추가
+                   auction.addImageString("auctionbag.jpg");
 
-
-            // Auction 객체 생성 및 저장을 반복문을 사용하여 처리
-            for (int i = 1; i <= 10; i++) {
-                LocalTime startTime = LocalTime.of(11 + i, 0);
-                LocalTime closingTime = LocalTime.of(12 + i, 59);
-
-                Auction auction = Auction.builder()
-                        .apName("Auction Product Name " + i)
-                        .apDesc("Auction Product Description " + i)
-                        .apCategory("Auction Product Category" + i)
-                        .apStartPrice(5000 * i)
-                        .apBidIncrement(500 * i)
-                        .apStartTime(LocalDateTime.of(date, startTime))
-                        .apClosingTime(LocalDateTime.of(date, closingTime))
-                        .apStatus(AuctionStatus.PENDING)
-                        .build();
-
-                // 이미지 추가
-                auction.addImageString("auctionbag.jpg");
-
-                auctionRepository.save(auction);
-                log.info("Saved Auction Product Name {}", i);
-            }
+                   auctionRepository.save(auction);
+                   log.info("Saved Auction Product Name {}", i);
+               }
 
             log.info("Saved 10 auctions");
         };

@@ -69,7 +69,7 @@ function FixedMenu() {
 
   return (
     <div
-      className={`w-[60px] ${
+      className={`w-[63px] ${
         isClosed ? "h-[25px]" : "h-[300px]"
       }  z-[9993] flex flex-col justify-end fixed bottom-[50px] right-[10px]`}
     >
