@@ -98,7 +98,7 @@ const PasswordChangeFormComponent = () => {
         <AlertModal
           title="비밀번호 변경"
           content="비밀번호가 성공적으로 변경되었습니다."
-          onClose={handleModalClose}
+          callbackFn={handleModalClose}
         />
       )}
       {result === false && <AlertModal title="오류" content={errorMessage} />}
