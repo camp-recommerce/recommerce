@@ -27,3 +27,22 @@ export const readAlarms = async (alarmIds) => {
     throw error;
   }
 };
+
+export const getRoomList = async () => {
+  try {
+    const res = await jwtAxios.get(`${host}/room`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching auction list:", error);
+    throw error; // 오류를 호출자에게 전파
+  }
+};
+export const deleteAlarm = async (roomId) => {
+  try {
+    await jwtAxios.delete(`${host}/delete/${roomId}`);
+    console.log("Alarm deleted successfully.");
+  } catch (error) {
+    console.error("Error deleting alarm:", error);
+    throw error;
+  }
+};

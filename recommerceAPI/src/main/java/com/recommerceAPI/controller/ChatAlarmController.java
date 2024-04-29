@@ -31,8 +31,18 @@ public class ChatAlarmController {
         log.info("---------email: "+email);
         return chatAlarmService.getAlarmList(email);
     }
+    @GetMapping("/room")
+    public List<ChatAlarmDTO> getRooms(Principal principal){
+        String email = principal.getName();
+        log.info("---------email: "+email);
+        return chatAlarmService.getRoomList(email);
+    }
     @PutMapping("/read/{alarmId}")
     public List<ChatAlarmDTO> updateAlarmsToRead(@PathVariable(name = "alarmId") Long alarmId) {
         return chatAlarmService.updateMultipleChatAlarmsToRead(alarmId);
+    }
+    @DeleteMapping("/delete/{roomId}")
+    public void deleteAllAlarm(@PathVariable String roomId){
+        chatAlarmService.deleteAllChatAlarmsByRoomId(roomId);
     }
 }

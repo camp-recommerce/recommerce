@@ -9,5 +9,7 @@ public interface ChatAlarmService {
     List<ChatAlarmDTO> saveModChatAlarm(ChatAlarmDTO chatAlarmDTO);
     List<ChatAlarmDTO> getAlarmList(String email);
     List<ChatAlarmDTO> updateMultipleChatAlarmsToRead(Long alarmId);
+    List<ChatAlarmDTO> getRoomList(String email);
     void sendAuctionAlarm(ChatAlarmDTO chatAlarmDTO);
+    void deleteAllChatAlarmsByRoomId(String roomId);
 }

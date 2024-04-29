@@ -19,6 +19,12 @@ public interface ChatAlarmRepository extends JpaRepository<ChatAlarm, Long> {
 
     @Query("SELECT chatalarm FROM ChatAlarm chatalarm WHERE chatalarm.user.email = :email AND chatalarm.readCheck = false")
     public List<ChatAlarm> findAllByUserEmail(@Param("email") String email);
+    // senderEmail당 하나씩만 가져오는거 마이페이지에서 쓸겁니다.
+    @Query("SELECT chatalarm FROM ChatAlarm chatalarm WHERE chatalarm.user.email = :email AND chatalarm.senderEmail LIKE '%@%' GROUP BY chatalarm.senderEmail")
+    public List<ChatAlarm> findAllByUserEmailChat(@Param("email") String email);
 
     Optional<ChatAlarm> findByUserAndReadCheck(User user, boolean b);
+
+    @Query("SELECT chatalarm FROM ChatAlarm chatalarm WHERE chatalarm.roomId = :roomId")
+    public List<ChatAlarm> findAllByRoomId(@Param("roomId") String roomId);
 }

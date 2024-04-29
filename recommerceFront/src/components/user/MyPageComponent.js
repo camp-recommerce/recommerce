@@ -5,6 +5,7 @@ import { readUser } from "../../api/userApi";
 import { fetchSaleItems } from "../../api/salesApi";
 import { fetchPurchaseItems } from "../../api/purchaseApi";
 import { getBidList } from "../../api/auctionBidApi";
+import { getRoomList, readAlarms, deleteAlarm } from "../../api/chatAlarmApi";
 import { getMyList } from "../../api/auctionApi";
 import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { API_SERVER_HOST } from "../../api/userApi";
@@ -14,6 +15,7 @@ import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
 import styles from "../../scss/user/MyPageComponent.module.scss";
 import UserProductComponent from "./UserProductComponent"; // 판매 목록 컴포넌트
+import Chat from "../product/chat/chatcomponents/Chat";
 
 const host = API_SERVER_HOST;
 
@@ -26,6 +28,7 @@ const MyPageComponent = () => {
   const [activeMenu, setActiveMenu] = useState("profile");
   const { page, size, moveMyPageToAuctonRead } = useCustomMovePage();
   const [auction, setAuction] = useState(null);
+  const [room, setRoom] = useState(null);
   const [bidlist, setBidList] = useState(null);
   const [openImg, setOpenImg] = useState(false);
   const [selectedImgPath, setSelectedImgPath] = useState("");
@@ -34,9 +37,19 @@ const MyPageComponent = () => {
   const closeImageModal = () => {
     setOpenImg(false);
   };
-
   const email = user.email;
   const apBuyer = user.email;
+
+  const handleDeleteClick = async (roomId) => {
+    try {
+      await deleteAlarm(roomId);
+      // 페이지 새로고침 전에 setActiveMenu를 호출하여 Chat 화면을 보여줍니다.
+      setActiveMenu("Chat");
+      window.location.reload(); // 페이지 새로고침
+    } catch (error) {
+      console.error("Error deleting room:", error);
+    }
+  };
 
   const handleImageClick = (imageName) => {
     setSelectedImgPath(`${host}/auction/view/${imageName}`);
@@ -57,6 +70,10 @@ const MyPageComponent = () => {
           getMyList({ page, size, apBuyer }).then((data) => {
             console.log(data);
             setAuction(data);
+          });
+          getRoomList({ email }).then((data) => {
+            console.log(data);
+            setRoom(data);
           });
           getBidList(email).then((data) => {
             console.log(data);
@@ -88,6 +105,9 @@ const MyPageComponent = () => {
         </div>
         <div className={styles.menuItem} onClick={() => setActiveMenu("bid")}>
           경매
+        </div>
+        <div className={styles.menuItem} onClick={() => setActiveMenu("Chat")}>
+          내 채팅
         </div>
         <div
           className={styles.menuItem}
@@ -267,6 +287,51 @@ const MyPageComponent = () => {
                 imagePath={selectedImgPath}
               />
             )}
+          </div>
+        )}
+        {activeMenu === "Chat" && room && (
+          <div className={styles.chatRooms}>
+            <h2 style={{ fontSize: "24px" }}>내 채팅</h2>
+            <hr />
+            <ul>
+              {room.map((chat) => (
+                <li key={chat.id}>
+                  <div className="mt-3">
+                    <span style={{ fontSize: "18px" }}>
+                      채팅 상대: {chat.senderEmail}
+                    </span>
+                    <button
+                      className="ml-5 bg-black text-white"
+                      style={{ width: 40, height: 30 }}
+                      onClick={() => {
+                        openChatModal(chat.roomId);
+                      }}
+                    >
+                      채팅
+                    </button>
+                    <button
+                      className="ml-5 bg-black text-white"
+                      style={{ width: 40, height: 30 }}
+                      onClick={() => {
+                        handleDeleteClick(chat.roomId);
+                      }}
+                    >
+                      X
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+            <div>
+              {isChatModalOpen && (
+                <Chat
+                  room={roomId}
+                  username={email}
+                  socket={socket}
+                  closeModal={closeChatModal}
+                />
+              )}
+            </div>
           </div>
         )}
 
