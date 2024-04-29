@@ -141,6 +141,8 @@ const P_InfiniteComponent = () => {
 
   const handleDistrictSelect = (district) => {
     setPNameInput(district); // 검색 입력란에 동 정보 설정
+    setPName(pnameInput);
+    setAddressLine(pnameInput);
   };
 
   const handleClickOutside = (event) => {
