@@ -35,11 +35,23 @@ const AnalysisComponent = ({ email }) => {
   }
 
   return (
-    <div>
-      {/* <p>최다 구매 카테고리: {profile.topPurchaseCategory}</p> */}
-      <p>최다 판매 카테고리: {profile.topSaleCategory}</p>
-      <p>평균 판매가: {formatPrice(profile.averagePrice)}원</p>
-      <p>주요 거래 지역: {profile.topSellingLocation}</p>
+    <div className="flex flex-col p-[20px] rounded-md bg-[#F0F0F0] w-[500px]">
+      {/* <div className="flex justify-between">
+        <p className="min-w-[150px]">최다 구매 카테고리</p>
+        <p>{profile.topPurchaseCategory}</p>
+      </div> */}
+      <div className="flex justify-between">
+        <p className="min-w-[150px]">최다 판매 카테고리</p>
+        <p>{profile.topSaleCategory}</p>
+      </div>
+      <div className="flex justify-between">
+        <p className="min-w-[150px]">평균 판매가</p>
+        <p>{formatPrice(profile.averagePrice)}원</p>
+      </div>
+      <div className="flex justify-between">
+        <p className="min-w-[150px]">주요 거래 지역</p>
+        <p>{profile.topSellingLocation}</p>
+      </div>
     </div>
   );
 };

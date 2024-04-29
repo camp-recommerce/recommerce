@@ -34,7 +34,7 @@ public class UserProfileServiceImpl implements UserProfileService {
                 .mapToInt(Product::getPrice).average().orElse(0.0);
 
         String topSellingLocation = soldProducts.stream()
-                .collect(Collectors.groupingBy(Product::getPlocat, Collectors.counting()))
+                .collect(Collectors.groupingBy(Product::getAddressLine, Collectors.counting()))
                 .entrySet().stream().max(Map.Entry.comparingByValue())
                 .map(Map.Entry::getKey).orElse("None");
 

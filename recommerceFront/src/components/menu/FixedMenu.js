@@ -39,7 +39,6 @@ function FixedMenu() {
   const openModal = (alarm) => {
     refreshAlarm();
     setIsModalOpen(true); // 모달창 열기
-    
   };
 
   const closeModal = () => {
@@ -114,17 +113,21 @@ function FixedMenu() {
             {isLogin ? `(${unreadAlarmCount})` : "(0)"}
           </button>
           {/* 챗봇 추가용 */}
-          <button
+          {/* <button
             className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
             onClick={() => openModal()} // 모달창 열기
           >
             <RiRobot2Fill className="text-lg" />
             <span>챗봇</span>
-          </button>
+          </button> */}
         </>
       )}
       {isModalOpen && ( // 모달창이 열려 있는 경우
-        <AlarmModal email={loginState.email} closeModal={closeModal} isModalOpen={isModalOpen} />
+        <AlarmModal
+          email={loginState.email}
+          closeModal={closeModal}
+          isModalOpen={isModalOpen}
+        />
       )}
     </div>
   );

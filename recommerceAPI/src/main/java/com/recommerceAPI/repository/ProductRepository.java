@@ -25,10 +25,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>{
 
     //   이미지가 포함된 목록 처리
     @Query("select p, pi from Product p left join p.imageList pi where " +
-           "(:pname is null or p.pname like %:pname%) and " +
-           "(:pcategory is null or p.pcategory like %:pcategory%) and " +
-           "(:addressLine is null or p.addressLine like %:addressLine%) and " +
-           "p.delFlag = false")
+            "p.delFlag = false and (" +
+            "(:pname is null or p.pname like %:pname%) or " +
+            "(:addressLine is null or p.addressLine like %:addressLine%)) and " +
+            "(:pcategory is null or p.pcategory like %:pcategory%)")
     Page<Object[]> selectList(@Param("pname") String pname, @Param("pcategory") String pcategory,
                               @Param("addressLine") String addressLine, Pageable pageable);
 

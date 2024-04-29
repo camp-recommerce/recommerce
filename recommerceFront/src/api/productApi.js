@@ -10,7 +10,7 @@ export const getList = async (pageParam) => {
 
   try {
     const res = await axios.get(`${host}`, {
-      params: { page, size, pname, pcategory },
+      params: { page, size, pname, pcategory, addressLine },
     });
     return res.data;
   } catch (error) {
@@ -41,11 +41,11 @@ export const putOne = async (pno, product) => {
   return res.data;
 };
 
-export const soldOut = async(pno) =>{
-  const res = await jwtAxios.put(`${host}/product/soldOut/${pno}`)
+export const soldOut = async (pno) => {
+  const res = await jwtAxios.put(`${host}/product/soldOut/${pno}`);
 
   return res.data;
-}
+};
 
 //상품 삭제하기
 export const deleteOne = async (product) => {

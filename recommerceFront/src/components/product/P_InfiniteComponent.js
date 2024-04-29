@@ -26,6 +26,7 @@ const P_InfiniteComponent = () => {
   const [pname, setPName] = useState(""); // pname 상태 추가
   const [pnameInput, setPNameInput] = useState("");
   const [pcategory, setPCategory] = useState(""); // pcategory 상태 추가
+  const [addressLine, setAddressLine] = useState(""); // addressLine 상태 추가
   const [isMapModalOpen, setMapModalOpen] = useState(false);
   const modalRef = useRef();
 
@@ -54,7 +55,10 @@ const P_InfiniteComponent = () => {
   };
 
   const handleSearchInputChange = (e) => {
-    setPNameInput(e.target.value);
+    const value = e.target.value;
+    setPNameInput(value); // 사용자 입력 처리
+    setPName(value); // 상품 이름 검색에 사용
+    setAddressLine(value); // 주소 검색에도 동일한 값을 사용
   };
 
   useEffect(() => {
@@ -62,8 +66,15 @@ const P_InfiniteComponent = () => {
       setLoading(true);
       const categoryQuery = pcategory === "전체" || !pcategory ? "" : pcategory;
       const nameQuery = pname ? pname : "";
+      const addressLineQuery = addressLine ? addressLine : "";
 
-      getList({ page: 1, size, pname: nameQuery, pcategory: categoryQuery })
+      getList({
+        page: 1,
+        size,
+        pname: nameQuery,
+        pcategory: categoryQuery,
+        addressLine: addressLineQuery,
+      })
         .then((data) => {
           if (data && data.data) {
             setServerData({
@@ -96,7 +107,13 @@ const P_InfiniteComponent = () => {
 
     const nextPage = serverData.currentPage + 1; // 다음 페이지 번호 계산
 
-    getList({ page: nextPage, size, pname: pname, pcategory: pcategory })
+    getList({
+      page: nextPage,
+      size,
+      pname: pname,
+      pcategory: pcategory,
+      addressLine: addressLine,
+    })
       .then((data) => {
         if (data && data.data.length > 0) {
           setServerData((prev) => ({
