@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { postOne } from "../../api/productApi";
 import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
@@ -6,8 +6,6 @@ import "../../scss/product/AddPage.scss";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import MapComponent from "../MapComponent";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
-import useAuthStatus from "../../hooks/useAuthStatus";
-import { useNavigate } from "react-router-dom";
 
 const initState = {
   pname: "",
@@ -61,11 +59,19 @@ const P_AddComponent = () => {
 
     reader.onloadend = () => {
       setImagePreviewUrl(reader.result);
+      uploadRef.current.style.display = "none"; // 이미지를 선택한 후 파일 선택 창 숨김
     };
 
     if (file) {
       reader.readAsDataURL(file);
     }
+  };
+
+  const cancelImageUpload = () => {
+    setProduct({ ...product, files: [] }); // 파일 목록 초기화
+    uploadRef.current.value = null; // 파일 업로드 input의 값 초기화
+    uploadRef.current.style.display = "block"; // 파일 선택 창 다시 표시
+    setImagePreviewUrl(""); // 이미지 미리보기 초기화
   };
 
   // 주소 처리
@@ -141,7 +147,7 @@ const P_AddComponent = () => {
                 alt={product.pname}
               />
             ) : (
-              <></>
+              <label htmlFor="uploadImage"></label>
             )}
             <input
               ref={uploadRef}
@@ -150,6 +156,9 @@ const P_AddComponent = () => {
               multiple={true}
               onChange={handleImagePreview}
             />
+            {imagePreviewUrl && (
+              <button onClick={cancelImageUpload}>취소</button>
+            )}
           </div>
           {/* 버튼 영역 */}
           <div className="shopList_btn">
