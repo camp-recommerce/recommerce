@@ -38,9 +38,15 @@ public class User {
     }
 
     // 사용자의 비밀번호를 변경하는 메서드
-    public void changePassword(String pw) {
-        this.pw = pw;
+    public void changePassword(String newPassword) {
+        this.pw = newPassword;
     }
+
+    // 새 비밀번호와 확인 비밀번호가 일치하는지 검사하는 메서드
+    public boolean confirmNewPassword(String newPassword, String confirmPassword) {
+        return newPassword.equals(confirmPassword);
+    }
+
 
     // 사용자의 닉네임을 변경하는 메서드
     public void changeNickname(String nickname) {
@@ -61,7 +67,5 @@ public class User {
     public void updateRating(double newRating) {
         this.averageRating = newRating;
     }
-
-
 
 }

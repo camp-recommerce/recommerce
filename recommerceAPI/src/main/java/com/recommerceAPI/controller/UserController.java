@@ -44,7 +44,7 @@ public class UserController {
         Map<String, Object> claims = loginDTO.getClaims();  //카카오로 처리된 회원의 정보
 
         String jwtAccessToken = JWTUtil.generateToken(claims, 10);  //JWT형태로 생성해서 넣어주는 것
-        String jwtRefreshToken = JWTUtil.generateToken(claims, 60*1);
+        String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 1);
 
         claims.put("accessToken", jwtAccessToken);  //정보 넣기
         claims.put("refreshToken", jwtRefreshToken);
@@ -64,7 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/mypage/{email}")
-    public ResponseEntity<?> userGet(@PathVariable  String email) {
+    public ResponseEntity<?> userGet(@PathVariable String email) {
 
         log.info("now user is : " + email);
 
@@ -75,13 +75,13 @@ public class UserController {
 
     //수정
     @PutMapping("/modify")
-    public Map<String,String> modifyUser(@RequestBody UserDTO userDTO) {
+    public Map<String, String> modifyUser(@RequestBody UserDTO userDTO) {
 
         log.info("member modify: " + userDTO);
 
         userService.modifyUser(userDTO);
 
-        return Map.of("result","modified");
+        return Map.of("result", "modified");
     }
 
     @DeleteMapping("/remove/{email}")
@@ -123,14 +123,21 @@ public class UserController {
         }
     }
 
-    // PUT 메서드를 사용하여 사용자의 비밀번호를 변경합니다.
-    // @param email 사용자의 이메일 주소
-    // @param newPassword 새로운 비밀번호
+    // 비밀번호 변경을 위한 PUT 요청을 처리하는 메서드
+// @param email 사용자의 이메일 주소, 경로 변수로 받음
+// @param currentPassword 사용자가 입력한 현재 비밀번호, 요청 매개변수로 받음
+// @param newPassword 사용자가 입력한 새로운 비밀번호, 요청 매개변수로 받음
+// @param confirmPassword 사용자가 입력한 새로운 비밀번호 확인, 요청 매개변수로 받음
     @PutMapping("/password/{email}")
-    public ResponseEntity<String> changePassword(@PathVariable String email, @RequestParam String newPassword) {
-        // 비밀번호 변경을 UserService에 위임합니다.
-        userService.changePassword(email, newPassword);
-        // 변경 성공을 응답합니다.
+    public ResponseEntity<String> changePassword(
+            @PathVariable String email,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword,
+            @RequestParam String confirmPassword) {
+
+        // 비밀번호 변경 로직을 UserService의 changePassword 메서드에 위임
+        userService.changePassword(email, currentPassword, newPassword, confirmPassword);
+        // 비밀번호 변경 성공 시, HTTP 상태 코드 200과 함께 성공 메시지를 응답
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");
     }
 }

@@ -13,6 +13,8 @@ import lombok.extern.log4j.Log4j2;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -72,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User user = result.orElseThrow();
 
         // User 객체의 정보를 userDTO로부터 받은 값으로 변경합니다.
-        user.changePassword(passwordEncoder.encode(userDTO.getPw()));
+
         user.changeNickname(userDTO.getNickname());
         user.changePhone(userDTO.getPhone());
         user.changeBirth(userDTO.getBirth());
@@ -138,18 +140,33 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(String email, String newPassword) {
-        // 이메일을 사용하여 사용자 정보를 조회합니다.
-        Optional<User> userOptional = userRepository.findByEmail(email);
-        // 사용자 정보가 존재하지 않으면 예외를 발생시킵니다.
-        User user = userOptional.orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
+    public void changePassword(String email, String currentPassword, String newPassword, String confirmPassword) {
+        // 사용자가 유효한 JWT 토큰을 포함하고 있는지 확인
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User is not authenticated.");
+        }
+        // 사용자 이메일로 사용자 정보 조회, 없으면 예외 발생
+        User user = userRepository.findById(email).orElseThrow(() -> new IllegalArgumentException("No user found with email " + email));
 
-        // 새로운 비밀번호를 인코딩하여 설정합니다.
-        String encodedPassword = passwordEncoder.encode(newPassword);
-        user.changePassword(encodedPassword);
+        // 현재 비밀번호가 올바른지 검증, 여기서 passwordEncoder.matches() 메서드를 사용하여 비밀번호를 검증합니다.
+        if (!passwordEncoder.matches(currentPassword, user.getPw())) {
+            throw new IllegalArgumentException("Incorrect current password.");
+        }
 
-        // 변경된 비밀번호를 저장합니다.
+        // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
+        if (!user.confirmNewPassword(newPassword, confirmPassword)) {
+            // 비밀번호 불일치시, 예외 발생
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        // 비밀번호 일치시, 비밀번호를 암호화하여 변경 후 저장
+        user.changePassword(passwordEncoder.encode(newPassword));
         userRepository.save(user);
     }
 
+
+
 }
+
+
