@@ -137,7 +137,7 @@ const UserAuction = () => {
                     >
                       입찰 하기
                     </button>
-                    {roomId === item.auctionApno && (
+                    {isChatModalOpen && roomId === item.auctionApno && (
                       <A_Chat
                         username={email}
                         room={item.auctionApno}

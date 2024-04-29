@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { useLocation, useNavigate } from "react-router-dom";
+import { buyOne } from "../../api/auctionApi";
 
 const generateOrderId = () => `order_${Date.now()}`;
 
@@ -62,8 +63,9 @@ export function CheckoutPage() {
       if (response.success) {
         // 결제가 성공하면 선택된 상품들을 장바구니에서 제거
         selectedProducts.forEach((productId) => {
-          // 각 상품을 삭제하는 로직을 구현하세요.
+          buyOne(productId);
         });
+
         navigate("/payment/success");
       } else {
         navigate("/payment/fail");
