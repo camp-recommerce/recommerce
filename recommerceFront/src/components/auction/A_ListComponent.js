@@ -182,7 +182,7 @@ const A_ListComponent = () => {
                 <div className="shopList_thum mb-2">
                   <img
                     alt={auctionProduct.apno}
-                    src={`${host}/auction/view/s_${auctionProduct.uploadFileNames[0]}`}
+                    src={`${host}/auction/view/${auctionProduct.uploadFileNames[0]}`}
                     style={{ width: "100%", height: "400px" }}
                   />
                 </div>
