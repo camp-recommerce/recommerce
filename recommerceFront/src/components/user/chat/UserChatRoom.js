@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { getRoomList, deleteAlarm } from "../../api/chatAlarmApi";
-import { API_SERVER_HOST } from "../../api/userApi";
-import useCustomChatModal from "../../hooks/useCustomChatModal";
-import styles from "../../scss/user/MyPageComponent.module.scss";
-import Chat from "../product/chat/chatcomponents/Chat";
+import { getRoomList, deleteAlarm } from "../../../api/chatAlarmApi";
+import { API_SERVER_HOST } from "../../../api/userApi";
+import useCustomChatModal from "../../../hooks/useCustomChatModal";
+import styles from "../../../scss/user/MyPageComponent.module.scss";
+import Chat from "../../product/chat/chatcomponents/Chat";
 
 const host = API_SERVER_HOST;
 
@@ -28,11 +28,11 @@ const UserChatRoom = () => {
   const handleDeleteClick = async (roomId) => {
     try {
       await deleteAlarm(roomId);
+      window.location.reload(); // 페이지 새로고침
     } catch (error) {
       console.error("Error deleting room:", error);
     }
   };
-
   return (
     <div className={styles.chatRooms}>
       <h2 style={{ fontSize: "24px" }}>내 채팅</h2>
