@@ -36,22 +36,11 @@ const P_InfiniteComponent = () => {
   };
 
   const handleCategoryClick = (category) => {
-    // "전체"를 선택한 경우
-    if (category === "전체") {
-      setPCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
-      setPNameInput(""); // 입력값도 초기화합니다.
-      setPName(""); // 입력값도 초기화합니다.
-    } else {
-      setPCategory(category);
-    }
-    // 데이터 목록 초기화와 첫 페이지 설정
-    setServerData({
-      dtoList: [],
-      currentPage: 1,
-      totalItems: 0,
-      totalPages: 0,
-      hasMore: true,
-    });
+    const newCategory = category === "전체" ? "" : category;
+    setPCategory(newCategory);
+    setPNameInput(""); // 상품 이름 입력값 초기화
+    setAddressLine(""); // 주소 입력값 초기화
+    fetchData(1, "", newCategory, ""); // fetchData를 즉시 업데이트된 값으로 호출
   };
 
   const handleSearchInputChange = (e) => {
@@ -61,43 +50,45 @@ const P_InfiniteComponent = () => {
     setAddressLine(value); // 주소 검색에도 동일한 값을 사용
   };
 
+  // useEffect는 초기 로드 시에만 데이터를 불러오는 용도로 유지
   useEffect(() => {
-    const fetchData = () => {
-      setLoading(true);
-      const categoryQuery = pcategory === "전체" || !pcategory ? "" : pcategory;
-      const nameQuery = pname ? pname : "";
-      const addressLineQuery = addressLine ? addressLine : "";
+    fetchData(1);
+  }, []);
 
-      getList({
-        page: 1,
-        size,
-        pname: nameQuery,
-        pcategory: categoryQuery,
-        addressLine: addressLineQuery,
+  const fetchData = (
+    pageNum,
+    productName = pnameInput,
+    productCategory = pcategory,
+    productAddressLine = addressLine
+  ) => {
+    setLoading(true);
+    getList({
+      page: pageNum,
+      size,
+      pname: productName,
+      pcategory: productCategory,
+      addressLine: productAddressLine,
+    })
+      .then((data) => {
+        if (data && data.data) {
+          setServerData({
+            dtoList: data.data,
+            currentPage: data.currentPage,
+            totalPages: data.totalPages,
+            totalItems: data.totalItems,
+            hasMore: data.hasMore,
+          });
+        } else {
+          setServerData((prev) => ({ ...prev, hasMore: false }));
+        }
+        setLoading(false);
       })
-        .then((data) => {
-          if (data && data.data) {
-            setServerData({
-              dtoList: data.data,
-              currentPage: data.currentPage,
-              totalPages: data.totalPages,
-              totalItems: data.totalItems,
-              hasMore: data.hasMore,
-            });
-          } else {
-            setServerData((prev) => ({ ...prev, hasMore: false })); // 데이터 없음 처리
-          }
-          setLoading(false);
-        })
-        .catch((error) => {
-          console.error("Error fetching product data:", error);
-          setLoading(false);
-          setServerData((prev) => ({ ...prev, hasMore: false })); // 에러 발생 시 처리
-        });
-    };
-
-    fetchData();
-  }, [page, size, pname, pcategory]); // 의존성 배열에 pname과 pcategory 추가
+      .catch((error) => {
+        console.error("Error fetching product data:", error);
+        setLoading(false);
+        setServerData((prev) => ({ ...prev, hasMore: false }));
+      });
+  };
 
   const fetchMoreData = () => {
     if (serverData.currentPage >= serverData.totalPages) {
@@ -134,8 +125,7 @@ const P_InfiniteComponent = () => {
   };
 
   const handleSearchButtonClick = () => {
-    setPName(pnameInput); // 검색 버튼 클릭 시 pname 상태 업데이트
-    setMapModalOpen(false);
+    fetchData();
   };
 
   const handleKeyPress = (e) => {
