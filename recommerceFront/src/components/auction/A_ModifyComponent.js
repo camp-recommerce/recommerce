@@ -3,7 +3,6 @@ import useCustomMovePage from "../../hooks/useCustomMovePage";
 import { deleteOne, getOne, putOne } from "../../api/auctionApi";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useParams } from "react-router-dom";
-import { formatNumber } from "../../util/formatNumberUtil";
 import LoadingModal from "../modal/LoadingModal";
 
 const initState = {
@@ -30,6 +29,7 @@ const A_ModifyComponent = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [formattedPrice, setFormattedPrice] = useState("");
   const [formattedIncrement, setFormattedIncrement] = useState("");
+  const [showFileSelect, setShowFileSelect] = useState(true); // 파일 선택 창 표시 여부
 
   useEffect(() => {
     getOne(apno).then((data) => {
@@ -40,6 +40,11 @@ const A_ModifyComponent = () => {
       setFormattedIncrement(
         data.apBidIncrement.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
       );
+      // 이미지 파일명이 존재할 경우 이미지 미리보기 설정
+      if (data.uploadFileNames.length > 0) {
+        setImagePreviewUrl(`${host}/auction/view/s_${data.uploadFileNames[0]}`);
+        setShowFileSelect(false); // 이미지 파일이 있으면 파일 선택 창 숨김
+      }
     });
   }, [apno]);
 
@@ -58,8 +63,14 @@ const A_ModifyComponent = () => {
     }
   };
 
-  // // 이미지 등록 시 미리보기 생성
-  const handleImageChange = (e) => {
+  const cancelImageUpload = () => {
+    setAuction({ ...auction, uploadFileNames: [] }); // 파일 목록 초기화
+    uploadRef.current.value = null; // 파일 업로드 input의 값 초기화
+    setShowFileSelect(true); // 파일 선택 창 표시
+    setImagePreviewUrl(""); // 이미지 미리보기 초기화
+  };
+
+  const handleImagePreview = (e) => {
     e.preventDefault();
 
     let reader = new FileReader();
@@ -67,6 +78,7 @@ const A_ModifyComponent = () => {
 
     reader.onloadend = () => {
       setImagePreviewUrl(reader.result);
+      setShowFileSelect(false); // 이미지를 선택한 후 파일 선택 창 숨김
     };
 
     if (file) {
@@ -74,16 +86,6 @@ const A_ModifyComponent = () => {
     }
   };
 
-  const removeImages = (imageName) => {
-    const resultFileNames = auction.uploadFileNames.filter(
-      (fileName) => fileName !== imageName
-    );
-    auction.uploadFileNames = resultFileNames;
-
-    setAuction({ ...auction });
-  };
-
-  // 수정된 handleClickModify 함수
   const handleClickModify = () => {
     const files = uploadRef.current.files;
     const formData = new FormData();
@@ -113,10 +115,9 @@ const A_ModifyComponent = () => {
     formData.append("apStatus", auction.apStatus);
     formData.append("apStartTime", auction.apStartTime);
     formData.append("apClosingTime", auction.apClosingTime);
-    console.log(auction.apClosingTime);
 
     for (let i = 0; i < auction.uploadFileNames.length; i++) {
-      formData.append("uploadFileNames", auction.uploadFileNames[i]); // 파일 이름 추가
+      formData.append("uploadFileNames", auction.uploadFileNames[i]);
     }
 
     setLoading(true);
@@ -156,45 +157,43 @@ const A_ModifyComponent = () => {
     <>
       {loading ? <LoadingModal /> : <></>}
       <div className="flex justify-center mt-20" style={{ minHeight: "66vh" }}>
-        <div>물품 수정</div>
         <div className="grid grid-cols-2 gap-10">
           <div className="flex justify-center items-center">
             <div className="modify_wrap">
-              <div className="modify-info">현재 이미지</div>
-              <div className="modify-content">
-                {auction.uploadFileNames.map((imgFile, i) => (
-                  <div className="modify-box current" key={i}>
-                    <div className="imageContainer">
-                      <img
-                        alt={auction.apName}
-                        src={`${host}/auction/view/s_${imgFile}`}
-                      />
-                      <button
-                        className="imgRemoveBtn"
-                        onClick={() => removeImages(imgFile)}
-                      >
-                        X
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              <div className="modify-content"></div>
             </div>
-            <div className="max-w-md">
+            <div
+              className="max-w-md flex items-center justify-center relative"
+              style={{ border: "1px solid #CCCCCC", width: 550, height: 550 }}
+            >
               {imagePreviewUrl ? (
-                <img src={imagePreviewUrl} className="addImage" alt="preview" />
+                <img
+                  style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%",
+                  }}
+                  src={imagePreviewUrl}
+                  alt={auction.apName}
+                />
               ) : (
-                <label htmlFor="uploadImage">파일 선택</label>
+                <label htmlFor="uploadImage"></label>
               )}
               <input
                 ref={uploadRef}
                 id="uploadImage"
                 type="file"
                 multiple={true}
-                onChange={handleImageChange}
-                style={{ display: "none" }}
-                alt={auction.apName}
+                onChange={handleImagePreview}
+                style={{ display: showFileSelect ? "block" : "none" }} // Adjusted condition
               />
+              {imagePreviewUrl && (
+                <button
+                  className="absolute top-0 right-0 m-2 p-1 bg-red-500 text-white rounded"
+                  onClick={cancelImageUpload}
+                >
+                  취소
+                </button>
+              )}
             </div>
           </div>
           <div>
@@ -295,16 +294,12 @@ const A_ModifyComponent = () => {
                 >
                   목록
                 </button>
-              </div>
-              <div className="flex space-x-4">
                 <button
                   className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
                   onClick={handleClickModify}
                 >
                   수정
                 </button>
-              </div>
-              <div className="flex space-x-4">
                 <button
                   className="bg-gray-800 text-white px-6 py-2 rounded-md hover:bg-gray-900"
                   onClick={handleClickDelete}
