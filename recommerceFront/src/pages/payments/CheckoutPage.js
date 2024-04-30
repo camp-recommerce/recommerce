@@ -29,7 +29,6 @@ export function CheckoutPage() {
         "test_ck_ORzdMaqN3w9ZDjea2G2Pr5AkYXQG",
         ANONYMOUS
       );
-
       paymentWidgetRef.current = paymentWidget;
 
       paymentWidget.renderPaymentMethods(
@@ -63,7 +62,7 @@ export function CheckoutPage() {
       if (response.success) {
         // 결제가 성공하면 선택된 상품들을 장바구니에서 제거
         selectedProducts.forEach((productId) => {
-          buyOne(productId);
+          // buyOne(productId);
         });
 
         navigate("/payment/success");
