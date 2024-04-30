@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import { getRoomList, deleteAlarm } from "../../../api/chatAlarmApi";
 import { API_SERVER_HOST } from "../../../api/userApi";
 import useCustomChatModal from "../../../hooks/useCustomChatModal";
-import styles from "../../../scss/user/MyPageComponent.module.scss";
+import styles from "../../../scss/user/UserSettings.module.scss";
 import Chat from "../../product/chat/chatcomponents/Chat";
 
 const host = API_SERVER_HOST;
