@@ -8,7 +8,7 @@ export function FailPage() {
 
   // "다시 테스트하기" 버튼 클릭 시 실행될 함수
   const handleRetry = () => {
-    navigate("/"); // 현재 탭에서 상품 리스트 페이지로 이동
+    navigate("/myPage/auction"); // 현재 탭에서 경매페이지로 이동
   };
 
   return (

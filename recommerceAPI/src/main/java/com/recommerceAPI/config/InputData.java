@@ -126,6 +126,7 @@ public class InputData {
                                .build();
                    }
                    // Product 객체 저장 등 추가 로직 수행
+                   product.addImageString("bag.jpg");
                    productRepository.save(product);
                    log.info("Saved user1 and 30 products");
                }

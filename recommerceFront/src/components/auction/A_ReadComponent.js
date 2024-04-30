@@ -33,7 +33,10 @@ const A_ReadComponent = () => {
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal();
-  const isAdmin = loginState.roleNames.includes("ADMIN");
+  const isAdmin =
+    loginState &&
+    loginState.roleNames &&
+    loginState.roleNames.includes("ADMIN");
 
   useEffect(() => {
     setLoading(true);
@@ -47,18 +50,15 @@ const A_ReadComponent = () => {
       setLoading(false);
     });
   }, [apno, isChatModalOpen]);
-
   const closeImageModal = () => {
     setOpenImg(false);
   };
-
   const auctionStatusDesc = {
     PENDING: "경매 대기 중",
     ACTIVE: "경매 진행 중",
     CLOSED: "경매 종료",
     CANCELLED: "경매 취소",
   };
-
   return (
     <>
       {loading ? <LoadingModal /> : <></>}

@@ -25,34 +25,24 @@ public class AuctionScheduler {
     private final AuctionRepository auctionRepository;
     private final AuctionBiddingRepository auctionBiddingRepository;
     private final ChatAlarmService chatAlarmService;
-
     // 3분마다 실행되는 스케줄링 작업
     @Scheduled(fixedRate = 1000 * 60)
     public void updateAuctionStatus() {
         LocalDateTime currentTime = LocalDateTime.now();
-
         // 경매 대기 중 (PENDING): 현재 시간이 경매 시작 시간 이전인 경우
         List<Auction> pendingAuctions = auctionRepository.findByApStartTimeAfter(currentTime);
         if (!pendingAuctions.isEmpty()) {
             pendingAuctions.forEach(auction -> auction.changeStatus(AuctionStatus.PENDING));
             auctionRepository.saveAll(pendingAuctions);
-        }
-
-        // 경매 진행 중 (ACTIVE): 현재 시간이 경매 시작 시간과 종료 시간 사이인 경우
+        } // 경매 진행 중 (ACTIVE)
         List<Auction> activeAuctions = auctionRepository.findByApStartTimeBeforeAndApClosingTimeAfter(currentTime, currentTime);
         if (!activeAuctions.isEmpty()) {
             activeAuctions.forEach(auction -> auction.changeStatus(AuctionStatus.ACTIVE));
             auctionRepository.saveAll(activeAuctions);
         }
-
-        // 종료된 경매를 찾음, 조건은 현재시간 보다 이전인 경매종료 시간을 가지고 있으면 현재 상태가 경매중인 경매
-        List<Auction> closedAuctions = auctionRepository.findActiveAuctionsBeforeClosingTime(currentTime);
-        // 각 종료된 경매에 대해 처리
-        if (!closedAuctions.isEmpty()) {
-            // 사용자 이메일 주소를 추적하기 위한 Set 생성
-            // 중복되서 발송되는 문제가 있길래 해쉬셋 사용
-            // 중복된 값을 허용하지 않기 때문에 해당하는 이메일이 한번씩만 저장됨
-            Set<String> userEmails = new HashSet<>();
+        List<Auction> closedAuctions = auctionRepository.findActiveAuctionsBeforeClosingTime(currentTime); // 종료된 경매를 찾음
+        if (!closedAuctions.isEmpty()) { // 각 종료된 경매에 대해 처리
+            Set<String> userEmails = new HashSet<>();// 중복된 값을 허용하지 않기 때문에 해당하는 이메일이 한번씩만 저장됨
             closedAuctions.forEach(auction -> {
                 Long apno = auction.getApno();
                 String auctionName = auction.getApName();
@@ -63,11 +53,9 @@ public class AuctionScheduler {
                 List<AuctionBidding> auctionBiddings = auctionBiddingRepository.findByAuction_Apno(apno);
                 auctionBiddings.forEach(auctionBidding -> {
                     String userEmail = auctionBidding.getBidder().getEmail();
-                    // 이메일 주소가 사용자 목록에 없으면 알림을 보냄
-                    if (!userEmails.contains(userEmail)) {
+                    if (!userEmails.contains(userEmail)) {// 이메일 주소가 사용자 목록에 없으면 알림을 보냄
                         ChatAlarmDTO chatAlarmDTO = new ChatAlarmDTO();
-                        // chatAlarmDTO들 필요한 정보로 생성
-                        chatAlarmDTO.setSenderEmail(apno+"번 상품 경매 종료 알림!");
+                        chatAlarmDTO.setSenderEmail(apno+"번 상품 경매 종료 알림!"); // chatAlarmDTO들 필요한 정보로 생성
                         chatAlarmDTO.setReadCheck(false);
                         chatAlarmDTO.setMessage(auctionName+"상품의 경매가 종료 됬습니다!");
                         chatAlarmDTO.setCreatedAt(auctionClosedTime);
@@ -75,14 +63,11 @@ public class AuctionScheduler {
                         chatAlarmDTO.setRoomId(String.valueOf(apno));
                         log.info("====================alarm"+chatAlarmDTO);
                         chatAlarmService.sendAuctionAlarm(chatAlarmDTO);
-                        // 사용자 이메일 주소를 사용자 목록에 추가
-                        userEmails.add(userEmail);
+                        userEmails.add(userEmail); // 사용자 이메일 주소를 사용자 목록에 추가
                     }
                 });
                 auctionRepository.save(auction); // 각 경매를 저장합니다.
             });
         }
-
-
     }
 }

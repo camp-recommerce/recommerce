@@ -18,17 +18,12 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final AuctionBiddingService auctionBiddingService;
     private final ChatMessageService chatMessageService;
-
-
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
         // ChatHandler 인스턴스 생성
         ChatHandler chatHandler = new ChatHandler(auctionBiddingService,chatMessageService);
-
         // WebSocket 핸들러 등록
         registry.addHandler(chatHandler, "/api/chat")
                 .setAllowedOrigins("http://localhost:3000");
-
-
     }
 }

@@ -36,7 +36,10 @@ const A_ListComponent = () => {
   const [apCategory, setApCategory] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
   const { loginState } = useCustomLoginPage();
-  const isAdmin = loginState.roleNames.includes("ADMIN");
+  const isAdmin =
+    loginState &&
+    loginState.roleNames &&
+    loginState.roleNames.includes("ADMIN");
 
   const navigate = useNavigate();
 
@@ -191,7 +194,8 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE"
+                    {auctionProduct.apStatus === "ACTIVE" &&
+                    auctionProduct.apCurrentPrice !== 0
                       ? `현재 입찰가: ${formatNumber(
                           auctionProduct.apCurrentPrice
                         )}원`

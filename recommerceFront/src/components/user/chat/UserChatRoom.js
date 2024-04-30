@@ -33,48 +33,56 @@ const UserChatRoom = () => {
       console.error("Error deleting room:", error);
     }
   };
+
   return (
-    <div className={styles.chatRooms}>
-      <h2 style={{ fontSize: "24px" }}>내 채팅</h2>
-      <hr />
-      <ul>
-        {room.map((chat) => (
-          <li key={chat.id}>
-            <div className="mt-3">
-              <span style={{ fontSize: "18px" }}>
-                채팅 상대: {chat.senderEmail}
-              </span>
-              <button
-                className="ml-5 bg-black text-white"
-                style={{ width: 40, height: 30 }}
-                onClick={() => {
-                  openChatModal(chat.roomId);
-                }}
-              >
-                채팅
-              </button>
-              <button
-                className="ml-5 bg-black text-white"
-                style={{ width: 40, height: 30 }}
-                onClick={() => {
-                  handleDeleteClick(chat.roomId);
-                }}
-              >
-                X
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
-      <div>
-        {isChatModalOpen && (
-          <Chat
-            room={roomId}
-            username={email}
-            socket={socket}
-            closeModal={closeChatModal}
-          />
-        )}
+    <div
+      style={{
+        minHeight: 600,
+        marginTop: 10,
+        display: "flex",
+        justifyContent: "center",
+      }}
+    >
+      <div className={styles.chatRooms}>
+        <h2 className={styles.heading}>대화 알람</h2>
+        <hr className={styles.hr} />
+        <ul>
+          {room.map((chat) => (
+            <li key={chat.id}>
+              <div className={styles.chatInfo}>
+                <span className={styles.chatInfoText}>
+                  대화 상대: {chat.senderEmail}
+                </span>
+                <button
+                  className={styles.chatButton}
+                  onClick={() => {
+                    openChatModal(chat.roomId);
+                  }}
+                >
+                  대화 시작
+                </button>
+                <button
+                  className={styles.deleteButton}
+                  onClick={() => {
+                    handleDeleteClick(chat.roomId);
+                  }}
+                >
+                  X
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div>
+          {isChatModalOpen && (
+            <Chat
+              room={roomId}
+              username={email}
+              socket={socket}
+              closeModal={closeChatModal}
+            />
+          )}
+        </div>
       </div>
     </div>
   );

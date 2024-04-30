@@ -85,26 +85,22 @@ public class ChatHandler extends TextWebSocketHandler {
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         log.info("Received message: {}", payload);
-
-        // payload 에 딸려온거 맵퍼 돌리는거
+        // payload 값에 같이온값을 맵퍼 돌린다.
         ChatMessageDTO chatMessageDTO = objectMapper.readValue(payload, ChatMessageDTO.class);
         log.info("Received chat message: {}", chatMessageDTO);
-
         String room = chatMessageDTO.getRoom();
-
         if (chatMessageDTO.getMessageType() == null) {
             log.error("Message type is null: {}", payload);
             return;
         }
         if (chatMessageDTO.getMessageType() == ChatMessageDTO.MessageType.BID) {
             // BID 메시지 처리: 입찰 객체 등록 등 필요한 작업 수행
-            // 예를 들어, 입찰 객체 등록을 위한 메소드 호출 등을 수행할 수 있습니다.
+            // 여기선 타입이 경매 이기 때문에 해당 채팅을 입찰 내역으로 저장중
             auctionBiddingService.saveAuctionBidding(chatMessageDTO);
         }
         if(chatMessageDTO.getMessageType()== ChatMessageDTO.MessageType.MESSAGE){
             chatMessageService.saveChat(chatMessageDTO);
-        }
-
+        } // 같은 Room 에 채팅을 전송
         sendMessageToRoom(room, chatMessageDTO, session);
     }
 
