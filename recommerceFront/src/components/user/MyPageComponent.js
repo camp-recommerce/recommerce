@@ -138,7 +138,6 @@ const MyPageComponent = () => {
             <p>생년월일: {userData.birth}</p>
           </div>
         )}
-
         {activeMenu === "address" && userData && (
           <div className={styles.userInfo}>
             <p>주소: {userData.address || "등록된 주소가 없습니다."}</p>
@@ -167,7 +166,6 @@ const MyPageComponent = () => {
             </Link>
           </div>
         )}
-
         {activeMenu === "sales" && saleItems && saleItems.length > 0 && (
           <ul className={styles.list}>
             <li className={styles.title}>판매리스트:</li>
