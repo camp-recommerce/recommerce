@@ -59,7 +59,7 @@ const UserAuction = () => {
 
   return (
     <>
-      <div>
+      <div style={{ minHeight: 500 }}>
         <ul className={styles.list}>
           <li className={styles.title}>낙찰 물품</li>
           {auction &&
