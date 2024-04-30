@@ -157,7 +157,7 @@ userInfo button {
 }
 
 /* 정보 표시 영역 스타일링 */
-// MyPageComponent.module.scss
+// 프로필 css
 .infoBundle {
   display: flex;
   justify-content: center; // 중앙 정렬
@@ -172,7 +172,7 @@ userInfo button {
   display: grid;
   grid-template-columns: repeat(2, 1fr); // 2열 그리드
   gap: 10px;
-  width: 100%; // 전체 너비 사용
+  width: 80%; // 전체 너비 사용
   padding: 20px;
   background-color: #ffffff;
   border-radius: 8px;
@@ -185,6 +185,21 @@ userInfo button {
     font-weight: bold; // 텍스트를 굵게
     color: #333; // 텍스트 색상은 진한 회색
   }
+}
+.Pname {
+  font-weight: bold; /* 글자를 두껍게 설정합니다. */
+  font-size: 30px; /* 글자 크기를 크게 설정합니다. */
+  display: block; /* 한 줄에 표시하도록 설정합니다. */
+  text-align: center; /* 텍스트를 가운데 정렬합니다. */
+}
+
+.profileContainer {
+  display: flex; /* 요소를 가로로 나열합니다. */
+  flex-direction: column; /* 요소들을 세로로 정렬합니다. */
+}
+
+.infoBundle {
+  margin-bottom: 20px; /* 정보 묶음 사이의 간격을 조정합니다. */
 }
 
 @media (max-width: 768px) {

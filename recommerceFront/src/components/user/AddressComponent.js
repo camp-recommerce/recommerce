@@ -19,6 +19,8 @@ const AddressComponent = () => {
   const handleComplete = (data) => {
     setAddress(data.address);
     setPostcode(data.postcode);
+    setPostcode(data.zonecode); // 우편번호를 설정합니다.
+    setaddressDetail(data.addressDetail);
   };
 
   const saveAddress = async () => {
@@ -29,12 +31,12 @@ const AddressComponent = () => {
 
     setIsLoading(true);
     try {
-      await updateAddress(email, address, addressDetail, postcode);
+      await updateAddress(email, address, postcode, addressDetail);
       setModalContent("주소가 성공적으로 업데이트 되었습니다."); // 성공 메시지 설정
       setModalShow(true); // 모달 표시
       setTimeout(() => {
         setModalShow(false);
-        navigate(`/user/mypage/${email}`);
+        navigate(`/myPage/profile`);
       }, 2000);
     } catch (error) {
       console.error("주소 및 우편번호 업데이트 실패:", error);
