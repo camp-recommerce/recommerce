@@ -4,6 +4,7 @@ import PublicProfileComponent from "../components/user/PublicProfileComponent";
 const Loading = <div>Loading....</div>;
 const Join = lazy(() => import("../components/user/JoinComponent"));
 const Login = lazy(() => import("../components/user/LoginComponent"));
+const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const LogoutPage = lazy(() => import("../components/user/LogoutComponent"));
 const KakaoRedirect = lazy(() => import("../pages/user/KakaoRedirectPage"));
 const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
@@ -50,6 +51,14 @@ const userRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <PublicProfile />
+        </Suspense>
+      ),
+    },
+    {
+      path: "reset-pw",
+      element: (
+        <Suspense fallback={Loading}>
+          <FindPw />
         </Suspense>
       ),
     },

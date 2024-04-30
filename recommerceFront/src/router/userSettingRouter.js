@@ -3,7 +3,6 @@ import { Suspense, lazy } from "react";
 const Loading = <div>Loading....</div>;
 
 const Remove = lazy(() => import("../components/user/RemoveComponent"));
-const FindPw = lazy(() => import("../components/user/FindPwComponent"));
 const Address = lazy(() => import("../components/user/AddressComponent"));
 const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
 const PasswordChangeForm = lazy(() =>
@@ -17,14 +16,6 @@ const userSettingRouter = () => {
       element: (
         <Suspense fallback={Loading}>
           <Remove />
-        </Suspense>
-      ),
-    },
-    {
-      path: "reset-pw",
-      element: (
-        <Suspense fallback={Loading}>
-          <FindPw />
         </Suspense>
       ),
     },
