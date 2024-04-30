@@ -80,10 +80,12 @@ const A_ListComponent = () => {
     } else {
       setApCategory(category);
     }
+    moveProductListPage(1);
   };
 
   const handleStatusClick = (status) => {
     setApStatus(status);
+    moveProductListPage(1);
   };
 
   const handleSearchInputChange = (e) => {
@@ -138,7 +140,7 @@ const A_ListComponent = () => {
           >
             검색
           </button>
-          <div className="flex items-center ml-4">
+          <div className="flex items-center ml-4 category-container ">
             {categories.map((category) => (
               <div
                 key={category}
@@ -149,6 +151,7 @@ const A_ListComponent = () => {
                     : ""
                 }`}
                 onClick={() => handleCategoryClick(category)}
+                style={{ display: window.innerWidth > 768 ? "block" : "none" }}
               >
                 {category}
               </div>
@@ -181,6 +184,7 @@ const A_ListComponent = () => {
                       : null
                   )
                 }
+                style={{ display: window.innerWidth > 768 ? "block" : "none" }}
               >
                 {status}
               </div>
