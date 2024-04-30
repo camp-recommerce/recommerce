@@ -8,7 +8,7 @@ import ImageModal from "../../modal/ImageModal";
 import A_Chat from "../../auction/chat/A_Chat";
 import useCustomChatModal from "../../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
-import styles from "../../../scss/user/MyPageComponent.module.scss";
+import styles from "../../../scss/user/UserAuction.module.scss";
 
 const host = API_SERVER_HOST;
 
@@ -68,7 +68,7 @@ const UserAuction = () => {
             auction.dtoList.map((item) => (
               <div key={item.apno}>
                 <img
-                  style={{width:400,height:400}}
+                  style={{ width: 400, height: 400 }}
                   alt={item.apno}
                   src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
                   className={styles.image}
@@ -109,7 +109,7 @@ const UserAuction = () => {
                   <div key={item.apno}>
                     <img
                       alt={item.auctionApno}
-                      style={{width:400,height:400}}
+                      style={{ width: 400, height: 400 }}
                       src={`${host}/auction/view/${item.uploadFileNames[0]}`}
                       className={styles.image}
                       onClick={() => handleImageClick(item.uploadFileNames[0])}

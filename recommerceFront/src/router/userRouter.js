@@ -1,4 +1,5 @@
 import { Suspense, lazy } from "react";
+import PublicProfileComponent from "../components/user/PublicProfileComponent";
 
 const Loading = <div>Loading....</div>;
 const Join = lazy(() => import("../components/user/JoinComponent"));
@@ -6,6 +7,9 @@ const Login = lazy(() => import("../components/user/LoginComponent"));
 const LogoutPage = lazy(() => import("../components/user/LogoutComponent"));
 const KakaoRedirect = lazy(() => import("../pages/user/KakaoRedirectPage"));
 const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
+const PublicProfile = lazy(() =>
+  import("../components/user/PublicProfileComponent")
+);
 
 const userRouter = () => {
   return [
@@ -41,7 +45,14 @@ const userRouter = () => {
         </Suspense>
       ),
     },
-    
+    {
+      path: "profile/:email",
+      element: (
+        <Suspense fallback={Loading}>
+          <PublicProfile />
+        </Suspense>
+      ),
+    },
   ];
 };
 

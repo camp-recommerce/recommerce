@@ -38,7 +38,7 @@ const userSettingRouter = () => {
     },
 
     {
-      path: "password/:email", // 공개 프로필 페이지 라우트 추가
+      path: "password/:email",
       element: (
         <Suspense fallback={Loading}>
           <PasswordChangeForm />
