@@ -30,6 +30,7 @@ const status = ["경매 대기", "경매중", "경매 종료"];
 const A_ListComponent = () => {
   const { page, size, refresh, moveProductListPage, moveReadPage } =
     useCustomMovePage();
+  const [inputWidth, setInputWidth] = useState("400px");
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
   const [apNameInput, setApNameInput] = useState("");
@@ -55,7 +56,8 @@ const A_ListComponent = () => {
   useEffect(() => {
     const handleResize = () => {
       // 화면의 너비에 따라 그리드의 열 수를 결정하여 설정합니다.
-      const numCols = window.innerWidth > 768 ? 4 : 2;
+      setInputWidth(window.innerWidth <= 1025 ? "300px" : "400px");
+      const numCols = window.innerWidth > 1025 ? 4 : 2;
       document.documentElement.style.setProperty("--grid-cols", numCols);
     };
 
@@ -128,7 +130,7 @@ const A_ListComponent = () => {
             onKeyPress={handleKeyPress}
             placeholder="상품 이름 검색"
             style={{
-              width: "400px",
+              width: inputWidth,
               padding: "0.375rem 0.75rem",
               border: "1px solid #ccc",
               borderRadius: "0.375rem",
@@ -151,7 +153,7 @@ const A_ListComponent = () => {
                     : ""
                 }`}
                 onClick={() => handleCategoryClick(category)}
-                style={{ display: window.innerWidth > 768 ? "block" : "none" }}
+                style={{ display: window.innerWidth > 1025 ? "block" : "none" }}
               >
                 {category}
               </div>
@@ -184,7 +186,7 @@ const A_ListComponent = () => {
                       : null
                   )
                 }
-                style={{ display: window.innerWidth > 768 ? "block" : "none" }}
+                style={{ display: window.innerWidth > 1025 ? "block" : "none" }}
               >
                 {status}
               </div>

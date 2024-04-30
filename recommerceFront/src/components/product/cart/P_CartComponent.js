@@ -22,7 +22,7 @@ const P_CartComponent = () => {
   useEffect(() => {
     const handleResize = () => {
       // 화면의 너비에 따라 그리드의 열 수를 결정하여 설정합니다.
-      const numCols = window.innerWidth > 768 ? 4 : 2;
+      const numCols = window.innerWidth > 1025 ? 4 : 2;
       document.documentElement.style.setProperty("--grid-cols", numCols);
     };
 
