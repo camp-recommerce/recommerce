@@ -3,6 +3,7 @@ import { createBrowserRouter } from "react-router-dom";
 import productRouter from "./productRouter";
 import userRouter from "./userRouter";
 import auctionRouter from "./auctionRouter";
+import myPageRouter from "./myPageRouter";
 
 import { CheckoutPage } from "../pages/payments/CheckoutPage";
 import { SuccessPage } from "../pages/payments/SuccessPage";
@@ -12,6 +13,7 @@ const Loading = <div>Loading....</div>;
 const ProductIndex = lazy(() => import("../pages/product/P_IndexPage"));
 const LoginIndex = lazy(() => import("../pages/user/IndexPage"));
 const AuctionIndex = lazy(() => import("../pages/auction/A_IndexPage"));
+const MyPage = lazy(() => import("../pages/user/indexMyPage"));
 const root = createBrowserRouter([
   {
     // 일단 로그인 상품 기본 잡아두갰습니다. 각자 필요하면 추가하세요
@@ -32,6 +34,16 @@ const root = createBrowserRouter([
     ),
     children: userRouter(),
   },
+  {
+    path: "/mypage",
+    element: (
+      <Suspense fallback={Loading}>
+        <MyPage />
+      </Suspense>
+    ),
+    children: myPageRouter(),
+  },
+  
   {
     path: "/auction",
     element: (
