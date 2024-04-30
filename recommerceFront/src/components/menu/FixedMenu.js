@@ -4,32 +4,20 @@ import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import AlarmModal from "../modal/AlarmModal";
-import ChatbotModal from "../chatbot/ChatbotModal";
-import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { IoTriangle } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { AiFillMessage } from "react-icons/ai";
 import { TbArrowBarDown } from "react-icons/tb";
 import { TbArrowBarUp } from "react-icons/tb";
-import { RiRobot2Fill } from "react-icons/ri";
 
 function FixedMenu() {
   const { isLogin, loginState } = useCustomLoginPage();
   const { refreshCart, cartItems } = useCustomWishListPage();
   const { refreshAlarm, alarmList } = useCustomChatAlarm();
   const [isClosed, setIsClosed] = useState(false);
-  const [isBotModalOpen, setIsBotModalOpen] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달창 상태 변수 추가
   const unreadAlarmCount = alarmList.filter((alarm) => !alarm.readCheck).length;
-
-  const openBotModal = () => {
-    setIsBotModalOpen(true);
-  };
-
-  const closeBotModal = () => {
-    setIsBotModalOpen(false);
-  };
 
   const handleClose = () => {
     setIsClosed(true);
@@ -138,7 +126,6 @@ function FixedMenu() {
           isModalOpen={isModalOpen}
         />
       )}
-      {isBotModalOpen && <ChatbotModal closeModal={closeBotModal} />}
     </div>
   );
 }
