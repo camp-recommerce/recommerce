@@ -43,11 +43,9 @@ const UserAuction = () => {
       state: {
         productName: item.apName,
         productPrice: item.apCurrentPrice,
-        productId: item.pno,
-        quantity: 1,
+        productId: item.apno,
       },
     });
-    window.location.reload();
   };
 
   const handleImageClick = (imageName) => {
@@ -68,7 +66,7 @@ const UserAuction = () => {
             auction.dtoList.map((item) => (
               <div key={item.apno}>
                 <img
-                  style={{width:400,height:400}}
+                  style={{ width: 400, height: 400 }}
                   alt={item.apno}
                   src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
                   className={styles.image}
@@ -109,7 +107,7 @@ const UserAuction = () => {
                   <div key={item.apno}>
                     <img
                       alt={item.auctionApno}
-                      style={{width:400,height:400}}
+                      style={{ width: 400, height: 400 }}
                       src={`${host}/auction/view/${item.uploadFileNames[0]}`}
                       className={styles.image}
                       onClick={() => handleImageClick(item.uploadFileNames[0])}

@@ -191,7 +191,8 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE"
+                    {auctionProduct.apStatus === "ACTIVE" &&
+                    auctionProduct.apCurrentPrice !== 0
                       ? `현재 입찰가: ${formatNumber(
                           auctionProduct.apCurrentPrice
                         )}원`

@@ -162,7 +162,7 @@ const P_ReadComponent = () => {
             </div>
             <p>
               <Link
-                to={`/user/profile/${product.userEmail}`}
+                to={`/myPage/profile/${product.userEmail}`}
                 style={{
                   color: "#000",
                   textDecoration: "none",

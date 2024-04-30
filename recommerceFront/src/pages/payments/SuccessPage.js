@@ -96,20 +96,26 @@ export function SuccessPage() {
           </div>
         </div>
       ) : (
-        <div className="flex-column align-center confirm-loading w-100 max-w-540">
-          <div className="flex-column align-center">
+        <div className="flex flex-column justify-center items-center confirm-loading w-full max-w-540">
+          <div className="flex flex-column items-center">
             <img
               src="https://static.toss.im/lotties/loading-spot-apng.png"
               width="120"
               height="120"
+              alt="Loading"
             />
-            <h2 className="title text-center">결제 요청까지 성공했어요.</h2>
-            <h4 className="text-center description">
+            <h2 className="text-center text-2xl font-semibold mt-4 mb-2">
+              결제 요청까지 성공했어요.
+            </h2>
+            <h4 className="text-center text-lg text-gray-600">
               결제 승인하고 완료해보세요.
             </h4>
           </div>
-          <div className="w-100">
-            <button className="btn primary w-100" onClick={confirmPayment}>
+          <div className="w-full flex justify-center">
+            <button
+              className="bg-blue-500 text-white rounded-lg px-4 py-2 mt-4 "
+              onClick={confirmPayment}
+            >
               결제 승인하기
             </button>
           </div>

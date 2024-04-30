@@ -54,7 +54,6 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         assert auction != null;
         auction.updateCurrentPrice(bidAmount);
         auctionRepository.save(auction);
-
         // 필요한 정보가 없으면 null 반환
         // AuctionBidding 객체 생성
         AuctionBidding auctionBidding = AuctionBidding.builder()
@@ -63,7 +62,6 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
                 .bidAmount(bidAmount)
                 .bidTime(bidTime)
                 .build();
-
         // 옥션 바이딩 저장
         return auctionBiddingRepository.save(auctionBidding);
     }
