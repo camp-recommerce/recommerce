@@ -39,7 +39,10 @@ const A_ListComponent = () => {
   const [apStatus, setApStatus] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
   const { loginState } = useCustomLoginPage();
-  const isAdmin = loginState.roleNames.includes("ADMIN");
+  const isAdmin =
+    loginState &&
+    loginState.roleNames &&
+    loginState.roleNames.includes("ADMIN");
 
   const navigate = useNavigate();
 
