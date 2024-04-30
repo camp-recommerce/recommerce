@@ -25,6 +25,7 @@ const initState = {
 };
 
 const categories = ["전체", "신발", "옷", "시계", "기타"];
+const status = ["경매 대기", "경매중", "경매 종료"];
 
 const A_ListComponent = () => {
   const { page, size, refresh, moveProductListPage, moveReadPage } =
@@ -34,24 +35,22 @@ const A_ListComponent = () => {
   const [apNameInput, setApNameInput] = useState("");
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
+  const [apStatus, setApStatus] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
   const { loginState } = useCustomLoginPage();
-  const isAdmin =
-    loginState &&
-    loginState.roleNames &&
-    loginState.roleNames.includes("ADMIN");
+  const isAdmin = loginState.roleNames.includes("ADMIN");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    getList({ page, size, apName, apCategory }).then((data) => {
+    getList({ page, size, apName, apCategory, apStatus }).then((data) => {
       console.log(data);
       setServerData(data);
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName, apCategory, apStatus]); // 의존성 배열에 추가
 
   useEffect(() => {
     const handleResize = () => {
@@ -74,11 +73,17 @@ const A_ListComponent = () => {
   const handleCategoryClick = (category) => {
     // "전체"를 선택한 경우
     if (category === "전체") {
-      setApCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApCategory(""); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApStatus("");
       setApName(""); // 입력값도 초기화합니다.
+      setApNameInput(""); //입력창도 초기화
     } else {
       setApCategory(category);
     }
+  };
+
+  const handleStatusClick = (status) => {
+    setApStatus(status);
   };
 
   const handleSearchInputChange = (e) => {
@@ -87,19 +92,14 @@ const A_ListComponent = () => {
 
   const handleSearchButtonClick = () => {
     setLoading(true);
-    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
-    getList({ page: 1, size, apName, apCategory: categoryQuery }).then(
+
+    setApName(apNameInput); // 입력 창의 값을 변수에 저장
+    getList({ page: 1, size, apName: apNameInput, apCategory, apStatus }).then(
       (data) => {
         setServerData(data);
         setLoading(false);
       }
     );
-
-    setApName(apNameInput); // 입력 창의 값을 변수에 저장
-    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
   };
 
   const handleKeyPress = (e) => {
@@ -154,6 +154,38 @@ const A_ListComponent = () => {
               </div>
             ))}
           </div>
+          <div className="flex items-center ml-4">
+            {status.map((status) => (
+              <div
+                key={status}
+                className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
+                  apStatus ===
+                  (status === "경매 대기"
+                    ? "PENDING"
+                    : status === "경매중"
+                    ? "ACTIVE"
+                    : status === "경매 종료"
+                    ? "CLOSED"
+                    : null)
+                    ? "bg-gray-200"
+                    : ""
+                }`}
+                onClick={() =>
+                  handleStatusClick(
+                    status === "경매 대기"
+                      ? "PENDING"
+                      : status === "경매중"
+                      ? "ACTIVE"
+                      : status === "경매 종료"
+                      ? "CLOSED"
+                      : null
+                  )
+                }
+              >
+                {status}
+              </div>
+            ))}
+          </div>
         </div>
         <div
           className="shopList_area grid gap-2"
@@ -194,8 +226,7 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE" &&
-                    auctionProduct.apCurrentPrice !== 0
+                    {auctionProduct.apStatus === "ACTIVE"
                       ? `현재 입찰가: ${formatNumber(
                           auctionProduct.apCurrentPrice
                         )}원`
@@ -244,4 +275,5 @@ const A_ListComponent = () => {
     </>
   );
 };
+
 export default A_ListComponent;

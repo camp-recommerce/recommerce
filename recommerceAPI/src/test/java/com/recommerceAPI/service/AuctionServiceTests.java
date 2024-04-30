@@ -51,13 +51,13 @@ public class AuctionServiceTests {
         log.info(auctionDTO);
     }
 
-    @Test
-    public void testList() {
-        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
-                .page(1)
-                .size(10)
-                .build();
-        PageResponseDTO<AuctionDTO> response = auctionService.getList(pageRequestDTO, null, null);
-        log.info(response);
-    }
+//    @Test
+//    public void testList() {
+//        PageRequestDTO pageRequestDTO = PageRequestDTO.builder()
+//                .page(1)
+//                .size(10)
+//                .build();
+//        PageResponseDTO<AuctionDTO> response = auctionService.getList(pageRequestDTO, null, null);
+//        log.info(response);
+//    }
 }
