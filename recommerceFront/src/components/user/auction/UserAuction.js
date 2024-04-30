@@ -61,7 +61,7 @@ const UserAuction = () => {
 
   return (
     <>
-      <div>
+      <div style={{ minHeight: 500, marginTop: 10 }}>
         <ul className={styles.list}>
           <li className={styles.title}>낙찰 물품</li>
           {auction &&
@@ -70,7 +70,7 @@ const UserAuction = () => {
                 <img
                   style={{ width: 400, height: 400 }}
                   alt={item.apno}
-                  src={`${host}/auction/view/s_${item.uploadFileNames[0]}`}
+                  src={`${host}/auction/view/${item.uploadFileNames[0]}`}
                   className={styles.image}
                   onClick={() => handleImageClick(item.uploadFileNames[0])}
                 />
