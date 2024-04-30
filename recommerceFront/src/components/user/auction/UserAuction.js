@@ -8,7 +8,7 @@ import ImageModal from "../../modal/ImageModal";
 import A_Chat from "../../auction/chat/A_Chat";
 import useCustomChatModal from "../../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
-import styles from "../../../scss/user/UserAuction.module.scss";
+import styles from "../../../scss/user/MyPageComponent.module.scss";
 
 const host = API_SERVER_HOST;
 
@@ -43,9 +43,11 @@ const UserAuction = () => {
       state: {
         productName: item.apName,
         productPrice: item.apCurrentPrice,
-        productId: item.apno,
+        productId: item.pno,
+        quantity: 1,
       },
     });
+    window.location.reload();
   };
 
   const handleImageClick = (imageName) => {
@@ -59,7 +61,7 @@ const UserAuction = () => {
 
   return (
     <>
-      <div style={{ minHeight: 500 }}>
+      <div>
         <ul className={styles.list}>
           <li className={styles.title}>낙찰 물품</li>
           {auction &&
