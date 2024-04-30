@@ -13,7 +13,7 @@ function A_Chat({
   imageSrc,
   room,
   currentPrice,
-  apStatus
+  apStatus,
 }) {
   const inputRef = useRef();
   const [messageList, setMessageList] = useState([]);
@@ -24,37 +24,30 @@ function A_Chat({
   const sendMessage = async () => {
     const currentMsg = inputRef.current.value;
     const parsedMsg = parseInt(currentMsg);
-
     if (isNaN(parsedMsg)) {
       window.alert("입력된 값이 숫자가 아닙니다. 숫자를 입력해주세요.");
       return;
     }
-
     // 입력된 메시지가 숫자가 아니거나, startPrice보다 작은 경우 알림창으로 알림
     if (isNaN(parsedMsg) || parsedMsg <= startPrice) {
       window.alert("입찰가가 시작가 보다 낮습니다.");
       return;
     }
-
     // bidIncrement로 나누어 떨어지지 않는 경우 알림창으로 알림
     if (parsedMsg % bidIncrement !== 0) {
       window.alert("입찰 단위가 맞지 않습니다.");
       return;
     }
-
     // 입찰가가 현재 입찰가보다 낮을 경우 알림창으로 알림
     if (parsedMsg <= currentBid) {
       window.alert("입찰가가 현재 입찰가보다 낮습니다.");
       return;
     }
-
-    if(apStatus==="CLOSED"){
-      window.alert("종료된 경매 입니다!!")
+    if (apStatus === "CLOSED") {
+      window.alert("종료된 경매 입니다!!");
       return;
     }
-
     const currentMonth = new Date().getMonth() + 1;
-
     // 조건에 맞는 경우에만 메시지 전송
     const messageData = {
       room: room,
@@ -68,13 +61,13 @@ function A_Chat({
         new Date(Date.now()).getHours() +
         ":" +
         new Date(Date.now()).getMinutes(),
-      messageType: "BID",
+      messageType: "BID", //Type Bid로 설정
     };
     socket.send(JSON.stringify(messageData));
     setMessageList((list) => [...list, messageData]);
     inputRef.current.value = "";
-    setCurrentBid(parsedMsg);
-    window.alert(`${currentMsg}원에 입찰 하셨습니다.`); // 입찰 성공 시 현재 입찰가 업데이트
+    setCurrentBid(parsedMsg); // 입찰 성공 시 현재 입찰가 업데이트
+    window.alert(`${currentMsg}원에 입찰 하셨습니다.`); // 알림 전송
   };
 
   useEffect(() => {

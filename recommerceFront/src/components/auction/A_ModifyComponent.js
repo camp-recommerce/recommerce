@@ -224,6 +224,14 @@ const A_ModifyComponent = () => {
                     type={"text"}
                     onChange={handleChangeAuction}
                     value={auction.apName}
+                    style={{
+                      border: "1px solid #CCCCCC",
+                      width: 250,
+                      height: 30,
+                      marginTop: 5,
+                      lineHeight: "30px", // textarea의 높이와 일치하도록 설정
+                      overflow: "hidden", // 스크롤 바 숨기기
+                    }}
                   ></textarea>
                 </div>
               </div>
@@ -235,6 +243,14 @@ const A_ModifyComponent = () => {
                   type={"text"}
                   onChange={handleChangeAuction}
                   value={auction.apDesc}
+                  style={{
+                    border: "1px solid #CCCCCC",
+                    width: 250,
+                    height: 30,
+                    marginTop: 5,
+                    lineHeight: "30px", // textarea의 높이와 일치하도록 설정
+                    overflow: "hidden", // 스크롤 바 숨기기
+                  }}
                 ></textarea>
               </div>
               <div className="flex items-center justify-between mb-4">
@@ -246,6 +262,7 @@ const A_ModifyComponent = () => {
                     type={"text"}
                     value={formattedPrice}
                     onChange={handleChangeAuction}
+                    style={{ border: "1px solid #CCCCCC" }}
                   ></input>
                   원
                 </div>
@@ -259,6 +276,7 @@ const A_ModifyComponent = () => {
                     type={"text"}
                     value={formattedIncrement}
                     onChange={handleChangeAuction}
+                    style={{ border: "1px solid #CCCCCC" }}
                   ></input>
                   원
                 </div>

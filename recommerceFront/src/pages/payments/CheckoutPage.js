@@ -60,10 +60,10 @@ export function CheckoutPage() {
       // 결제 성공 시 success 페이지로, 실패 시 fail 페이지로 리디렉션
       // 주의: 실제로 이 부분은 결제 위젯에 의해 처리되므로 아래 코드는 예시일 뿐입니다.
       if (response.success) {
-        // 결제가 성공하면 선택된 상품들을 장바구니에서 제거
-        selectedProducts.forEach((productId) => {
-          // buyOne(productId);
-        });
+        // 선택한 상품들을 장바구니에서 제거
+        await Promise.all(
+          selectedProducts.map((productId) => buyOne(productId))
+        );
 
         navigate("/payment/success");
       } else {
