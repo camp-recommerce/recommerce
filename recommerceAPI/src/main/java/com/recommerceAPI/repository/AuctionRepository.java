@@ -1,5 +1,6 @@
 package com.recommerceAPI.repository;
 
+import com.recommerceAPI.domain.AuctionStatus;
 import com.recommerceAPI.domain.Auction;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,8 +17,13 @@ public interface AuctionRepository extends JpaRepository<Auction, Long> {
     @Query("select a, ai from Auction a left join a.imageList ai where " +
             "(:apName is null or a.apName like %:apName%) and " +
             "(:apCategory is null or a.apCategory like %:apCategory%) and " +
+            "(:apStatus is null or a.apStatus = :apStatus) and " +
             "a.deleted = false")
-    Page<Object[]> selectList(@Param("apName") String apName, @Param("apCategory") String apCategory, Pageable pageable);
+    Page<Object[]> selectList(@Param("apName") String apName,
+                              @Param("apCategory") String apCategory,
+                              @Param("apStatus") AuctionStatus apStatus,
+                              Pageable pageable);
+
 
     // 아래 3개는 현재 시간이랑 경매 시작시간, 종료시간 검사해서 검색하는 리파지토리입니다
     List<Auction> findByApStartTimeAfter(LocalDateTime currentTime);

@@ -1,5 +1,6 @@
 package com.recommerceAPI.controller;
 
+import com.recommerceAPI.domain.AuctionStatus;
 import com.recommerceAPI.dto.AuctionDTO;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
@@ -34,11 +35,18 @@ public class AuctionController {
     }
 
     @GetMapping("/list")
-    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
+    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory, String apStatus) {
 
         log.info(pageRequestDTO);
 
-        return auctionService.getList(pageRequestDTO,apName,apCategory);
+        AuctionStatus status = null;
+        try {
+            status = AuctionStatus.valueOf(apStatus);
+        } catch (IllegalArgumentException e) {
+            // 열거 상수 변환이 실패한 경우, status를 null로 유지합니다.
+        }
+
+        return auctionService.getList(pageRequestDTO, apName, apCategory, status);
     }
 
     @GetMapping("/bidlist")

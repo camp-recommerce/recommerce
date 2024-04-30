@@ -24,7 +24,16 @@ const initState = {
   current: 0,
 };
 
-const categories = ["전체", "신발", "옷", "시계", "기타"];
+const categories = [
+  "전체",
+  "신발",
+  "옷",
+  "시계",
+  "기타",
+  "경매 대기",
+  "경매중",
+  "경매 종료",
+];
 
 const A_ListComponent = () => {
   const { page, size, refresh, moveProductListPage, moveReadPage } =
@@ -34,24 +43,22 @@ const A_ListComponent = () => {
   const [apNameInput, setApNameInput] = useState("");
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
+  const [apStatus, setApStatus] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
   const { loginState } = useCustomLoginPage();
-  const isAdmin =
-    loginState &&
-    loginState.roleNames &&
-    loginState.roleNames.includes("ADMIN");
+  const isAdmin = loginState.roleNames.includes("ADMIN");
 
   const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
-    getList({ page, size, apName, apCategory }).then((data) => {
+    getList({ page, size, apName, apCategory, apStatus }).then((data) => {
       console.log(data);
       setServerData(data);
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName, apCategory, apStatus]); // 의존성 배열에 추가
 
   useEffect(() => {
     const handleResize = () => {
@@ -75,9 +82,26 @@ const A_ListComponent = () => {
     // "전체"를 선택한 경우
     if (category === "전체") {
       setApCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApStatus(""); // 상태도 초기화합니다.
       setApName(""); // 입력값도 초기화합니다.
+    } else if (["경매 대기", "경매중", "경매 종료"].includes(category)) {
+      setApCategory(""); // 상태 카테고리 선택 시 상품 카테고리 초기화
+      switch (category) {
+        case "경매 대기":
+          setApStatus("PENDING");
+          break;
+        case "경매중":
+          setApStatus("ACTIVE");
+          break;
+        case "경매 종료":
+          setApStatus("CLOSED");
+          break;
+        default:
+          break;
+      }
     } else {
       setApCategory(category);
+      setApStatus(""); // 상품 카테고리 선택 시 상태 초기화
     }
   };
 
@@ -87,16 +111,13 @@ const A_ListComponent = () => {
 
   const handleSearchButtonClick = () => {
     setLoading(true);
-    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
-    getList({ page: 1, size, apName, apCategory: categoryQuery }).then(
-      (data) => {
-        setServerData(data);
-        setLoading(false);
-      }
-    );
-
-    setApName(apNameInput); // 입력 창의 값을 변수에 저장
-    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
+    getList({
+      page: 1,
+      size,
+      apName: apNameInput,
+      apCategory,
+      apStatus,
+    }).then((data) => {
       setServerData(data);
       setLoading(false);
     });
@@ -143,8 +164,10 @@ const A_ListComponent = () => {
               <div
                 key={category}
                 className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
-                  apCategory === category ||
-                  (category === "전체" && apCategory === null)
+                  (apCategory === category &&
+                    !["경매 대기", "경매중", "경매 종료"].includes(category)) ||
+                  (apStatus === category &&
+                    ["경매 대기", "경매중", "경매 종료"].includes(category))
                     ? "bg-gray-200"
                     : ""
                 }`}
@@ -194,8 +217,7 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE" &&
-                    auctionProduct.apCurrentPrice !== 0
+                    {auctionProduct.apStatus === "ACTIVE"
                       ? `현재 입찰가: ${formatNumber(
                           auctionProduct.apCurrentPrice
                         )}원`
@@ -244,4 +266,5 @@ const A_ListComponent = () => {
     </>
   );
 };
+
 export default A_ListComponent;
