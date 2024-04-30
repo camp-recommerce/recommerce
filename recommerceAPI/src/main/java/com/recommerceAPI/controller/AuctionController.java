@@ -43,7 +43,6 @@ public class AuctionController {
         try {
             status = AuctionStatus.valueOf(apStatus);
         } catch (IllegalArgumentException e) {
-            // 열거 상수 변환이 실패한 경우, status를 null로 유지합니다.
         }
 
         return auctionService.getList(pageRequestDTO, apName, apCategory, status);
