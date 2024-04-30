@@ -63,7 +63,7 @@ const P_CartComponent = () => {
   }, [cartItems, selectedItems]);
 
   return (
-    <div className="cart-group basketdiv" style={{ minHeight: 800 }}>
+    <div className="cart-group basketdiv" style={{ minHeight: 700 }}>
       {isLogin ? (
         <div className="cart-area">
           <div className="cart-wrap itemWrap">
@@ -76,7 +76,10 @@ const P_CartComponent = () => {
             <div
               className="grid grid-cols-4 gap-4
             "
-              style={{ gridTemplateColumns: "repeat(var(--grid-cols), 1fr)" }}
+              style={{
+                gridTemplateColumns: "repeat(var(--grid-cols), 1fr)",
+                marginBottom: 35,
+              }}
             >
               {cartItems.map((item) => (
                 <P_CartItemComponent
