@@ -76,6 +76,7 @@ const A_ListComponent = () => {
       setApCategory(""); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
       setApStatus("");
       setApName(""); // 입력값도 초기화합니다.
+      setApNameInput(""); //입력창도 초기화
     } else {
       setApCategory(category);
     }
@@ -91,24 +92,14 @@ const A_ListComponent = () => {
 
   const handleSearchButtonClick = () => {
     setLoading(true);
-    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
-    const statusQuery = apStatus === "ALL" ? "" : apStatus;
-    getList({
-      page: 1,
-      size,
-      apName,
-      apCategory: categoryQuery,
-      apStatus: statusQuery,
-    }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
 
     setApName(apNameInput); // 입력 창의 값을 변수에 저장
-    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
+    getList({ page: 1, size, apName: apNameInput, apCategory, apStatus }).then(
+      (data) => {
+        setServerData(data);
+        setLoading(false);
+      }
+    );
   };
 
   const handleKeyPress = (e) => {
