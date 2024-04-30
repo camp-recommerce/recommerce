@@ -33,7 +33,11 @@ const A_ReadComponent = () => {
   const { loginState } = useCustomLoginPage();
   const { openChatModal, closeChatModal, isChatModalOpen, socket } =
     useCustomChatModal();
-  const isAdmin = loginState.roleNames.includes("ADMIN");
+  const isAdmin =
+    loginState &&
+    loginState.roleNames &&
+    loginState.roleNames.includes("ADMIN");
+
   useEffect(() => {
     setLoading(true);
     console.log(loginState);
