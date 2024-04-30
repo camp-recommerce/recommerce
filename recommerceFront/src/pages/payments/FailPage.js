@@ -8,7 +8,7 @@ export function FailPage() {
 
   // "다시 테스트하기" 버튼 클릭 시 실행될 함수
   const handleRetry = () => {
-    navigate("/"); // 현재 탭에서 상품 리스트 페이지로 이동
+    navigate("/myPage/auction"); // 현재 탭에서 경매페이지로 이동
   };
 
   return (
@@ -18,6 +18,7 @@ export function FailPage() {
           src="https://static.toss.im/lotties/error-spot-apng.png"
           width="120"
           height="120"
+          alt="error"
         />
         <h2 className="title">결제를 실패했어요</h2>
         <div className="response-section w-100">

@@ -18,13 +18,16 @@ export function PaymentSuccessPage() {
   }, [navigate]);
 
   return (
-    <div
-      className="payment-success-container"
-      style={{ padding: "20px", textAlign: "center" }}
-    >
-      <h1>결제가 완료되었습니다!</h1>
-      <p>고객님의 주문이 성공적으로 처리되었습니다. 주문해주셔서 감사합니다.</p>
-      <p>잠시 후 상품 목록 페이지로 이동합니다...</p>
+    <div className="payment-success-container px-5 py-5 text-center">
+      <h1 className="text-3xl font-bold text-gray-900 mb-4">
+        결제가 완료되었습니다!
+      </h1>
+      <p className="text-lg text-gray-700 mb-2">
+        고객님의 주문이 성공적으로 처리되었습니다. 주문해주셔서 감사합니다.
+      </p>
+      <p className="text-lg text-gray-700">
+        잠시 후 상품 목록 페이지로 이동합니다...
+      </p>
     </div>
   );
 }

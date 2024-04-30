@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { loadPaymentWidget, ANONYMOUS } from "@tosspayments/payment-widget-sdk";
 import { useLocation, useNavigate } from "react-router-dom";
+import { buyOne } from "../../api/auctionApi";
 
 const generateOrderId = () => `order_${Date.now()}`;
 
@@ -25,10 +26,9 @@ export function CheckoutPage() {
   useEffect(() => {
     (async () => {
       const paymentWidget = await loadPaymentWidget(
-        "test_ck_ORzdMaqN3w9ZDjea2G2Pr5AkYXQG",
+        "test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm",
         ANONYMOUS
       );
-
       paymentWidgetRef.current = paymentWidget;
 
       paymentWidget.renderPaymentMethods(
@@ -62,8 +62,10 @@ export function CheckoutPage() {
       if (response.success) {
         // 결제가 성공하면 선택된 상품들을 장바구니에서 제거
         selectedProducts.forEach((productId) => {
-          // 각 상품을 삭제하는 로직을 구현하세요.
+          console.log("상품정보~~~~" + productId);
+          buyOne(productId);
         });
+
         navigate("/payment/success");
       } else {
         navigate("/payment/fail");
@@ -79,8 +81,12 @@ export function CheckoutPage() {
       <div className="max-w-540 w-100">
         <div id="payment-method" className="w-100" />
         <div id="agreement" className="w-100" />
-        <div className="btn-wrapper w-100">
-          <button className="btn primary w-100" onClick={handlePayment}>
+        <div className="btn-wrapper flex justify-center w-100">
+          <button
+            className="bg-blue-500 text-white rounded-lg px-4 py-2"
+            style={{ width: "200px" }}
+            onClick={handlePayment}
+          >
             결제하기
           </button>
         </div>
