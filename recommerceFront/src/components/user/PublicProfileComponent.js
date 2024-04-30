@@ -18,7 +18,7 @@ const PublicProfileComponent = () => {
       try {
         const data = await fetchProductsByUserFrom({
           page: 1,
-          size: 10,
+          size: 50,
           userEmail: email,
         });
         setProducts(data);
@@ -47,6 +47,10 @@ const PublicProfileComponent = () => {
       fetchProfile();
     }
   }, [email]);
+
+  const handleTabClick = (tab) => {
+    setActiveTab(tab);
+  };
 
   if (loading) {
     return <div className="loading">로딩 중...</div>;
@@ -79,10 +83,20 @@ const PublicProfileComponent = () => {
       </div>
       <div className="products-section">
         <h2>상품 목록</h2>
-      </div>
-      <div className="button-group">
-        <button onClick={() => setActiveTab("onSale")}>판매 중</button>
-        <button onClick={() => setActiveTab("soldOut")}>판매 완료</button>
+        <div className="button-group">
+          <button
+            className={activeTab === "onSale" ? "active" : ""}
+            onClick={() => handleTabClick("onSale")}
+          >
+            판매 중
+          </button>
+          <button
+            className={activeTab === "soldOut" ? "active" : ""}
+            onClick={() => handleTabClick("soldOut")}
+          >
+            판매 완료
+          </button>
+        </div>
       </div>
       <div className="products-grid">
         {filteredProducts.map((product) => (

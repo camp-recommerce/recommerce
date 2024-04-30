@@ -8,7 +8,7 @@ import ImageModal from "../../modal/ImageModal";
 import A_Chat from "../../auction/chat/A_Chat";
 import useCustomChatModal from "../../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
-import styles from "../../../scss/user/MyPageComponent.module.scss";
+import styles from "../../../scss/user/UserAuction.module.scss";
 
 const host = API_SERVER_HOST;
 

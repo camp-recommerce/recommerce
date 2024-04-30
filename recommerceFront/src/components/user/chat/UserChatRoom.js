@@ -33,6 +33,7 @@ const UserChatRoom = () => {
       console.error("Error deleting room:", error);
     }
   };
+
   return (
     <div style={{ minHeight: 650 }}>
       <div className={styles.chatRooms}>

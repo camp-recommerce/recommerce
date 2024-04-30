@@ -89,7 +89,7 @@ const PasswordChangeFormComponent = () => {
 
   const handleModalClose = () => {
     setModalOpen(false);
-    navigate("/user/mypage/:email");
+    navigate("/mypage/profile");
   };
 
   return (
