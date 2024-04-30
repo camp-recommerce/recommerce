@@ -19,6 +19,19 @@ const P_CartComponent = () => {
     }
   }, [isLogin]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      // 화면의 너비에 따라 그리드의 열 수를 결정하여 설정합니다.
+      const numCols = window.innerWidth > 768 ? 4 : 2;
+      document.documentElement.style.setProperty("--grid-cols", numCols);
+    };
+
+    // 컴포넌트가 마운트될 때 한 번 실행하고, 창의 크기가 변할 때마다 다시 실행합니다.
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const calculateTotalAmount = () => {
     let total = 0;
     selectedItems.forEach((wino) => {
@@ -54,10 +67,17 @@ const P_CartComponent = () => {
       {isLogin ? (
         <div className="cart-area">
           <div className="cart-wrap itemWrap">
-            <div className="cart-box cartLength border-b-2 border-black font-bold text-lg mt-2" style={{ display: 'flex',  alignItems: 'center', height:50 }}>
+            <div
+              className="cart-box cartLength border-b-2 border-black font-bold text-lg mt-2"
+              style={{ display: "flex", alignItems: "center", height: 50 }}
+            >
               찜 목록({cartItems.length})
             </div>
-            <div className="grid grid-cols-4 gap-4">
+            <div
+              className="grid grid-cols-4 gap-4
+            "
+              style={{ gridTemplateColumns: "repeat(var(--grid-cols), 1fr)" }}
+            >
               {cartItems.map((item) => (
                 <P_CartItemComponent
                   {...item}
@@ -76,7 +96,6 @@ const P_CartComponent = () => {
       )}
     </div>
   );
-  
 };
 
 export default P_CartComponent;
