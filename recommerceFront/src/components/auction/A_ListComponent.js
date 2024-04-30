@@ -213,7 +213,7 @@ const A_ListComponent = () => {
                   "scale(1)";
               }}
             >
-              <div className="shopList_box">
+              <div className="shopList_box" style={{ minHeight: 500 }}>
                 <div className="shopList_thum mb-2">
                   <img
                     alt={auctionProduct.apno}
