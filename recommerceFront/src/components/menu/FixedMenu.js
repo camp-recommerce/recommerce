@@ -4,19 +4,16 @@ import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import AlarmModal from "../modal/AlarmModal";
-import useCustomChatModal from "../../hooks/useCustomChatModal";
 import { IoTriangle } from "react-icons/io5";
 import { FaHeart } from "react-icons/fa";
 import { AiFillMessage } from "react-icons/ai";
 import { TbArrowBarDown } from "react-icons/tb";
 import { TbArrowBarUp } from "react-icons/tb";
-import { RiRobot2Fill } from "react-icons/ri";
 
 function FixedMenu() {
   const { isLogin, loginState } = useCustomLoginPage();
   const { refreshCart, cartItems } = useCustomWishListPage();
   const { refreshAlarm, alarmList } = useCustomChatAlarm();
-  const { closeChatModal } = useCustomChatModal();
   const [isClosed, setIsClosed] = useState(false);
 
   const [isModalOpen, setIsModalOpen] = useState(false); // 모달창 상태 변수 추가
@@ -115,7 +112,7 @@ function FixedMenu() {
           {/* 챗봇 추가용 */}
           {/* <button
             className="btn-chat w-full h-[60px] rounded-[50%] flex flex-col justify-center items-center bg-[#E4E4E3] hover:bg-[#515151] text-[#282222] font-semibold text-xs mt-[10px]"
-            onClick={() => openModal()} // 모달창 열기
+            onClick={openBotModal} // 모달창 열기
           >
             <RiRobot2Fill className="text-lg" />
             <span>챗봇</span>

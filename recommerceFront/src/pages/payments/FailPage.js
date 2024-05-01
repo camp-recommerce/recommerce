@@ -18,6 +18,7 @@ export function FailPage() {
           src="https://static.toss.im/lotties/error-spot-apng.png"
           width="120"
           height="120"
+          alt="error"
         />
         <h2 className="title">결제를 실패했어요</h2>
         <div className="response-section w-100">

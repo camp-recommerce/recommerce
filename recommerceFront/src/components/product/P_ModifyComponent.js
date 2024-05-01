@@ -3,7 +3,6 @@ import { deleteOne, getOne, putOne } from "../../api/productApi";
 import LoadingModal from "../modal/LoadingModal";
 import AlertModal from "../modal/AlertModal";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
-import ImageModal from "../modal/ImageModal";
 import "../../scss/product/ModifyPage.scss";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +11,7 @@ import MapComponent from "../MapComponent";
 const initState = {
   pname: "",
   price: 0,
+  pcategory: "",
   pstate: "",
   plocat: "",
   addressLine: "",
@@ -27,18 +27,18 @@ const host = API_SERVER_HOST;
 const P_ModifyComponent = () => {
   const { pno } = useParams();
   const [product, setProduct] = useState({ ...initState });
-  const [openImg, setOpenImg] = useState(false);
   const [result, setResult] = useState(null);
   const [formattedPrice, setFormattedPrice] = useState("");
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const [loading, setLoading] = useState(false);
-  const [selectedImgPath, setSelectedImgPath] = useState("");
   const { moveBeforeReadPage } = useCustomProductPage();
   const [location, setLocation] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState("");
   const [showFileSelect, setShowFileSelect] = useState(true); // 파일 선택 창 표시 여부
   const uploadRef = useRef();
   const navigate = useNavigate();
+
+  const categories = ["신발", "옷", "시계", "기타"];
 
   useEffect(() => {
     getOne(pno).then((data) => {
@@ -98,6 +98,7 @@ const P_ModifyComponent = () => {
     // other data
     formData.append("pname", product.pname);
     formData.append("price", product.price);
+    formData.append("pcategory", product.pcategory);
     formData.append("pstate", product.pstate);
     formData.append("plocat", product.plocat);
     formData.append("addressLine", product.addressLine);
@@ -213,6 +214,20 @@ const P_ModifyComponent = () => {
               value={formattedPrice}
               onChange={handleChangeProduct}
             ></input>
+          </div>
+          <div className="modify-wrap">
+            <div className="modify-info ">카테고리</div>
+            <select
+              name="pcategory"
+              value={product.pcategory}
+              onChange={handleChangeProduct}
+            >
+              {categories.map((category) => (
+                <option key={category} value={category}>
+                  {category}
+                </option>
+              ))}
+            </select>
           </div>
           <div className="modify-wrap">
             <div className="modify-info ">조건 선택 </div>
