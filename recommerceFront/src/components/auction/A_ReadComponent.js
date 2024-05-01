@@ -66,9 +66,9 @@ const A_ReadComponent = () => {
         className="flex justify-center mt-20"
         style={{ minHeight: "65vh", position: "relative" }}
       >
-        <div className="grid grid-cols-2 gap-10">
+        <div className="grid grid-cols-2 gap-10" style={{ minHeight: 620 }}>
           <div className="flex justify-center items-center">
-            <div className="max-w-md" style={{ width: 800 }}>
+            <div className="max-w-md" style={{ width: "90%" }}>
               {auctionProduct.uploadFileNames.map((imgFile, i) => (
                 <img
                   key={i}

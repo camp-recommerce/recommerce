@@ -25,15 +25,18 @@ const initState = {
 };
 
 const categories = ["전체", "신발", "옷", "시계", "기타"];
+const status = ["경매 대기", "경매중", "경매 종료"];
 
 const A_ListComponent = () => {
   const { page, size, refresh, moveProductListPage, moveReadPage } =
     useCustomMovePage();
+  const [inputWidth, setInputWidth] = useState("400px");
   const [serverData, setServerData] = useState(initState);
   const [loading, setLoading] = useState(false);
   const [apNameInput, setApNameInput] = useState("");
   const [apName, setApName] = useState("");
   const [apCategory, setApCategory] = useState("");
+  const [apStatus, setApStatus] = useState("");
   const remainingTimes = useCustomTimesList(serverData); // 사용자 정의 훅 사용
   const { loginState } = useCustomLoginPage();
   const isAdmin =
@@ -45,18 +48,19 @@ const A_ListComponent = () => {
 
   useEffect(() => {
     setLoading(true);
-    getList({ page, size, apName, apCategory }).then((data) => {
+    getList({ page, size, apName, apCategory, apStatus }).then((data) => {
       console.log(data);
       setServerData(data);
       setLoading(false);
     });
     console.log(serverData.uploadFileNames);
-  }, [page, size, refresh, apName, apCategory]); // 의존성 배열에 추가
+  }, [page, size, refresh, apName, apCategory, apStatus]); // 의존성 배열에 추가
 
   useEffect(() => {
     const handleResize = () => {
       // 화면의 너비에 따라 그리드의 열 수를 결정하여 설정합니다.
-      const numCols = window.innerWidth > 768 ? 4 : 2;
+      setInputWidth(window.innerWidth <= 1025 ? "300px" : "400px");
+      const numCols = window.innerWidth > 1025 ? 4 : 2;
       document.documentElement.style.setProperty("--grid-cols", numCols);
     };
 
@@ -74,11 +78,19 @@ const A_ListComponent = () => {
   const handleCategoryClick = (category) => {
     // "전체"를 선택한 경우
     if (category === "전체") {
-      setApCategory(null); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApCategory(""); // 카테고리를 null로 설정하여 검색 조건을 초기화합니다.
+      setApStatus("");
       setApName(""); // 입력값도 초기화합니다.
+      setApNameInput(""); //입력창도 초기화
     } else {
       setApCategory(category);
     }
+    moveProductListPage(1);
+  };
+
+  const handleStatusClick = (status) => {
+    setApStatus(status);
+    moveProductListPage(1);
   };
 
   const handleSearchInputChange = (e) => {
@@ -87,19 +99,14 @@ const A_ListComponent = () => {
 
   const handleSearchButtonClick = () => {
     setLoading(true);
-    const categoryQuery = apCategory === "ALL" ? "" : apCategory;
-    getList({ page: 1, size, apName, apCategory: categoryQuery }).then(
+
+    setApName(apNameInput); // 입력 창의 값을 변수에 저장
+    getList({ page: 1, size, apName: apNameInput, apCategory, apStatus }).then(
       (data) => {
         setServerData(data);
         setLoading(false);
       }
     );
-
-    setApName(apNameInput); // 입력 창의 값을 변수에 저장
-    getList({ page: 1, size, apName: apNameInput, apCategory }).then((data) => {
-      setServerData(data);
-      setLoading(false);
-    });
   };
 
   const handleKeyPress = (e) => {
@@ -126,7 +133,7 @@ const A_ListComponent = () => {
             onKeyPress={handleKeyPress}
             placeholder="상품 이름 검색"
             style={{
-              width: "400px",
+              width: inputWidth,
               padding: "0.375rem 0.75rem",
               border: "1px solid #ccc",
               borderRadius: "0.375rem",
@@ -138,7 +145,7 @@ const A_ListComponent = () => {
           >
             검색
           </button>
-          <div className="flex items-center ml-4">
+          <div className="flex items-center ml-4 category-container ">
             {categories.map((category) => (
               <div
                 key={category}
@@ -149,8 +156,42 @@ const A_ListComponent = () => {
                     : ""
                 }`}
                 onClick={() => handleCategoryClick(category)}
+                style={{ display: window.innerWidth > 1025 ? "block" : "none" }}
               >
                 {category}
+              </div>
+            ))}
+          </div>
+          <div className="flex items-center ml-4">
+            {status.map((status) => (
+              <div
+                key={status}
+                className={`cursor-pointer px-3 py-1 border border-gray-300 rounded-md h-10 ml-2 ${
+                  apStatus ===
+                  (status === "경매 대기"
+                    ? "PENDING"
+                    : status === "경매중"
+                    ? "ACTIVE"
+                    : status === "경매 종료"
+                    ? "CLOSED"
+                    : null)
+                    ? "bg-gray-200"
+                    : ""
+                }`}
+                onClick={() =>
+                  handleStatusClick(
+                    status === "경매 대기"
+                      ? "PENDING"
+                      : status === "경매중"
+                      ? "ACTIVE"
+                      : status === "경매 종료"
+                      ? "CLOSED"
+                      : null
+                  )
+                }
+                style={{ display: window.innerWidth > 1025 ? "block" : "none" }}
+              >
+                {status}
               </div>
             ))}
           </div>
@@ -181,7 +222,7 @@ const A_ListComponent = () => {
                   "scale(1)";
               }}
             >
-              <div className="shopList_box">
+              <div className="shopList_box" style={{ minHeight: 500 }}>
                 <div className="shopList_thum mb-2">
                   <img
                     alt={auctionProduct.apno}
@@ -194,8 +235,7 @@ const A_ListComponent = () => {
                     {auctionProduct.apName}
                   </div>
                   <div className="shopList_price text-sm">
-                    {auctionProduct.apStatus === "ACTIVE" &&
-                    auctionProduct.apCurrentPrice !== 0
+                    {auctionProduct.apStatus === "ACTIVE"
                       ? `현재 입찰가: ${formatNumber(
                           auctionProduct.apCurrentPrice
                         )}원`
@@ -244,4 +284,5 @@ const A_ListComponent = () => {
     </>
   );
 };
+
 export default A_ListComponent;

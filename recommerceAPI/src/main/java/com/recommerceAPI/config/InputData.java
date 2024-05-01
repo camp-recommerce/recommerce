@@ -130,14 +130,14 @@ public class InputData {
                    productRepository.save(product);
                    log.info("Saved user1 and 30 products");
                }
-               for (int i = 1; i <= 10; i++) {
+               for (int i = 1; i <= 6; i++) {
                    LocalTime startTime = LocalTime.of(11 + i, 0);
                    LocalTime closingTime = LocalTime.of(12 + i, 59);
 
                    String category;
-                   if (i >= 1 && i <= 3) {
+                   if (i >= 1 && i <= 2) {
                        category = "옷";
-                   } else if (i >= 4 && i <= 6) {
+                   } else if (i >= 3 && i <= 4) {
                        category = "시계";
                    } else {
                        category = "기타";

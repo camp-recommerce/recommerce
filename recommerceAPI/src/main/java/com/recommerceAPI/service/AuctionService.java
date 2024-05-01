@@ -3,6 +3,7 @@ package com.recommerceAPI.service;
 import com.recommerceAPI.dto.AuctionDTO;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
+import com.recommerceAPI.domain.AuctionStatus;
 
 public interface AuctionService {
 
@@ -13,7 +14,7 @@ public interface AuctionService {
     void modify(AuctionDTO auctionDTO);
 
     void remove(Long apno);
-    PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO,String apName, String apCategory);
+    PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO, String apName, String apCategory, AuctionStatus apStatus);
 
     PageResponseDTO<AuctionDTO>findByApBuyer(PageRequestDTO pageRequestDTO,String apBuyer);
 
