@@ -18,30 +18,26 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class ChatAlarmController {
     private final ChatAlarmService chatAlarmService;
-    @PostMapping("/send")
+    @PostMapping("/send") // 알람 전송
     public List<ChatAlarmDTO> chatAlarm(@RequestBody ChatAlarmDTO chatAlarmDTO){
-
        return chatAlarmService.saveModChatAlarm(chatAlarmDTO);
-
     }
-
-    @GetMapping("/list")
+    @GetMapping("/list") // 알람 리스트 확인
     public List<ChatAlarmDTO> getAlarms(Principal principal){
         String email = principal.getName();
         log.info("---------email: "+email);
         return chatAlarmService.getAlarmList(email);
     }
-    @GetMapping("/room")
+    @GetMapping("/room") // 사용자에게 온 알람을 이용해 채팅방 정보들을 가져옴
     public List<ChatAlarmDTO> getRooms(Principal principal){
         String email = principal.getName();
         log.info("---------email: "+email);
         return chatAlarmService.getRoomList(email);
     }
-    @PutMapping("/read/{alarmId}")
+    @PutMapping("/read/{alarmId}") // 알람 들의 읽음 처리
     public List<ChatAlarmDTO> updateAlarmsToRead(@PathVariable(name = "alarmId") Long alarmId) {
         return chatAlarmService.updateMultipleChatAlarmsToRead(alarmId);
-    }
-    @DeleteMapping("/delete/{roomId}")
+    }@DeleteMapping("/delete/{roomId}") // 해당방의 모든 알림을 삭제
     public void deleteAllAlarm(@PathVariable String roomId){
         chatAlarmService.deleteAllChatAlarmsByRoomId(roomId);
     }

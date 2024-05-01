@@ -10,9 +10,7 @@ import useCustomChatModal from "../../../hooks/useCustomChatModal";
 import { useNavigate } from "react-router-dom";
 import styles from "../../../scss/user/MyPageComponent.module.scss";
 import { CgEnter } from "react-icons/cg";
-
 const host = API_SERVER_HOST;
-
 const UserAuction = () => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.loginSlice);
@@ -25,7 +23,6 @@ const UserAuction = () => {
     useCustomChatModal();
   const email = user.email;
   const apBuyer = user.email;
-
   useEffect(() => {
     if (user && user.email) {
       const fetchData = async () => {
@@ -38,7 +35,6 @@ const UserAuction = () => {
       fetchData();
     }
   }, [user]);
-
   const handleClickPayment = (item) => {
     navigate("/payment", {
       state: {
@@ -49,16 +45,13 @@ const UserAuction = () => {
       },
     });
   };
-
   const handleImageClick = (imageName) => {
     setSelectedImgPath(`${host}/auction/view/${imageName}`);
     setOpenImg(true);
   };
-
   const closeImageModal = () => {
     setOpenImg(false);
   };
-
   return (
     <>
       <div

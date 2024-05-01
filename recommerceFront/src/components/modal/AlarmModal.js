@@ -5,7 +5,7 @@ import useCustomLogin from "../../hooks/useCustomLoginPage";
 import useCustomChatAlarm from "../../hooks/useCustomChatAlarm";
 import { readAlarms } from "../../api/chatAlarmApi";
 
-const AlarmModal = ({ closeModal, email,isModalOpen }) => {
+const AlarmModal = ({ closeModal, email, isModalOpen }) => {
   const { openChatModal, isChatModalOpen, socket, closeChatModal } =
     useCustomChatModal(); // closeChatModal 함수 불러오기
   const { loginState } = useCustomLogin();
@@ -19,52 +19,28 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
       closeModal();
     }
   };
-
   const handleReadAlarms = async (senderEmail) => {
     const alarmsInRoom = groupedAlarms[senderEmail];
     if (!alarmsInRoom) {
       console.log("No alarms found for the provided senderEmail.");
       return;
     }
-
     // 해당 roomId에 해당하는 알림들의 id 배열을 추출합니다.
     const alarmIds = alarmsInRoom.map((alarm) => alarm.id);
-
     // 추출된 알람들의 id 배열을 전달하여 알람 상태를 업데이트합니다.
     readAlarms(alarmIds);
     refreshAlarm();
     console.log("Alarms marked as read.");
-
   };
-
-  useEffect(() => {
-    // 새로운 alarmList 설정
-    setNewAlarmList(originalAlarmList);
-    const groupAlarms = () => {
-      const grouped = {};
-      newAlarmList.forEach((alarm) => {
-        if (!grouped[alarm.senderEmail]) {
-          grouped[alarm.senderEmail] = [alarm];
-        } else {
-          grouped[alarm.senderEmail].push(alarm);
-        }
-      });
-      return grouped;
-    };
-    setGroupedAlarms(groupAlarms());
-  }, [isModalOpen, originalAlarmList]);
-
   const renderGroupedAlarms = () => {
     return Object.keys(groupedAlarms).map((senderEmail, index) => {
       const unreadAlarms = groupedAlarms[senderEmail].filter(
         (alarm) => !alarm.readCheck
       );
-
       // 읽지 않은 알림이 없는 경우 해당 섹션을 렌더링하지 않음
       if (unreadAlarms.length === 0) {
         return null;
       }
-
       return (
         <div key={index}>
           <h3 className="text-lg font-semibold mt-6">
@@ -89,7 +65,7 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
                   <p>메시지: {alarm.message}</p>
                 </div>
               ))}
-              <div>
+            <div>
               {isChatModalOpen && (
                 <Chat
                   room={groupedAlarms[senderEmail][0].roomId}
@@ -104,6 +80,22 @@ const AlarmModal = ({ closeModal, email,isModalOpen }) => {
       );
     });
   };
+  useEffect(() => {
+    // 새로운 alarmList 설정
+    setNewAlarmList(originalAlarmList);
+    const groupAlarms = () => {
+      const grouped = {};
+      newAlarmList.forEach((alarm) => {
+        if (!grouped[alarm.senderEmail]) {
+          grouped[alarm.senderEmail] = [alarm];
+        } else {
+          grouped[alarm.senderEmail].push(alarm);
+        }
+      });
+      return grouped;
+    };
+    setGroupedAlarms(groupAlarms());
+  }, [isModalOpen, originalAlarmList]);
 
   return (
     <div

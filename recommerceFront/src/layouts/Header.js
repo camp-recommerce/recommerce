@@ -1,10 +1,25 @@
 import React from "react";
 import useCustomLoginPage from "../hooks/useCustomLoginPage";
-import useAuthRedirect from "../hooks/useAuthStatus";
+import jwtAxios from "../util/jwtUtil";
+import { API_SERVER_HOST } from "../api/userApi";
+
+const host = `${API_SERVER_HOST}`;
 
 const Header = () => {
   const { isLogin } = useCustomLoginPage();
-  const handleAuthRedirect = useAuthRedirect();
+
+  const handleCheckPermission = async () => {
+    try {
+      const response = await jwtAxios.get(`${host}/check/validate_token`);
+      if (response.status === 200) {
+        // 권한이 확인되면 판매 페이지로 리다이렉트
+        window.location.href = "/product/register";
+      }
+    } catch (error) {
+      // 권한이 없거나 요청이 실패한 경우 로그인 페이지로 리다이렉트
+      window.location.href = "/user/login";
+    }
+  };
 
   return (
     <div
@@ -29,9 +44,7 @@ const Header = () => {
             경매
           </a>
           <button
-            onClick={() =>
-              handleAuthRedirect("/product/register", "/user/login")
-            }
+            onClick={handleCheckPermission}
             className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
           >
             판매하기
@@ -98,12 +111,7 @@ const Header = () => {
             </a>
           </li>
           <li>
-            <button
-              onClick={() =>
-                handleAuthRedirect("/product/register", "/user/login")
-              }
-              class="dropdown-item"
-            >
+            <button onClick={handleCheckPermission} class="dropdown-item">
               판매하기
             </button>
           </li>
