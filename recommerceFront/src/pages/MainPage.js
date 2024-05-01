@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import MainPageCenter from "./MainPageCenter";
 
 function MainPage() {
   const [slideIndex, setSlideIndex] = useState(0);
@@ -44,8 +45,8 @@ function MainPage() {
   };
 
   return (
-    <div className="main-container">
-      <div className="big-image flex items-center justify-center w-full h-100">
+    <div className="main-container flex flex-col items-center justify-center">
+      <div className="big-image flex items-center justify-center w-3/4 h-100">
         <img
           src="/images/bigmainimage.jpg"
           alt="BigImage"
@@ -53,9 +54,10 @@ function MainPage() {
           style={{ cursor: "pointer", height: "100%", width: "100%" }}
         />
       </div>
+      <MainPageCenter />
       <div className="slideshow-container flex items-center justify-center w-full h-96">
         {!isMobile ? (
-          <div className="slides flex items-center justify-center w-full h-96 overflow-hidden">
+          <div className="slides flex items-center justify-center w-3/4 h-96 overflow-hidden">
             <img
               src="/images/mainimage1.jpg"
               className="slide"
@@ -76,7 +78,7 @@ function MainPage() {
             />
           </div>
         ) : (
-          <div className="slides flex items-center justify-center w-full overflow-hidden relative h-80">
+          <div className="slides flex items-center justify-center w-3/4 overflow-hidden relative h-80">
             <button
               className="prev text-xl font-bold absolute left-0 top-1/2 transform -translate-y-1/2"
               onClick={() => plusSlides(-1)}

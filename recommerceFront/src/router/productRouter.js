@@ -1,7 +1,7 @@
 import React, { Suspense, lazy } from "react";
 
 const Loading = <div>Loading...</div>;
-const ImageSlice = lazy(() => import("../pages/MainPage"));
+const MainTop = lazy(() => import("../pages/MainPage"));
 const ProductList = lazy(() =>
   import("../components/product/P_InfiniteComponent")
 );
@@ -20,7 +20,7 @@ const productRouter = () => {
       path: "/",
       element: (
         <Suspense fallback={Loading}>
-          <ImageSlice />
+          <MainTop />
           <ProductList />
         </Suspense>
       ),

@@ -7,7 +7,6 @@ import MapComponent from "../MapComponent";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import { FaMapMarkedAlt } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 
 const host = API_SERVER_HOST;
