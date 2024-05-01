@@ -7,7 +7,7 @@ import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ReadPage.scss";
 import useCustomWishListPage from "../../hooks/useCustomWishListPage";
-import MapComponent from "../MapComponent";
+import MapComponent from "../common/MapComponent";
 import { Link } from "react-router-dom"; // 맨 위에 추가
 import { formatNumber } from "../../util/formatNumberUtil";
 

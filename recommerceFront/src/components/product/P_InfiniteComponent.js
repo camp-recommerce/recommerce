@@ -3,11 +3,10 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { getList } from "../../api/productApi";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ListPage.scss";
-import MapComponent from "../MapComponent";
+import MapComponent from "../common/MapComponent";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { AiOutlineCloseSquare } from "react-icons/ai";
 import { FaMapMarkedAlt } from "react-icons/fa";
-import { useLocation } from "react-router-dom";
 import { formatNumber } from "../../util/formatNumberUtil";
 
 const host = API_SERVER_HOST;
@@ -126,12 +125,20 @@ const P_InfiniteComponent = () => {
   };
 
   const handleSearchButtonClick = () => {
-    fetchData();
+    // pname과 addressLine을 pnameInput 값으로 설정
+    setPName(pnameInput);
+    setAddressLine(pnameInput);
+
+    // 상태 업데이트 후 검색 실행 (상태 업데이트가 비동기적으로 이루어지므로 직접 호출하지 않고 useEffect를 사용)
+    fetchData(1, pnameInput, pcategory, pnameInput);
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === "Enter") {
-      handleSearchButtonClick();
+    console.log("Key pressed in modal:", e.key);
+    if (e.key === " ") {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log("Space bar pressed - modal should stay open.");
     }
   };
 
@@ -180,6 +187,12 @@ const P_InfiniteComponent = () => {
           <button
             className="btn_search relative w-[54px] h-[54px]"
             onClick={toggleMapModal}
+            onKeyDown={(e) => {
+              if (e.key === " ") {
+                // 스페이스바가 눌리면 실행되지 않도록
+                e.preventDefault();
+              }
+            }}
           >
             <FaMapMarkedAlt size="24" color="#fff" />
             {isMapModalOpen && (

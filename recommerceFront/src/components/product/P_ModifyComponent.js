@@ -6,7 +6,7 @@ import useCustomProductPage from "../../hooks/useCustomProductPage";
 import "../../scss/product/ModifyPage.scss";
 import { API_SERVER_HOST } from "../../api/userApi";
 import { useNavigate, useParams } from "react-router-dom";
-import MapComponent from "../MapComponent";
+import MapComponent from "../common/MapComponent";
 
 const initState = {
   pname: "",

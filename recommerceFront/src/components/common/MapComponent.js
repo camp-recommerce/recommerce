@@ -1,6 +1,5 @@
 /*global kakao*/
 import React, { useEffect, useRef, useState } from "react";
-import { FaMapMarkerAlt } from "react-icons/fa";
 import { FaLocationCrosshairs } from "react-icons/fa6";
 
 const MapComponent = ({
@@ -12,9 +11,6 @@ const MapComponent = ({
 }) => {
   const mapContainer = useRef(null);
   const [map, setMap] = useState(null);
-  const [address, setAddress] = useState("");
-  const [roadAddress, setRoadAddress] = useState("");
-  const [currentPosition, setCurrentPosition] = useState(null);
   const [keyword, setKeyword] = useState("");
   const [selectedAddress, setSelectedAddress] = useState(""); // 주소를 저장할 상태 추가
 
@@ -144,7 +140,7 @@ const MapComponent = ({
             ? result[0].road_address.address_name
             : result[0].address.address_name;
           setSelectedAddress(roadAddressText);
-          const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
+          // const addressText = result[0].address.address_name; // 도로명 주소 <-> 지번 주소 전환 버튼 추가 시 사용
           const addressInfo = result[0].address; // 지번 주소 정보 객체
           const addressLine = `${addressInfo.region_1depth_name} ${addressInfo.region_2depth_name} ${addressInfo.region_3depth_name}`;
           const district = addressInfo.region_3depth_name; // 동 정보만 추출

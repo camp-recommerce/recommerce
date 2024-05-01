@@ -4,7 +4,7 @@ import AlertModal from "../modal/AlertModal";
 import LoadingModal from "../modal/LoadingModal";
 import "../../scss/product/AddPage.scss";
 import useCustomProductPage from "../../hooks/useCustomProductPage";
-import MapComponent from "../MapComponent";
+import MapComponent from "../common/MapComponent";
 import useCustomLoginPage from "../../hooks/useCustomLoginPage";
 
 const initState = {
