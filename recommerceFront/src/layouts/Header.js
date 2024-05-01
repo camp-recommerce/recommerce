@@ -98,12 +98,14 @@ const Header = () => {
             </a>
           </li>
           <li>
-            <a
+            <button
+              onClick={() =>
+                handleAuthRedirect("/product/register", "/user/login")
+              }
               class="dropdown-item"
-              href="http://localhost:3000/product/register"
             >
               판매하기
-            </a>
+            </button>
           </li>
 
           {isLogin ? (
