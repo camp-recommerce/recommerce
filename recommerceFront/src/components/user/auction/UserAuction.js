@@ -44,11 +44,10 @@ const UserAuction = () => {
       state: {
         productName: item.apName,
         productPrice: item.apCurrentPrice,
-        productId: item.pno,
+        productId: item.apno,
         quantity: 1,
       },
     });
-    window.location.reload();
   };
 
   const handleImageClick = (imageName) => {

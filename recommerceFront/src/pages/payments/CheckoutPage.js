@@ -45,6 +45,7 @@ export function CheckoutPage() {
       console.error("결제 위젯이 로드되지 않았습니다.");
       return;
     }
+    console.log("apno" + productId);
     buyOne(productId);
 
     try {
