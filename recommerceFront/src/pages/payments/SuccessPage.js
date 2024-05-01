@@ -45,6 +45,7 @@ export function SuccessPage() {
             src="https://static.toss.im/illusts/check-blue-spot-ending-frame.png"
             width="120"
             height="120"
+            alt="payment"
           />
           <h2 className="title">결제를 완료했어요</h2>
           <div className="response-section w-100">
