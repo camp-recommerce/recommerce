@@ -74,12 +74,20 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
     @Override
     public List<ChatAlarmDTO> getRoomList(String email){
         // 사용자 이메일에 해당하는 모든 채팅 알람을 조회합니다.
+        // 이번에는 방 정보를 가져오고 싶기 때문에, 발신자 기준으로 하나씩만 가져 옵니다.
         List<ChatAlarm> chatAlarms = chatAlarmRepository.findAllByUserEmailChat(email);
-
         // ChatAlarm을 ChatAlarmDTO로 변환하여 리스트로 반환합니다.
         return chatAlarms.stream()
                 .map(chatAlarm -> modelMapper.map(chatAlarm, ChatAlarmDTO.class))
                 .collect(Collectors.toList());
+    }
+    @Override
+    public void deleteAllChatAlarmsByRoomId(String roomId) {
+        // roomId에 해당하는 모든 알람들을 조회합니다.
+        List<ChatAlarm> chatAlarms = chatAlarmRepository.findAllByRoomId(roomId);
+
+        // 조회된 알람들을 삭제합니다.
+        chatAlarmRepository.deleteAll(chatAlarms);
     }
 
     @Override
@@ -114,13 +122,6 @@ public class ChatAlarmServiceImpl implements ChatAlarmService{
 
 
     }
-    @Override
-    public void deleteAllChatAlarmsByRoomId(String roomId) {
-        // roomId에 해당하는 모든 알람들을 조회합니다.
-        List<ChatAlarm> chatAlarms = chatAlarmRepository.findAllByRoomId(roomId);
 
-        // 조회된 알람들을 삭제합니다.
-        chatAlarmRepository.deleteAll(chatAlarms);
-    }
 }
 

@@ -73,15 +73,12 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
         List<AuctionBiddingDTO> auctionBiddingDTOList = new ArrayList<>();
         for (AuctionBidding auctionBidding : auctionBiddingList) {
             AuctionBiddingDTO auctionBiddingDTO = new AuctionBiddingDTO();
-
             // 수동으로 매핑 설정
             auctionBiddingDTO.setApno(auctionBidding.getApno());
             auctionBiddingDTO.setBidAmount(auctionBidding.getBidAmount());
             auctionBiddingDTO.setBidTime(auctionBidding.getBidTime());
-
             // AuctionBidding 객체에서 Auction 객체 가져오기
             Auction auction = auctionBidding.getAuction();
-
             // Auction 객체가 null이 아닌 경우에만 추가 정보 설정
             if (auction != null) {
                 // Auction 객체에서 필요한 정보들을 DTO에 설정
@@ -92,7 +89,6 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
                 auctionBiddingDTO.setCurrentPrice(auction.getApCurrentPrice());
                 auctionBiddingDTO.setBidIncrement(auction.getApBidIncrement());
                 auctionBiddingDTO.setStartPrice(auction.getApStartPrice());
-
                 // Auction 객체에서 이미지 파일 이름들을 가져와서 DTO에 설정
                 List<String> uploadFileNames = new ArrayList<>();
                 for (AuctionImage image : auction.getImageList()) {
@@ -100,11 +96,9 @@ public class AuctionBiddingServiceImpl implements AuctionBiddingService{
                 }
                 auctionBiddingDTO.setUploadFileNames(uploadFileNames);
             }
-
             // 리스트에 추가
             auctionBiddingDTOList.add(auctionBiddingDTO);
         }
-
         return auctionBiddingDTOList;
     }
 

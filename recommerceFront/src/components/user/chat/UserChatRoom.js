@@ -6,13 +6,11 @@ import useCustomChatModal from "../../../hooks/useCustomChatModal";
 import styles from "../../../scss/user/MyPageComponent.module.scss";
 import Chat from "../../product/chat/chatcomponents/Chat";
 
-const host = API_SERVER_HOST;
-
 const UserChatRoom = () => {
   const user = useSelector((state) => state.loginSlice);
   const [room, setRoom] = useState([]);
   const { openChatModal, closeChatModal, isChatModalOpen, socket, roomId } =
-    useCustomChatModal(); // useNavigate 훅 사용
+    useCustomChatModal();
   const email = user.email;
 
   useEffect(() => {
