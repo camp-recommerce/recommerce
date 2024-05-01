@@ -21,6 +21,7 @@ const host = API_SERVER_HOST;
 const initState = {
   pname: "",
   price: "",
+  pcategory: "",
   pstate: "",
   plocat: "",
   addressLine: "",
@@ -172,6 +173,12 @@ const P_ReadComponent = () => {
                 {product.userEmail}
               </Link>
             </p>
+          </div>
+          <div className="shopRead_box">
+            <div className="item_info">
+              <strong>카테고리</strong>
+            </div>
+            <div className="shopRead_pstate">{product.pcategory}</div>
           </div>
 
           <div className="shopRead_box">

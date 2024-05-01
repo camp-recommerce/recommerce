@@ -197,9 +197,10 @@ public class ProductServiceImpl implements ProductService {
 
         Product product = result.orElseThrow();
 
-        //2. change pname, price, pstate, plocat, pdesc
+        //2. change pname, price, pcategory, pstate, plocat, pdesc
         product.changeName(productDTO.getPname());
         product.changePrice(productDTO.getPrice());
+        product.changePcategory(productDTO.getPcategory());
         product.changeState(productDTO.getPstate());
         product.changeLocat(productDTO.getPlocat());
         product.changeAddressLine(productDTO.getAddressLine());
