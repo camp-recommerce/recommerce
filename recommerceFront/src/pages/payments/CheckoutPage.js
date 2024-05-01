@@ -58,8 +58,15 @@ export function CheckoutPage() {
         successUrl: window.location.origin + "/payment/success", // 성공 시 리디렉션할 경로
         failUrl: window.location.origin + "/payment/fail", // 실패 시 리디렉션할 경로
       });
+
+      if (response.success) {
+        navigate("/payment/success");
+      } else {
+        navigate("/payment/fail");
+      }
     } catch (error) {
       console.error("결제 처리 중 오류 발생:", error);
+      navigate("/payment/fail"); // 에러 발생 시 실패 페이지로 리디렉션
     }
   };
 
