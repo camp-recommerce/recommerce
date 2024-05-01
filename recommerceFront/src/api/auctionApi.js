@@ -6,11 +6,11 @@ const host = `${API_SERVER_HOST}/auction`;
 
 // getList 함수에서의 params 사용 간소화
 export const getList = async (pageParam) => {
-  const { page, size, apName, apCategory } = pageParam;
+  const { page, size, apName, apCategory, apStatus } = pageParam;
 
   try {
     const res = await axios.get(`${host}/list`, {
-      params: { page, size, apName, apCategory },
+      params: { page, size, apName, apCategory, apStatus },
     });
     return res.data;
   } catch (error) {

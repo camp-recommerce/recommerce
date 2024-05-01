@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.recommerceAPI.domain.AuctionStatus;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -149,13 +150,15 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
+    public PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO, String apName, String apCategory, AuctionStatus apStatus) {
         Pageable pageable = PageRequest.of(
                 pageRequestDTO.getPage() - 1,
                 pageRequestDTO.getSize(),
-                Sort.by("apno").descending());
+                Sort.by("apStartTime").descending());
 
-        Page<Object[]> result = auctionRepository.selectList(apName,apCategory,pageable);
+
+
+        Page<Object[]> result = auctionRepository.selectList(apName, apCategory, apStatus, pageable);
 
         List<AuctionDTO> dtoList = result.getContent().stream()
                 .map(arr -> {
@@ -178,4 +181,5 @@ public class AuctionServiceImpl implements AuctionService{
 
         return responseDTO;
     }
+
 }
