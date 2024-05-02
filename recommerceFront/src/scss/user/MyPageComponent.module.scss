@@ -30,9 +30,9 @@
   justify-content: space-around;
   align-items: center;
   padding: 12px 0;
-  background-color: #020715; // 배경색 변경
-  border-bottom: 1px solid #020715;
-  color: #dad8d6; // 글자색 변경
+  background-color: #505153; // 배경색 변경
+  border-bottom: 1px solid #505153;
+  color: #ffffff; // 글자색 변경
 }
 
 /* 각 메뉴 아이템 스타일링
@@ -62,9 +62,9 @@
 }
 
 .active {
-  background-color: #020715; // 활성화 상태의 배경색
-  color: #020715; // 활성화 상태의 글자색
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // 그림자 효과 추가
+  background-color: #505153; // 활성화 상태의 배경색
+  color: #505153; // 활성화 상태의 글자색
+  // box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); // 그림자 효과 추가
   font-weight: bold; // 텍스트 굵기 변경
   font-size: 20px; // 텍스트 크기 증가
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1); // 텍스트 그림자 추가

@@ -7,7 +7,7 @@ const UserSettingComponent = () => {
   const user = useSelector((state) => state.loginSlice);
 
   return (
-    <div>
+    <div style={{ minHeight: 600 }}>
       <div className={styles.userInfo}>
         <div className={styles.buttonWrapper}>
           <NavLink

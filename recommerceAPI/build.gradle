@@ -71,8 +71,6 @@ dependencies {
 
 	implementation 'com.google.cloud:google-cloud-dialogflow:2.0.0'
 	implementation 'com.google.cloud:google-cloud-storage:1.106.0'
-
-
 }
 
 tasks.named('test') {
@@ -80,13 +78,9 @@ tasks.named('test') {
 }
 
 sourceSets {
-
 	main {
 		java {
 			srcDirs = ["$projectDir/src/main/java", "$projectDir/build/generated"]
 		}
 	}
 }
-
-
-compileJava.dependsOn('clean')
