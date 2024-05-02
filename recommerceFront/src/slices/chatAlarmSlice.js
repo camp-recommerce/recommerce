@@ -8,9 +8,7 @@ export const getAlarmsAsync = createAsyncThunk("getAlarmsAsync", () => {
 export const sendAlarmAsync = createAsyncThunk("sendAlarmAsync", (param) => {
   return sendAlarm(param);
 });
-
 const initState = [];
-
 const chatAlarmSlice = createSlice({
   name: "chatAlarmSlice",
   initialState: [initState],
