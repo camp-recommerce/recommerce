@@ -47,7 +47,7 @@ const Header = () => {
             onClick={handleCheckPermission}
             className="hover:bg-gray-700 rounded-full py-2 px-4 text-lg"
           >
-            판매하기
+            중고 판매
           </button>
         </div>
         <div className="center flex space-x-6">
@@ -99,7 +99,7 @@ const Header = () => {
           className="bg-[#282222]"
         >
           <img
-            src="https://cdn-icons-png.flaticon.com/512/5036/5036960.png"
+            src="https://i.pinimg.com/originals/26/9d/d1/269dd16fa1f5ff51accd09e7e1602267.png"
             alt="Menu"
             className="h-20 w-auto"
           />
