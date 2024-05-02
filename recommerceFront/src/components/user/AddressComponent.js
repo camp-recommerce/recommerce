@@ -3,7 +3,6 @@ import DaumPostcode from "react-daum-postcode";
 import { useNavigate, useParams } from "react-router-dom";
 import { updateAddress } from "../../api/userApi";
 import AlertModal from "../modal/AlertModal"; // 모달 컴포넌트 import
-import { post } from "jquery";
 
 const AddressComponent = () => {
   const { email } = useParams();
