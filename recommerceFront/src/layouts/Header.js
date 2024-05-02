@@ -121,7 +121,7 @@ const Header = () => {
               <li>
                 <a
                   class="dropdown-item"
-                  href="http://localhost:3000/user/mypage/:email"
+                  href="http://localhost:3000/mypage/profile"
                 >
                   마이페이지
                 </a>
