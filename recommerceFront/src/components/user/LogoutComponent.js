@@ -38,19 +38,21 @@ const LogoutComponent = () => {
   };
 
   return (
-    <div style={styles.logOutBg}>
-      <div style={styles.logOutTitle}>
-        <div>
-          <span>로그아웃</span>을 원하시면
+    <div style={{ minHeight: 600 }}>
+      <div style={styles.logOutBg}>
+        <div style={styles.logOutTitle}>
+          <div>
+            <span>로그아웃</span>을 원하시면
+          </div>
+          <div>
+            아래 <span>로그아웃</span> 버튼을 눌러주세요
+          </div>
         </div>
-        <div>
-          아래 <span>로그아웃</span> 버튼을 눌러주세요
-        </div>
-      </div>
 
-      <button onClick={handleClickLogout} style={styles.logOutButton}>
-        LOGOUT
-      </button>
+        <button onClick={handleClickLogout} style={styles.logOutButton}>
+          LOGOUT
+        </button>
+      </div>
     </div>
   );
 };

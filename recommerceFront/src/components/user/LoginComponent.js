@@ -71,40 +71,45 @@ const LoginComponent = () => {
   };
 
   return (
-    <div style={styles.loginWrap}>
-      <div style={styles.title}>
-        <span>로그인을 해주세요</span>
+    <div style={{ minHeight: 700 }}>
+      <div style={styles.loginWrap}>
+        <div style={styles.title}>
+          <span>로그인을 해주세요</span>
+        </div>
+        <div style={styles.inputSection}>
+          <input
+            style={styles.input}
+            name="email"
+            type="text"
+            placeholder="이메일"
+            value={loginParam.email}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+          />
+          <input
+            style={styles.input}
+            name="pw"
+            type="password"
+            placeholder="비밀번호"
+            value={loginParam.pw}
+            onChange={handleChange}
+            onKeyPress={handleKeyPress}
+          />
+        </div>
+        <button style={styles.button} onClick={handleClickLogin}>
+          로그인
+        </button>
+        <button
+          style={styles.button}
+          onClick={() => navigate("/user/reset-pw")}
+        >
+          비밀번호 찾기
+        </button>
+        <button style={styles.button} onClick={() => navigate("/user/join")}>
+          회원가입
+        </button>
+        <KakaoLoginComponent />
       </div>
-      <div style={styles.inputSection}>
-        <input
-          style={styles.input}
-          name="email"
-          type="text"
-          placeholder="이메일"
-          value={loginParam.email}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-        />
-        <input
-          style={styles.input}
-          name="pw"
-          type="password"
-          placeholder="비밀번호"
-          value={loginParam.pw}
-          onChange={handleChange}
-          onKeyPress={handleKeyPress}
-        />
-      </div>
-      <button style={styles.button} onClick={handleClickLogin}>
-        로그인
-      </button>
-      <button style={styles.button} onClick={() => navigate("/user/reset-pw")}>
-        비밀번호 찾기
-      </button>
-      <button style={styles.button} onClick={() => navigate("/user/join")}>
-        회원가입
-      </button>
-      <KakaoLoginComponent />
     </div>
   );
 };
