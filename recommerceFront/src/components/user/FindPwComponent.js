@@ -65,18 +65,20 @@ const FindPwComponent = () => {
   };
 
   return (
-    <div style={styles.findWrap}>
-      <h2>비밀번호 찾기</h2>
-      <input
-        type="email"
-        value={email}
-        onChange={handleEmailChange}
-        style={styles.input}
-        placeholder="이메일 입력"
-      />
-      <button onClick={handleSubmit} style={styles.button}>
-        임시비밀번호 발송
-      </button>
+    <div style={{ minHeight: 650 }}>
+      <div style={styles.findWrap}>
+        <h2>비밀번호 찾기</h2>
+        <input
+          type="email"
+          value={email}
+          onChange={handleEmailChange}
+          style={styles.input}
+          placeholder="이메일 입력"
+        />
+        <button onClick={handleSubmit} style={styles.button}>
+          임시비밀번호 발송
+        </button>
+      </div>
     </div>
   );
 };
