@@ -159,36 +159,6 @@ public class ProductServiceImpl implements ProductService {
         return dto;
     }
 
-    private ProductDTO entityToDTO(Product product){
-
-        ProductDTO productDTO = ProductDTO.builder()
-                .pno(product.getPno())
-                .pname(product.getPname())
-                .pcategory(product.getPcategory())
-                .price(product.getPrice())
-                .pstate(product.getPstate())
-                .plocat(product.getPlocat())
-                .addressLine(product.getAddressLine())
-                .lat(product.getLat())
-                .lng(product.getLng())
-                .pdesc(product.getPdesc())
-                .userEmail(product.getUserEmail())
-                .soldOut(product.isSoldOut())
-                .build();
-
-        List<ProductImage> imageList = product.getImageList();
-
-        if(imageList == null || imageList.size() == 0 ){
-            return productDTO;
-        }
-
-        List<String> fileNameList = imageList.stream().map(productImage ->
-                productImage.getFileName()).toList();
-
-        productDTO.setUploadFileNames(fileNameList);
-
-        return productDTO;
-    }
 
     @Override
     public void modify(ProductDTO productDTO) {
