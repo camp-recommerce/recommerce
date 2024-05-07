@@ -1,0 +1,86 @@
+// UserProductComponent.scss
+.user-product-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 28px;
+  font-weight: bold;
+  color: #000;
+}
+
+.loading,
+.no-products {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #555;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  margin: 0 10px;
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold; // 기본 글자 굵기
+  font-size: 16px; // 기본 글자 크기
+  transition: all 0.3s ease; // 부드러운 전환 효과
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &.active {
+    background-color: #555; // 활성화 상태 배경색
+    color: white;
+    font-weight: bold; // 활성화 상태에서 글자 두껍게
+    font-size: 18px; // 활성화 상태에서 글자 크기 증가
+    padding: 12px 22px; // 활성화 상태에서 패딩 증가
+  }
+}
+
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+  margin-top: 20px;
+}
+
+.product-card {
+  background: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 10px;
+  padding: 20px;
+  width: calc(50% - 20px);
+  box-sizing: border-box;
+
+  &:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.product-link {
+  text-decoration: none;
+  color: black;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+.product-details {
+  margin-top: 5px;
+  font-size: 14px;
+  color: #666;
+}

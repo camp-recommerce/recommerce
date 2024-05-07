@@ -1,13 +1,15 @@
 import React from "react";
-import HeaderLayout from "./HeaderLayout";
-import FooterLayout from "./FooterLayout";
+import Header from "./Header";
+import Footer from "./Footer";
+import FixedMenu from "../components/menu/FixedMenu";
 
 const BasicLayout = ({ children }) => {
   return (
     <>
-      <HeaderLayout />
+      <Header />
+      <FixedMenu />
       {children}
-      <FooterLayout />
+      <Footer />
     </>
   );
 };

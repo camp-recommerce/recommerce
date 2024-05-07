@@ -1,16 +1,16 @@
 import { Suspense, lazy } from "react";
+import PublicProfileComponent from "../components/user/PublicProfileComponent";
 
 const Loading = <div>Loading....</div>;
 const Join = lazy(() => import("../components/user/JoinComponent"));
 const Login = lazy(() => import("../components/user/LoginComponent"));
-const LogoutPage = lazy(() => import("../components/user/LogoutComponent"));
-const KakaoRedirect = lazy(() =>
-  import("../components/user/KakaoRedirctComponent")
-);
-const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
-const MyPage = lazy(() => import("../components/user/MyComponent"));
-const Remove = lazy(() => import("../components/user/RemoveComponent"));
 const FindPw = lazy(() => import("../components/user/FindPwComponent"));
+const LogoutPage = lazy(() => import("../components/user/LogoutComponent"));
+const KakaoRedirect = lazy(() => import("../pages/user/KakaoRedirectPage"));
+const MemberModify = lazy(() => import("../components/user/ModifyComponent"));
+const PublicProfile = lazy(() =>
+  import("../components/user/PublicProfileComponent")
+);
 
 const userRouter = () => {
   return [
@@ -47,26 +47,10 @@ const userRouter = () => {
       ),
     },
     {
-      path: "modify",
+      path: "profile/:email",
       element: (
         <Suspense fallback={Loading}>
-          <MemberModify />
-        </Suspense>
-      ),
-    },
-    {
-      path: "mypage/:email",
-      element: (
-        <Suspense fallback={Loading}>
-          <MyPage />
-        </Suspense>
-      ),
-    },
-    {
-      path: "remove/:email",
-      element: (
-        <Suspense fallback={Loading}>
-          <Remove />
+          <PublicProfile />
         </Suspense>
       ),
     },

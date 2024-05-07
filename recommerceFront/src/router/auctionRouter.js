@@ -44,8 +44,8 @@ const auctionRouter = () => {
       ),
     },
 
-    { path: "", element: <Navigate replace to="list/?page=1&size=12" /> },
-    { path: "list", element: <Navigate replace to="list/?page=1&size=12" /> },
+    { path: "", element: <Navigate replace to="list/?page=1&size=4" /> },
+    { path: "list", element: <Navigate replace to="list/?page=1&size=4" /> },
   ];
 };
 

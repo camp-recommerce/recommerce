@@ -12,14 +12,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-
 public class AuctionBidding {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long apno; // 입찰한 상품
+    private Long apno; // 입찰한 상품, 이 아니라 정확히는 생성되는 고유값
 
     @ManyToOne
-    @JoinColumn(name = "auction_apno")
+    @JoinColumn(name = "auction_apno") // 이게 입찰한 상품 번호
     private Auction auction;
 
     @ManyToOne
@@ -28,5 +27,5 @@ public class AuctionBidding {
 
     private int bidAmount; // 입찰 금액 -> 최종 입찰 금액이 낙찰 금액 되도록
 
-    private LocalDateTime bidTime; // 입찰 시간
+    private String bidTime; // 입찰 시간
 }

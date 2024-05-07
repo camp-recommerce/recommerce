@@ -13,14 +13,20 @@ import org.springframework.data.repository.query.Param;
 public interface WishlistItemRepository extends JpaRepository<WishlistItem, Long>{
 
     // 회원의 이메일을 기반으로 해당 회원의 카트 아이템 목록을 조회하는 쿼리 메서드
-    @Query("select " +
-            "new com.recommerceAPI.dto.WishlistItemListDTO(wi.wino, wi.qty, p.pno, p.pname, p.price, pi.fileName) " +
-            "from " +
-            "WishlistItem wi inner join Wishlist mc on wi.wishlist = mc " +
+    @Query("select new com.recommerceAPI.dto.WishlistItemListDTO(" +
+            "wi.wino, " +
+            "wi.qty, " +
+            "p.pno, " +
+            "p.pname, " +
+            "p.price, " +
+            "pi.fileName, " +
+            "p.soldOut, " +
+            "p.userEmail) " +
+            "from WishlistItem wi " +
+            "inner join Wishlist mc on wi.wishlist = mc " +
             "left join Product p on wi.product = p " +
             "left join p.imageList pi " +
-            "where " +
-            "mc.owner.email = :email and pi.ord = 0 " +
+            "where mc.owner.email = :email and pi.ord = 0 " +
             "order by wi desc")
     public List<WishlistItemListDTO> getItemsOfWishlistDTOByEmail(@Param("email") String email);
 
@@ -44,7 +50,7 @@ public interface WishlistItemRepository extends JpaRepository<WishlistItem, Long
     public Long getWishlistFromItem( @Param("wino") Long wino);
 
     // 카트 번호를 기반으로 해당 카트의 카트 아이템 목록을 조회하는 쿼리 메서드
-    @Query("select new com.recommerceAPI.dto.WishlistItemListDTO(wi.wino,  wi.qty,  p.pno, p.pname, p.price , pi.fileName )  " +
+    @Query("select new com.recommerceAPI.dto.WishlistItemListDTO(wi.wino,  wi.qty,  p.pno, p.pname, p.price , pi.fileName, p.soldOut, p.userEmail )  " +
             " from " +
             "   WishlistItem wi inner join Wishlist mc on wi.wishlist = mc " +
             "   left join Product p on wi.product = p " +

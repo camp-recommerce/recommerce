@@ -16,15 +16,19 @@ public class WishlistItemListDTO { // 쇼핑카트 아이템 리스트를 위한
     private String pname; // 상품 이름
     private int price; // 상품 가격
     private String imageFile; // 상품 이미지 파일 경로 또는 URL
+    private boolean soldOut;
+    private String userEmail;
 
     // 모든 필드를 초기화하는 생성자
-    public WishlistItemListDTO(Long wino, int qty, Long pno, String pname, int price, String imageFile){
+    public WishlistItemListDTO(Long wino, int qty, Long pno, String pname, int price, String imageFile, boolean soldOut, String userEmail){
         this.wino = wino; // 카트 아이템 고유 번호 초기화
         this.qty = qty; // 상품 수량 초기화
         this.pno = pno; // 상품 번호 초기화
         this.pname = pname; // 상품 이름 초기화
         this.price = price; // 상품 가격 초기화
         this.imageFile = imageFile; // 상품 이미지 파일 경로 또는 URL 초기화
+        this.soldOut=soldOut;
+        this.userEmail =userEmail;
     }
 
 }

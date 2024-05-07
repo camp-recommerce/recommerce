@@ -10,7 +10,7 @@ const useCustomTimes = (apStartTime) => {
       const distance = endTime - now;
 
       if (distance < 0) {
-        setRemainingTime("경매 종료");
+        setRemainingTime("경매 대기중");
         return;
       }
 
@@ -21,7 +21,7 @@ const useCustomTimes = (apStartTime) => {
       const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-      setRemainingTime(`${days}일 ${hours}시간 ${minutes}분 ${seconds}초`);
+      setRemainingTime(`${days}일 ${hours}시간 `);
     };
 
     const timer = setInterval(updateRemainingTime, 1000);

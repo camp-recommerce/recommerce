@@ -35,9 +35,17 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String path = request.getRequestURI();
         log.info("check uri: " + path);
 
+        // 루트 경로 "/"만 필터링하지 않고, 이 경로의 하위 경로는 필터링합니다.
+         if ("/".equals(path)) {
+             return true;
+         }
+
         // 특정 경로에 대한 요청은 필터링하지 않도록 설정합니다.
-        List<String> skipPaths = List.of("/api/user/", "/mountain", "/sea", "/images", "/api/products/view", "review/view", "/confirm",
-                "/api/wishlist", "/api/products","/api/chat","/auction");
+
+        List<String> skipPaths = List.of("/api/user/", "review/view", "/confirm",
+                "/api/wishlist","/api/chat","/auction","/product/read" ,"/product/view", "/user/by-user",
+                "/user/password"
+        );
 
 
         return skipPaths.stream().anyMatch(path::startsWith);
@@ -53,32 +61,36 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String authHeaderStr = request.getHeader("Authorization");
 
         try {
-            // Authorization 헤더에서 "Bearer " 부분을 제거하여 토큰을 추출합니다.
-            String accessToken = authHeaderStr.substring(7);
-            // 토큰 검증을 수행하고 클레임을 추출합니다.
-            Map<String, Object> claims = JWTUtil.validateToken(accessToken);
+            if (authHeaderStr != null && authHeaderStr.startsWith("Bearer ")) {
+                // Authorization 헤더에서 "Bearer " 부분을 제거하여 토큰을 추출합니다.
+                String accessToken = authHeaderStr.substring(7);
+                // 토큰 검증을 수행하고 클레임을 추출합니다.
+                Map<String, Object> claims = JWTUtil.validateToken(accessToken);
 
-            log.info("JWT claims: " + claims);
+                log.info("JWT claims: " + claims);
 
-            // 추출한 클레임으로부터 사용자 정보를 구성합니다.
-            LoginDTO loginDTO = new LoginDTO(
-                    (String) claims.get("email"),
-                    (String) claims.get("pw"),
-                    (String) claims.get("nickname"),
-                    (String) claims.get("phone"),
-                    (String) claims.get("birth"),
-                    (List<String>) claims.get("roleNames")
-            );
+                // 추출한 클레임으로부터 사용자 정보를 구성합니다.
+                LoginDTO loginDTO = new LoginDTO(
+                        (String) claims.get("email"),
+                        (String) claims.get("pw"),
+                        (String) claims.get("nickname"),
+                        (String) claims.get("phone"),
+                        (String) claims.get("birth"),
+                        (List<String>) claims.get("roleNames")
+                );
 
-            log.info("User Details: " + loginDTO);
+                log.info("User Details: " + loginDTO);
 
-            // Spring Security 인증 토큰을 생성하고, SecurityContext에 설정합니다.
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO, null, loginDTO.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+                // Spring Security 인증 토큰을 생성하고, SecurityContext에 설정합니다.
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginDTO, null, loginDTO.getAuthorities());
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-            // 다음 필터로 요청을 전달합니다.
-            filterChain.doFilter(request, response);
-
+                // 다음 필터로 요청을 전달합니다.
+                filterChain.doFilter(request, response);
+            } else {
+                // Authorization 헤더가 없거나 "Bearer "로 시작하지 않는 경우에 대한 처리
+                throw new ServletException("Missing or invalid Authorization header");
+            }
         } catch (Exception e) {
             // 토큰 검증 중 오류가 발생하면 에러 메시지를 반환합니다.
             log.error("JWT Check Error: ", e);
@@ -90,4 +102,5 @@ public class JWTCheckFilter extends OncePerRequestFilter {
             printWriter.close();
         }
     }
+
 }

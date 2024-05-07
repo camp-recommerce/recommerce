@@ -17,6 +17,8 @@ public class UserDTO {
     // 사용자의 비밀번호를 저장합니다. 보안을 위해 저장되거나 전송될 때 적절히 암호화하는 것이 중요합니다.
     private String pw;
 
+    private String newPassword; // 사용자의 새 비밀번호
+
     // 사용자의 닉네임을 저장합니다. 사용자가 시스템 내에서 사용할 이름이나 별명입니다.
     private String nickname;
 
@@ -29,12 +31,10 @@ public class UserDTO {
     // 사용자의 평균 평점을 저장합니다. 사용자가 남긴 후기의 평균 평점을 나타냅니다.
     private double averageRating;
 
-    // 비밀번호 변경이나 계정 삭제 시 현재 비밀번호를 검증하기 위한 필드.
-    // 이 필드는 사용자가 비밀번호를 변경하거나 계정을 삭제할 때 입력한 현재 비밀번호를 저장하기 위해 사용됩니다.
-    // 해당 작업에서만 사용되며, 데이터베이스에는 저장되지 않습니다.
-    private String currentPassword;
+    //사용자 우편번호
+    private String postcode;
 
-    // 사용자의 계정 삭제 요청 시 사용됩니다.
-    // 계정 삭제 로직에서만 사용되며, 데이터베이스에는 저장되지 않습니다.
-    private String deletionPassword;
+    private String address; // 사용자 주소
+
+    private String addressDetail; //  상세 주소
 }

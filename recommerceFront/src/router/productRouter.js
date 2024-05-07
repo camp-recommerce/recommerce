@@ -1,12 +1,18 @@
 import React, { Suspense, lazy } from "react";
-import { Navigate } from "react-router-dom";
 
 const Loading = <div>Loading...</div>;
-const ImageSlice = lazy(() => import("../pages/MainPage"));
-const ProductList = lazy(() => import("../pages/product/P_ListPage"));
-const ProductRead = lazy(() => import("../pages/product/P_ReadPage"));
-const ProductAdd = lazy(() => import("../pages/product/P_AddPage"));
-const ProductModify = lazy(() => import("../pages/product/P_ModifyPage"));
+const MainTop = lazy(() => import("../pages/MainPage"));
+const ProductList = lazy(() =>
+  import("../components/product/P_InfiniteComponent")
+);
+const ProductRead = lazy(() => import("../components/product/P_ReadComponent"));
+const ProductAdd = lazy(() => import("../components/product/P_AddComponent"));
+const ProductModify = lazy(() =>
+  import("../components/product/P_ModifyComponent")
+);
+const P_CartComponent = lazy(() =>
+  import("../components/product/cart/P_CartComponent")
+);
 
 const productRouter = () => {
   return [
@@ -14,13 +20,13 @@ const productRouter = () => {
       path: "/",
       element: (
         <Suspense fallback={Loading}>
-          <ImageSlice />
+          <MainTop />
           <ProductList />
         </Suspense>
       ),
     },
     {
-      path: "/product/read/:pno",
+      path: "product/read/:pno",
       element: (
         <Suspense fallback={Loading}>
           <ProductRead />
@@ -28,7 +34,7 @@ const productRouter = () => {
       ),
     },
     {
-      path: "/product/register",
+      path: "product/register",
       element: (
         <Suspense fallback={Loading}>
           <ProductAdd />
@@ -36,15 +42,21 @@ const productRouter = () => {
       ),
     },
     {
-      path: "/product/modify/:pno",
+      path: "product/modify/:pno",
       element: (
         <Suspense fallback={Loading}>
           <ProductModify />
         </Suspense>
       ),
     },
-    { path: "", element: <Navigate replace to="list/?page=1&size=12" /> },
-    { path: "list", element: <Navigate replace to="list/?page=1&size=12" /> },
+    {
+      path: "product/cart",
+      element: (
+        <Suspense fallback={Loading}>
+          <P_CartComponent />
+        </Suspense>
+      ),
+    },
   ];
 };
 

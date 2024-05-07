@@ -1,0 +1,92 @@
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.loading,
+.no-products {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.profile-section,
+.analysis-section,
+.products-section {
+  margin-bottom: 20px;
+}
+
+.button-group button {
+  padding: 10px 20px;
+  margin: 0 5px; // 좀 더 가까운 간격
+  background-color: #000;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: #333;
+  }
+
+  &.active {
+    background-color: #555;
+    font-weight: bold;
+    font-size: 18px;
+    padding: 12px 22px;
+  }
+}
+
+.profile-section h2,
+.products-section h2,
+.analysis-section h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.profile-section p,
+.products-section p,
+.analysis-section p {
+  font-size: 18px;
+}
+
+.product-card {
+  background: #f0f0f0;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 5px;
+  padding: 15px;
+  width: calc(33.333% - 10px); // 3열로 표시
+  box-sizing: border-box;
+}
+
+.product-link {
+  text-decoration: none;
+  color: black;
+  display: block;
+  &:hover {
+    color: #0056b3;
+  }
+}
+
+.product-details {
+  font-size: 14px;
+  color: #555;
+  margin-top: 5px;
+}
+
+.button-group {
+  margin-bottom: 20px;
+}
+
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: flex-start;
+}

@@ -1,0 +1,160 @@
+.modify_group {
+  width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  .modify_title {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 50px auto;
+  }
+
+  .modify_container {
+    width: 90%;
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    .modify_imgArea {
+      width: 20%;
+      margin: 0 auto;
+      height: auto;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+
+      .img {
+        width: 50%;
+        height: auto;
+      }
+      .deleteBtn {
+        white-space: nowrap;
+        width: 50px;
+        margin: 15px auto;
+        color: white;
+        background-color: #ff0000;
+        border-radius: 10px;
+        padding: 5px;
+      }
+    }
+    .modify_textArea {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 50%;
+      height: auto;
+      margin-bottom: 20px;
+
+      .modify-wrap {
+        margin-bottom: 20px;
+
+        .modify-info {
+          font-size: 16px;
+          font-weight: bolder;
+        }
+
+        label {
+          margin-right: 15px;
+        }
+
+        textarea {
+          resize: vertical;
+        }
+      }
+
+      .modify_area {
+        display: flex;
+        flex-direction: column;
+        height: 500px;
+        width: 100%;
+
+        .modify_area_text {
+          .modify-info {
+            font-size: 16px;
+            font-weight: bolder;
+          }
+        }
+
+        // Container for the map itself
+        #map {
+          width: 100%;
+          height: 300px;
+          position: relative;
+
+          border-radius: 4px; // Optional, for rounded corners
+          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); // Optional, for subtle shadow
+        }
+      }
+    }
+  }
+
+  input[type="text"],
+  input[type="file"],
+  textarea,
+  select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+  }
+
+  .shopModify_btn {
+    display: flex;
+    width: 20%;
+    height: auto;
+    justify-content: space-between;
+    margin: 20px auto;
+
+    button {
+      padding: 10px 20px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+
+      &.shopModify_modifyBtn {
+        background-color: #122013d8;
+        color: white;
+      }
+
+      &.shopModify_deleteBtn {
+        background-color: #310401d5;
+        color: white;
+      }
+    }
+  }
+
+  .modify_imgArea {
+    .modify_imgRemove,
+    .modify_imgAdd {
+      display: flex;
+      flex-wrap: wrap;
+
+      .modify-box {
+        position: relative;
+        margin-right: 10px;
+
+        img {
+          width: 100px;
+          height: 100px;
+          object-fit: cover;
+        }
+
+        .imgRemoveBtn {
+          position: absolute;
+          top: 0;
+          right: 0;
+          background: #ff0000;
+          color: white;
+          border: none;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+}

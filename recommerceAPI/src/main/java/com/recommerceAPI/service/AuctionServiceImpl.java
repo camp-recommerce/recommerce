@@ -6,6 +6,7 @@ import com.recommerceAPI.dto.AuctionDTO;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.repository.AuctionRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
@@ -15,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.recommerceAPI.domain.AuctionStatus;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -68,6 +70,17 @@ public class AuctionServiceImpl implements AuctionService{
 
         return dto;
     }
+    @Override
+    public void  buy (Long apno) {
+        java.util.Optional<Auction> result = auctionRepository.findById(apno);
+
+        Auction auction = result.orElseThrow();
+
+        auction.setDeleted(true);
+
+        auctionRepository.save(auction);
+
+    }
 
     @Override
     public void modify(AuctionDTO auctionDTO) {
@@ -95,18 +108,57 @@ public class AuctionServiceImpl implements AuctionService{
     }
 
     @Override
-    public void remove(Long apno) {
-        auctionRepository.deleteById(apno);
-    }
+    public PageResponseDTO<AuctionDTO>findByApBuyer(PageRequestDTO pageRequestDTO,String apBuyer){
 
-    @Override
-    public PageResponseDTO<AuctionDTO> list(PageRequestDTO pageRequestDTO, String apName, String apCategory) {
         Pageable pageable = PageRequest.of(
-                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getPage()-1,
                 pageRequestDTO.getSize(),
                 Sort.by("apno").descending());
 
-        Page<Object[]> result = auctionRepository.selectList(apName,apCategory,pageable);
+        Page<Object[]> result = auctionRepository.findByApBuyer(pageable,apBuyer);
+
+        List<AuctionDTO> dtoList = result.getContent().stream()
+                .map(arr -> {
+                    Auction auction = (Auction) arr[0];
+                    AuctionImage auctionImage = (AuctionImage) arr[1];
+                    AuctionDTO auctionDTO = modelMapper.map(auction, AuctionDTO.class);
+                    if (auctionImage != null) {
+                        auctionDTO.setUploadFileNames(Collections.singletonList(auctionImage.getFileName()));
+                    }
+                    return auctionDTO;
+                }).collect(Collectors.toList());
+
+        long totalCount = result.getTotalElements();
+        PageResponseDTO<AuctionDTO> responseDTO = PageResponseDTO.<AuctionDTO>withAll()
+                .dtoList(dtoList)
+                .pageRequestDTO(pageRequestDTO)
+                .totalCount(totalCount)
+                .build();
+
+        return responseDTO;
+
+
+    }
+    @Override
+    public void remove(Long apno) {
+        Auction auction = auctionRepository.findById(apno)
+                .orElseThrow(() -> new EntityNotFoundException("Auction not found with apno: " + apno));
+        auction.setDeleted(true); // delFlag를 1로 설정
+        auctionRepository.save(auction);
+
+
+    }
+
+    @Override
+    public PageResponseDTO<AuctionDTO> getList(PageRequestDTO pageRequestDTO, String apName, String apCategory, AuctionStatus apStatus) {
+        Pageable pageable = PageRequest.of(
+                pageRequestDTO.getPage() - 1,
+                pageRequestDTO.getSize(),
+                Sort.by("apStartTime").descending());
+
+
+
+        Page<Object[]> result = auctionRepository.selectList(apName, apCategory, apStatus, pageable);
 
         List<AuctionDTO> dtoList = result.getContent().stream()
                 .map(arr -> {
@@ -129,4 +181,5 @@ public class AuctionServiceImpl implements AuctionService{
 
         return responseDTO;
     }
+
 }

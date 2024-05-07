@@ -1,6 +1,7 @@
 package com.recommerceAPI.controller;
 
 import com.recommerceAPI.domain.User;
+import com.recommerceAPI.dto.ChatAlarmDTO;
 import com.recommerceAPI.dto.LoginDTO;
 import com.recommerceAPI.dto.UserDTO;
 import com.recommerceAPI.repository.UserRepository;
@@ -12,6 +13,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -29,6 +31,8 @@ public class UserController {
 
     private final UserRepository userRepository;
 
+    private final JavaMailSender javaMailSender;
+
     @GetMapping("/kakao")
     public Map<String, Object> getUserFromKakao(String accessToken) {
 
@@ -40,15 +44,13 @@ public class UserController {
         Map<String, Object> claims = loginDTO.getClaims();  //카카오로 처리된 회원의 정보
 
         String jwtAccessToken = JWTUtil.generateToken(claims, 10);  //JWT형태로 생성해서 넣어주는 것
-        String jwtRefreshToken = JWTUtil.generateToken(claims, 60*1);
+        String jwtRefreshToken = JWTUtil.generateToken(claims, 60 * 1);
 
         claims.put("accessToken", jwtAccessToken);  //정보 넣기
         claims.put("refreshToken", jwtRefreshToken);
 
         return claims;
     }
-
-
 
     // 사용자 등록을 처리하는 엔드포인트
     @PostMapping("/join")
@@ -62,7 +64,7 @@ public class UserController {
     }
 
     @GetMapping("/mypage/{email}")
-    public ResponseEntity<?> userGet(@PathVariable  String email) {
+    public ResponseEntity<?> userGet(@PathVariable String email) {
 
         log.info("now user is : " + email);
 
@@ -73,13 +75,13 @@ public class UserController {
 
     //수정
     @PutMapping("/modify")
-    public Map<String,String> modifyUser(@RequestBody UserDTO userDTO) {
+    public Map<String, String> modifyUser(@RequestBody UserDTO userDTO) {
 
         log.info("member modify: " + userDTO);
 
         userService.modifyUser(userDTO);
 
-        return Map.of("result","modified");
+        return Map.of("result", "modified");
     }
 
     @DeleteMapping("/remove/{email}")
@@ -94,27 +96,48 @@ public class UserController {
             return ResponseEntity.notFound().build(); // 사용자를 찾을 수 없음
         }
     }
-    // 현재 비밀번호 검증을 처리하는 엔드포인트
-    @GetMapping("/validate-password")
-    public ResponseEntity<?> validateCurrentPassword(@RequestParam String email, @RequestParam String currentPassword) {
-        boolean isValid = userService.validateCurrentPassword(email, currentPassword);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Password is valid"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password"));
+
+
+    @PutMapping("/address/{email}")
+    public ResponseEntity<?> updateAddress(@PathVariable String email,
+                                           @RequestParam String newAddress,
+                                           @RequestParam String newPostcode,
+                                           @RequestParam String addressDetail) {  // 상세 주소를 위한 매개변수 추가
+        try {
+            // 상세 주소 포함하여 주소 정보 업데이트 메서드 호출
+            User updatedUser = userService.updateAddress(email, newAddress, newPostcode, addressDetail);
+            return ResponseEntity.ok(updatedUser);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         }
     }
 
-    // 계정 삭제 전 비밀번호 검증을 처리하는 엔드포인트
-    @GetMapping("/validate-deletion")
-    public ResponseEntity<?> validatePasswordForDeletion(@RequestParam String email, @RequestParam String deletionPassword) {
-        boolean isValid = userService.validatePasswordForDeletion(email, deletionPassword);
-        if (isValid) {
-            return ResponseEntity.ok(Map.of("message", "Password is valid for deletion"));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Invalid password for deletion"));
+    //이메일로 비밀번호 전송
+    @PostMapping("/reset-pw")
+    public ResponseEntity<String> resetPassword(@RequestParam("email") String email) {
+        try {
+            String message = userService.resetPassword(email);
+            return ResponseEntity.ok(message);
+        } catch (UserService.EmailNotExistException ex) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
     }
 
+    // 비밀번호 변경을 위한 PUT 요청을 처리하는 메서드
+// @param email 사용자의 이메일 주소, 경로 변수로 받음
+// @param currentPassword 사용자가 입력한 현재 비밀번호, 요청 매개변수로 받음
+// @param newPassword 사용자가 입력한 새로운 비밀번호, 요청 매개변수로 받음
+// @param confirmPassword 사용자가 입력한 새로운 비밀번호 확인, 요청 매개변수로 받음
+    @PutMapping("/password/{email}")
+    public ResponseEntity<String> changePassword(
+            @PathVariable String email,
+            @RequestParam String currentPassword,
+            @RequestParam String newPassword,
+            @RequestParam String confirmPassword) {
 
+        // 비밀번호 변경 로직을 UserService의 changePassword 메서드에 위임
+        userService.changePassword(email, currentPassword, newPassword, confirmPassword);
+        // 비밀번호 변경 성공 시, HTTP 상태 코드 200과 함께 성공 메시지를 응답
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");
+    }
 }

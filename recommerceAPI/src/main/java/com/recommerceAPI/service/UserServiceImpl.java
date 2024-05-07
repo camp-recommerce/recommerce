@@ -1,19 +1,25 @@
 package com.recommerceAPI.service;
 
 
+import com.recommerceAPI.domain.ChatAlarm;
 import com.recommerceAPI.domain.User;
 import com.recommerceAPI.domain.UserRole;
+import com.recommerceAPI.dto.ChatAlarmDTO;
 import com.recommerceAPI.dto.UserDTO;
 import com.recommerceAPI.repository.UserRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,6 +35,7 @@ public class UserServiceImpl implements UserService {
     // PasswordEncoder는 비밀번호를 안전하게 인코딩하는 데 사용됩니다.
     private final PasswordEncoder passwordEncoder;
 
+    private final EmailService emailService;
 
     @Override
     public void join(UserDTO userDTO) throws EmailExistException {
@@ -67,7 +74,7 @@ public class UserServiceImpl implements UserService {
         User user = result.orElseThrow();
 
         // User 객체의 정보를 userDTO로부터 받은 값으로 변경합니다.
-        user.changePassword(passwordEncoder.encode(userDTO.getPw()));
+
         user.changeNickname(userDTO.getNickname());
         user.changePhone(userDTO.getPhone());
         user.changeBirth(userDTO.getBirth());
@@ -76,21 +83,90 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
-    // 사용자의 개인정보 변경 시 비밀번호 확인 메서드
-    @Override
-    public boolean validateCurrentPassword(String email, String currentPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
-        return passwordEncoder.matches(currentPassword, user.getPw());
+    @Override
+    public User updateAddress(String email, String newAddress, String newPostcode, String addressDetail) throws Exception {
+        // 이메일을 사용하여 사용자 정보를 조회합니다.
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new Exception("User not found with email: " + email));
+
+        // 새로운 주소, 우편번호, 그리고 상세 주소를 사용자 정보에 설정합니다.
+        user.setAddress(newAddress);
+        user.setPostcode(newPostcode);
+        user.setAddressDetail(addressDetail); // 상세 주소 설정 추가
+
+        // 사용자 정보를 저장하고 업데이트된 정보를 반환합니다.
+        return userRepository.save(user);
+    }
+
+
+    @Override
+    public String resetPassword(String email){
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (!userOptional.isPresent()) {
+            throw new EmailNotExistException("등록된 이메일이 없습니다. 다시 확인하세요.");
+        }
+
+        User user = userOptional.get();
+        // 임시 비밀번호 생성 로직
+        String tempPassword = generateTempPassword();
+        // 비밀번호 인코딩
+        String encodedPassword = passwordEncoder.encode(tempPassword);
+        // 임시 비밀번호를 사용자 계정에 저장
+        user.changePassword(encodedPassword);
+        userRepository.save(user);
+        // 사용자 이메일로 임시 비밀번호를 포함한 이메일 발송
+        emailService.sendEmail(user.getEmail(),
+                "임시비밀번호 발송드립니다.",
+                "회원님의 임시비밀번호: " + tempPassword +"\n보안을 위해 로그인 후 비밀번호 재설정 부탁드립니다.");
+
+        return "비밀번호 재설정 이메일이 발송되었습니다. 등록된 이메일을 확인해 주세요.";
+    }
+
+
+    private String generateTempPassword() {
+        // 임시 비밀번호 생성 로직 구현
+        String lowerAlphabets = "abcdefghijklmnopqrstuvwxyz";
+        String numbers = "0123456789";
+        String combinedChars = lowerAlphabets + numbers;
+        SecureRandom random = new SecureRandom();
+        StringBuilder sb = new StringBuilder(8);
+
+        for (int i = 0; i < 8; i++) {
+            sb.append(combinedChars.charAt(random.nextInt(combinedChars.length())));
+        }
+
+        return sb.toString();
     }
 
     @Override
-    public boolean validatePasswordForDeletion(String email, String deletionPassword) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
+    public void changePassword(String email, String currentPassword, String newPassword, String confirmPassword) {
+        // 사용자가 유효한 JWT 토큰을 포함하고 있는지 확인
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !authentication.isAuthenticated()) {
+            throw new SecurityException("User is not authenticated.");
+        }
+        // 사용자 이메일로 사용자 정보 조회, 없으면 예외 발생
+        User user = userRepository.findById(email).orElseThrow(() -> new IllegalArgumentException("No user found with email " + email));
 
-        return passwordEncoder.matches(deletionPassword, user.getPw());
+        // 현재 비밀번호가 올바른지 검증, 여기서 passwordEncoder.matches() 메서드를 사용하여 비밀번호를 검증합니다.
+        if (!passwordEncoder.matches(currentPassword, user.getPw())) {
+            throw new IllegalArgumentException("Incorrect current password.");
+        }
+
+        // 새 비밀번호와 확인 비밀번호가 일치하는지 확인
+        if (!user.confirmNewPassword(newPassword, confirmPassword)) {
+            // 비밀번호 불일치시, 예외 발생
+            throw new IllegalArgumentException("New password and confirmation password do not match.");
+        }
+
+        // 비밀번호 일치시, 비밀번호를 암호화하여 변경 후 저장
+        user.changePassword(passwordEncoder.encode(newPassword));
+        userRepository.save(user);
     }
+
+
 
 }
+
+

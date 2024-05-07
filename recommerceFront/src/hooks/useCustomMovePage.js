@@ -46,11 +46,28 @@ const useCustomMovePage = (pno) => {
     setRefresh(!refresh);
   };
 
+  const moveMyPageToAuctonRead = (num) => {
+    console.log(queryDefault);
+    navigate({
+      pathname: `../../auction/read/${num}`,
+      search: queryDefault,
+    });
+  };
+
   const moveReadPage = (num) => {
     console.log(queryDefault);
 
     navigate({
       pathname: `../read/${num}`,
+      search: queryDefault,
+    });
+  };
+
+  const moveCartToProductRead = (num) => {
+    console.log(queryDefault);
+
+    navigate({
+      pathname: `../product/read/${num}`,
       search: queryDefault,
     });
   };
@@ -94,7 +111,7 @@ const useCustomMovePage = (pno) => {
 
     if (pageParam) {
       const pageNum = getNum(pageParam.page, 1);
-      const sizeNum = getNum(pageParam.size, 8);
+      const sizeNum = getNum(pageParam.size, 4);
 
       queryString = createSearchParams({
         page: pageNum,
@@ -118,6 +135,8 @@ const useCustomMovePage = (pno) => {
     moveListPage,
     moveProductListPage,
     moveReviewQnaListPage,
+    moveMyPageToAuctonRead,
+    moveCartToProductRead,
     page,
     size,
     reviewQnaPage,

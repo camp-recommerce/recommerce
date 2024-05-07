@@ -26,6 +26,4 @@ public interface UserRepository extends JpaRepository<User, String> {
     // @EntityGraph를 사용하여 사용자의 역할 정보도 함께 가져옵니다.
     @EntityGraph(attributePaths = {"userRoleList"})
     Optional<User> findByEmail(String email);
-
-
 }

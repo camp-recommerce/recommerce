@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "tbl_product")
 @Getter
 @ToString(exclude = "imageList")
 @Builder
@@ -21,15 +20,27 @@ public class Product {
 
     private String pname;
 
+    private String pcategory;
+
     private int price;
 
-    private String pdesc;
+    private String pstate; // 제품상태
 
-    private String paddress;
+    private String plocat; // 제품판매장소
 
-    private boolean delFlag;
+    private String addressLine; // 제품판매장소 동 정보
+    
+    private double lat; // 제품판매장소 위도
+    
+    private double lng; // 제품판매장소 경도
 
+    private String pdesc; // 제품설명
 
+    private boolean delFlag; // 삭제 여부
+    
+    private boolean soldOut; //판매완료 여부
+
+    private String userEmail; // Product와 User의 관계
     public void changeDel(boolean delFlag) {
         this.delFlag = delFlag;
     }
@@ -43,6 +54,10 @@ public class Product {
         this.price = price;
     }
 
+    public void changePcategory(String category) {
+            this.pcategory = category;
+        }
+
     public void changeDesc(String desc){
         this.pdesc = desc;
     }
@@ -51,9 +66,21 @@ public class Product {
         this.pname = name;
     }
 
-    public void changeAdd(String address){
-            this.paddress = address;
-        }
+    public void changeLocat(String locat){
+        this.plocat = locat;
+    }
+
+    public void changeAddressLine(String addressLine) {this.addressLine = addressLine;}
+
+    public void changeLat(double lat) {this.lat = lat;}
+
+    public void changeLng(double lng) {this.lng = lng;}
+
+    public void changeState(String state){this.pstate = state;}
+    public void changeUserEmail(String userEmail){
+        this.userEmail = userEmail;
+    };
+
 
     public void addImage(ProductImage image) {
 
@@ -72,5 +99,9 @@ public class Product {
 
     public void clearList() {
         this.imageList.clear();
+    }
+
+    public void changeSold(boolean soldOut) {
+        this.soldOut=soldOut;
     }
 }

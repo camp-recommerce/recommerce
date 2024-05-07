@@ -7,11 +7,16 @@ import java.util.stream.Collectors;
 import com.recommerceAPI.dto.PageRequestDTO;
 import com.recommerceAPI.dto.PageResponseDTO;
 import com.recommerceAPI.dto.ProductDTO;
+import com.recommerceAPI.dto.ProductPageResponseDTO;
 import com.recommerceAPI.service.ProductService;
 import com.recommerceAPI.util.CustomFileUtil;
+import com.recommerceAPI.util.JWTUtil;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -23,34 +28,34 @@ import lombok.extern.log4j.Log4j2;
 @CrossOrigin
 @RequiredArgsConstructor
 @Log4j2
-
 public class ProductController {
 
-    // 여기 하나만 조회하는 기능 추가 해주셔야 합니다.
     private final ProductService productService;
     private final CustomFileUtil fileUtil;
 
-
+    //상품 목록
     @GetMapping("/")
-    public PageResponseDTO<ProductDTO> list (PageRequestDTO pageRequestDTO, String pname){
+    public ProductPageResponseDTO getProductList(PageRequestDTO pageRequestDTO, String pname, String pcategory, String addressLine){
+    
+            log.info("list----------------------"+ pageRequestDTO);
+    
+            return productService.getList(pageRequestDTO, pname, pcategory, addressLine);
+        }
 
-        log.info("list----------------------"+ pageRequestDTO);
 
-        return productService.getList(pageRequestDTO, pname);
-    }
 
     // 특정 상품 번호(pno)에 대한 상세 정보를 조회하는 API
-    @GetMapping(value ="/products/read/{pno}")
-    public ProductDTO getProduct(@PathVariable(name="pno") Long pno) {
+    @GetMapping(value ="/product/read/{pno}")
+    public ResponseEntity<ProductDTO> getProduct(@PathVariable(name="pno") Long pno) {
         log.info("getProduct: " + pno);
-
-        // 상품 서비스를 통해 상품 정보 조회
         ProductDTO productDTO = productService.get(pno);
-
-        // 조회된 상품 정보를 ResponseEntity에 담아 반환
-        // 상품 정보가 존재하지 않을 경우 NOT_FOUND 상태 코드를 반환할 수 있도록 처리
-        return productDTO;
+        if (productDTO == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(productDTO);
     }
+
+
 
     @GetMapping("/product/view/{fileName}")
     public ResponseEntity<Resource> viewFileGET(@PathVariable String fileName){
@@ -63,7 +68,7 @@ public class ProductController {
     @PostMapping("/product/register")
     public Map<String, Long> register(ProductDTO productDTO){
 
-        log.info("register: " + productDTO);
+        log.info("!!!!!!!!!!!!!!!!!!!!Received productDTO: " + productDTO); // productDTO 확인 로그 추가
 
         List<MultipartFile> files = productDTO.getFiles();
 
@@ -71,7 +76,7 @@ public class ProductController {
 
         productDTO.setUploadFileNames(uploadFileNames);
 
-        log.info(uploadFileNames);
+        log.info("!!!!!!!!!!!!!!!!!!!!!!!!!Uploaded file names: " + uploadFileNames); // 업로드된 파일 이름 확인 로그 추가
 
         //서비스 호출
         Long pno = productService.register(productDTO);
@@ -128,6 +133,15 @@ public class ProductController {
         return Map.of("RESULT", "SUCCESS");
     }
 
+    @PutMapping("product/soldOut/{pno}")
+    public Map<String, String> soldOUt(@PathVariable(name="pno")Long pno) {
+
+        productService.soldOut(pno);
+
+        return Map.of("RESULT", "SUCCESS");
+    }
+
+
 
     @DeleteMapping("product/delete/{pno}")
     public Map<String, String> remove(@PathVariable("pno") Long pno) {
@@ -137,4 +151,24 @@ public class ProductController {
         fileUtil.deleteFiles(oldFileNames);
         return Map.of("RESULT", "SUCCESS");
     }
+
+
+    // 사용자 이메일과 판매 상태에 따른 제품 목록을 조회하는 메소드
+    @GetMapping("/user/by-user")
+    public PageResponseDTO<ProductDTO> getProductsByUserAndStatus(PageRequestDTO pageRequestDTO,
+             String userEmail
+            ) {
+
+        PageResponseDTO<ProductDTO> response = productService.getProductsByUserAndStatus(pageRequestDTO, userEmail);
+
+        return response;
+    }
+
+    //상품판매 페이지에 들어가려면 로그인 필수 . 유효한 토큰값을 갖고 있는 상태인지 확인
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    @GetMapping("/check/validate_token")
+    public ResponseEntity<?> validateSellPermission() {
+          // 권한 검증 후 성공 응답
+          return ResponseEntity.ok("Access granted to sell products.");
+      }
 }
