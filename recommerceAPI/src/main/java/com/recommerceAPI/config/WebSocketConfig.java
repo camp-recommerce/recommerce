@@ -14,6 +14,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @Configuration
 @EnableWebSocket
 @RequiredArgsConstructor
+// 웹소켓 설정
 public class WebSocketConfig implements WebSocketConfigurer {
 
     private final AuctionBiddingService auctionBiddingService;

@@ -48,7 +48,6 @@ function A_Chat({
       return;
     }
     const currentMonth = new Date().getMonth() + 1;
-    // 조건에 맞는 경우에만 메시지 전송
     const messageData = {
       room: room,
       author: username,

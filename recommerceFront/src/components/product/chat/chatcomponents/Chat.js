@@ -22,8 +22,8 @@ function Chat({ socket, username, closeModal, room }) {
     if (currentMsg !== "") {
       // 메시지 설정
       const messageData = {
-        room: room,
-        author: username,
+        room: room, // 방정보
+        author: username, // 내 이메일
         message: currentMsg,
         time:
           new Date(Date.now()).getMonth() +
@@ -34,28 +34,27 @@ function Chat({ socket, username, closeModal, room }) {
           new Date(Date.now()).getHours() +
           ":" +
           new Date(Date.now()).getMinutes(),
-        messageType: "MESSAGE",
+        messageType: "MESSAGE", // 날짜 설정후, 메시지 타입 설정
       };
       const alarm = {
         userEmail: receiverEmail,
-        senderEmail: username,
+        senderEmail: username, // 알림 설정
         roomId: room,
         createdAt: messageData.time,
         message: currentMsg,
       };
-
       socket.send(JSON.stringify(messageData)); // 소켓으로 채팅 전송
       sendAlarm(alarm); // 채팅 전송과 동시에 채팅 알람도 설정
       setMessageList((list) => [...list, messageData]); // 채팅리스트 설정
       inputRef.current.value = ""; // 채팅 입력칸 초기화
     }
   };
-  useEffect(() => {
-    socket.onmessage = (event) => {
-      const data = JSON.parse(event.data);
-      setMessageList((list) => [...list, data]);
-    };
-  }, [socket]);
+
+  socket.onmessage = (event) => {
+    const data = JSON.parse(event.data);
+    setMessageList((list) => [...list, data]);
+  };
+
   useEffect(() => {
     messageBottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messageList]);

@@ -1,8 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { getWishlistItems, postWishlistItems } from "../api/wishlistApi";
-
 // 비동기 생성자 함수 위시리스트 아이템 가져오기
 export const getWishlistItemsAsync = createAsyncThunk(
+  // 리덕스 액션 생성
   "getWishlistItemsAsync",
   () => {
     return getWishlistItems(); // wishlistApi 모듈의 getWishlistItems 함수 호출
@@ -10,6 +10,7 @@ export const getWishlistItemsAsync = createAsyncThunk(
 );
 // 비동기 생성자 함수 위시리스트 아이템 추가
 export const postWishlistItemsAsync = createAsyncThunk(
+  // 리덕스 액션 생성
   "postWishlistItemsAsync",
   (param) => {
     return postWishlistItems(param); // wishlistApi 모듈의 postWishlistItems 함수 호출
@@ -18,6 +19,7 @@ export const postWishlistItemsAsync = createAsyncThunk(
 const initState = [];
 // wishlistSlice 생성
 const wishlistSlice = createSlice({
+  // 리듀서 생성
   name: "wishlistSlice", // slice의 이름
   initialState: [initState], // 초기 상태 설정
   extraReducers: (builder) => {

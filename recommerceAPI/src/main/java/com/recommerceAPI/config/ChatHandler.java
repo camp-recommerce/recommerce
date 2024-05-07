@@ -36,14 +36,11 @@ public class ChatHandler extends TextWebSocketHandler {
 
     private final ChatMessageService chatMessageService;
 
-    @Override
+    @Override // 연결 성공 이후 실행 되는 함수
     public void afterConnectionEstablished(WebSocketSession session) throws Exception {
-
         sessions.add(session);
-        log.info("{} connect", session.getId());
         URI uri = session.getUri();
         String room = extractRoomFromUri(uri);
-
         if (isNumeric(room)) {
             // 숫자 형식이라면 아래옥션바이딩 서비스를 호출
             auctionBiddingService.sendPreviousBidHistory(Long.valueOf(room), session);
@@ -51,18 +48,15 @@ public class ChatHandler extends TextWebSocketHandler {
             // 이메일 형식이라면 채팅 메시지 서비스를 호출
             chatMessageService.sendPreviousChatHistory(room, session);
         }
-
         List<WebSocketSession> sessionList = sessionToUsername.getOrDefault(room, new ArrayList<>());
         sessionList.add(session);
         sessionToUsername.put(room, sessionList);
-
-        String author = "알림";
+        String author = "알림"; // 유저 입장시 보여주는 알림 설정
         String message = "유저 입장";
         String time = " ";
-        ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION, time);
+        ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message,
+                ChatMessageDTO.MessageType.NOTIFICATION, time);
         sendMessageToRoom(room, notificationDTO, session);
-
-
     }
 
     private String extractRoomFromUri(URI uri) {
@@ -80,8 +74,7 @@ public class ChatHandler extends TextWebSocketHandler {
         return str != null && str.matches("\\d+");
     }
 
-
-    @Override
+    @Override // 메시지를 받고 적절히 처리하는 함수
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
         String payload = message.getPayload();
         log.info("Received message: {}", payload);
@@ -104,22 +97,17 @@ public class ChatHandler extends TextWebSocketHandler {
         sendMessageToRoom(room, chatMessageDTO, session);
     }
 
-    @Override
+    @Override // 연결 종로 이후 실행되는 함수
     public void afterConnectionClosed(WebSocketSession session, org.springframework.web.socket.CloseStatus status) throws Exception {
-
         URI uri = session.getUri();
         String room = extractRoomFromUri(uri);
-
-        String author = "알림";
+        String author = "알림"; // 퇴장 알림
         String message = "유저 퇴장";
         String time = " ";
         ChatMessageDTO notificationDTO = new ChatMessageDTO(room, author, message, ChatMessageDTO.MessageType.NOTIFICATION,time );
-
         sendMessageToRoom(room,notificationDTO,session);
-
         sessions.remove(session);
         sessionToUsername.remove(session.getId());
-
         // 세션투유저네임 맵에 반복돌림
         Iterator<Map.Entry<String, List<WebSocketSession>>> iterator = sessionToUsername.entrySet().iterator();
         // 한줄씩 모든 내용 찾기.
