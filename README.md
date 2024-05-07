@@ -45,12 +45,13 @@
 
 ## 4. 분석 패키지 구조도
 
-![구조도](https://github.com/camp-recommerce/recommerce/blob/main/Information Architecture.PNG)
+![구조도](https://github.com/camp-recommerce/recommerce/blob/test/Re_Information Architecture.PNG)
 <br>
 
 ## 5. 개체-관계 모델(ERD)
 
-![ERD](https://github.com/camp-recommerce/recommerce/blob/main/ERD.PNG)
+![ERD](https://github.com/camp-recommerce/recommerce/blob/test/Re_ERD.png)
+
 <br>
 
 ## 6. 개발 팀 소개
