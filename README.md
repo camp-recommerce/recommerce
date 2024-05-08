@@ -49,7 +49,7 @@
 | ------------------------- | ---------------------------------------------------------------------------------------- |
 | 회원가입,로그인           | ![회원가입,로그인](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/join.gif) |
 | 회원 정보 변경            |![회원정보변경](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/changeUser.gif)  |
-| 상품List, 검색            |                                                                                          |
+| 상품List,상품검색  | ![상품리스트,검색](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/searchitems.gif)  |
 | 상품 등록, 수정, 삭제     |                                                                                          |
 | 찜 등록                   |                                                                                          |
 | 경매상품 등록, 수정, 삭제 |                                                                                          |
