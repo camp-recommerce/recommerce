@@ -48,7 +48,7 @@
 | 기능                      | 영상                                                                                     |
 | ------------------------- | ---------------------------------------------------------------------------------------- |
 | 회원가입,로그인           | ![회원가입,로그인](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/join.gif) |
-| 회원 정보 변경            |                                                                                          |
+| 회원 정보 변경            |![회원정보변경](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/changeUser.gif)  |
 | 상품List, 검색            |                                                                                          |
 | 상품 등록, 수정, 삭제     |                                                                                          |
 | 찜 등록                   |                                                                                          |
