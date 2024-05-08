@@ -52,7 +52,7 @@
 | 상품List,상품검색  | ![상품리스트,검색](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/searchitems.gif)  |
 | 상품 등록|  ![상품등록](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/createitem.gif) |
 | 찜 등록   |![찜등록](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/cart.gif) |
-| 경매상품 등록, 수정, 삭제 |                                                                                          |
+| 경매상품 수정 |   ![경매상품 수정](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/changerecommerce.gif)  |
 | 경매 검색, 채팅 | ![경매검색,채팅](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/recommerce.gif)  |
 | 결제                      | ![결제](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/toss.gif) |
 | 1:1 채팅, 채팅알람            |  ![채팅](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/onechat.gif)    |
