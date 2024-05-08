@@ -16,8 +16,8 @@
 
 ## 2. 사용 기술
 
-- Back-End, Java 17, Spring Boot 3.2.3, Spring web MVC, Spring data JPA, jwt, MySQL
-- Front, HTML 5, CSS 3, JavaScript, React, Redux, Redux-toolkit
+- Back-End : Java 17, Spring Boot 3.2.3, Spring web MVC, Spring data JPA, jwt, MySQL
+- Front : HTML 5, CSS 3, JavaScript, React, Redux, Redux-toolkit
   <br>
 
 ## 3. 주요 기능
