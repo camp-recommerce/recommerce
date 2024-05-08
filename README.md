@@ -50,7 +50,7 @@
 | 회원가입,로그인           | ![회원가입,로그인](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/join.gif) |
 | 회원 정보 변경            |![회원정보변경](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/changeUser.gif)  |
 | 상품List,상품검색  | ![상품리스트,검색](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/searchitems.gif)  |
-| 상품 등록, 수정, 삭제     |                                                                                          |
+| 상품 등록|  ![상품등록](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/createitem.gif) |
 | 찜 등록                   |                                                                                          |
 | 경매상품 등록, 수정, 삭제 |                                                                                          |
 | 경매 검색, 채팅 | ![경매검색,채팅](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/recommerce.gif)  |
