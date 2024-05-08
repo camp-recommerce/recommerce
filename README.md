@@ -66,7 +66,7 @@
 
 - 신승훈(https://github.com/overguy723) : 경매 backend, 공개 프로필 판매자 데이터 분석 비즈니스 로직 구성, 메인 페이지 지도/장소 검색, 팀 프로젝트 PDF 제작
 
-- 최혜선(https://github.com/choihyeseon1217) : 중고 상품, 중고 상품 리스트 페이지(메인 페이지) 구축
+- 최혜선(https://github.com/choihyeseon1217) : 중고 상품, 중고 상품 리스트 페이지(메인 페이지) 구축, 중고 상품 카테고리/검색,
 메인 페이지 CSS(header 디자인, 부트스트랩 / 반응형 이미지 / 무한 스크롤) 구성, 결제 API(토스 페이먼츠)
 
   <br>
