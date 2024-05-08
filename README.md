@@ -53,8 +53,9 @@
 | 상품 등록, 수정, 삭제     |                                                                                          |
 | 찜 등록                   |                                                                                          |
 | 경매상품 등록, 수정, 삭제 |                                                                                          |
+| 경매 검색, 채팅 |                                                                                          |
 | 결제                      | ![결제](https://raw.githubusercontent.com/camp-recommerce/recommerce/main/gif/toss.gif) |
-| 채팅, 채팅알람            |                                                                                          |
+| 1:1 채팅, 채팅알람            |                                                                                          |
 | 마이페이지           |                                                                                          |
 
 ## 7. 개발 팀 소개
